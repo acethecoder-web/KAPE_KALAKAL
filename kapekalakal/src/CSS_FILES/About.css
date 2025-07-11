@@ -1,0 +1,15 @@
+@font-face {
+	font-family: bebas;
+	src: url(../public/fonts/BebasNeue-Regular.otf);
+}
+
+@font-face {
+	font-family: playfair;
+	src: url(../../public/fonts/PlayfairDisplay-Regular.ttf);
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
