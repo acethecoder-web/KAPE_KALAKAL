@@ -107,8 +107,8 @@ span {
 
 @media (max-width: 480px) {
 	.maincon1 {
-		margin-left: -50px;
-		margin-top: -30px;
+		margin-left: -60px;
+		margin-top: 10px;
 		font-size: 10px;
 	}
 

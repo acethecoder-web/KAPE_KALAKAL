@@ -8,8 +8,111 @@
 	src: url(../../public/fonts/PlayfairDisplay-Regular.ttf);
 }
 
+@font-face {
+	font-family: playfairb;
+	src: url(../../public/fonts/PlayfairDisplay-Bold.ttf);
+}
+
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+	font-family: playfairb;
+}
+
+/* for overlay
+	background-color: rgba(65, 44, 23, 0.6);
+	width: 100vw;
+	height: 100vh; */
+
+.about-header {
+	margin-left: 190px;
+	padding: 5px;
+	margin-top: 20px;
+	font-size: 60px;
+	z-index: 1;
+	color: rgba(65, 44, 23);
+}
+
+.tag2 {
+	margin-left: 260px;
+	color: rgb(144, 109, 75);
+}
+
+.story {
+	width: 700px;
+	background-color: rgba(65, 44, 23, 0.8);
+	padding: 40px;
+	border-radius: 20px;
+	margin-left: 150px;
+	margin-top: 20px;
+	color: rgb(220, 216, 212);
+	font-size: 16px;
+}
+
+.about-con {
+	display: flex;
+}
+
+.decor {
+	width: 250px;
+	padding: 20px;
+	border-radius: 30px;
+	opacity: 50%;
+	transition-duration: 0.2s;
+}
+
+.decor:hover {
+	width: 250px;
+	padding: 20px;
+	border-radius: 30px;
+	opacity: 100%;
+	transform: scale(1.1);
+	filter: drop-shadow(5px 7px 9px black);
+}
+
+.pic-con {
+	border-radius: 30px;
+	margin-left: 60px;
+	margin-top: 100px;
+	width: 500px;
+	height: 500px;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	background-color: rgba(162, 116, 71, 0.8);
+}
+
+/* responsiveness */
+
+/* Small devices (phones) */
+
+@media (max-width: 576px) {
+}
+
+/* Medium devices (tablets) */
+
+@media (max-width: 768px) {
+}
+
+/* Large devices (small laptops) */
+
+@media (max-width: 992px) {
+}
+
+/* Extra large devices (desktops */
+
+@media (max-width: 1200px) {
+}
+
+/* Huge screens (TVs, etc.) */
+
+@media (min-width: 1200px) {
+}
+
+@media (max-width: 480px) {
+	.about-con {
+		display: flex;
+		flex-direction: column;
+	}
 }

@@ -3,6 +3,7 @@
     "boostrap": "^2.0.0",
     "bootstrap": "^5.3.7",
     "express": "^5.1.0",
+    "react-router-dom": "^7.6.3",
     "tailwind": "^4.0.0"
   },
   "devDependencies": {

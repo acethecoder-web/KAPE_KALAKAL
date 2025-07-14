@@ -1,13 +1,16 @@
 import "../CSS_FILES/App.css";
-import LandingPage from "./LandingPage";
-import NavBar from "./NavBar";
-import About from "./About";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./Home";
+
 function App() {
 	return (
 		<>
-			<NavBar />
-			<LandingPage />
-			{/* <About /> */}
+			<BrowserRouter>
+				<Routes>
+					<Route index element={<Home />} />
+					<Route path="/home" element={<Home />} />
+				</Routes>
+			</BrowserRouter>
 		</>
 	);
 }
