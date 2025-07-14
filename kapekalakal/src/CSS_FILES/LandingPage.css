@@ -26,3 +26,20 @@ span {
 	filter: drop-shadow(1px 5.5px 2px black);
 	font-weight: light;
 }
+
+.register {
+	background-color: rgb(169, 132, 103, 80%);
+	padding: 10px;
+	border: none;
+	border-radius: 25px;
+	margin-left: 295px;
+	margin-top: 20px;
+	color: black;
+	transition-duration: 0.2s;
+	font-size: 20px;
+}
+
+.register:hover {
+	background-color: rgba(92, 73, 59, 0.8);
+	color: white;
+}
