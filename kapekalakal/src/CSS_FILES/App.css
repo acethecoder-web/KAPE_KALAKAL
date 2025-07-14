@@ -14,10 +14,12 @@ color standards
 	font-family: playfair;
 	src: url(../../public/fonts/PlayfairDisplay-Bold.ttf);
 }
+
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+	overflow: hidden;
 }
 
 .logo {
@@ -81,4 +83,60 @@ color standards
 	font-family: playfair;
 	font-weight: bold;
 	font-size: 40px;
+}
+
+/* responsiveness */
+
+@media (max-width: 480px) {
+	.shopname {
+		font-size: 10x;
+	}
+
+	.nav-item6 {
+		transform: translate(0px, -5px);
+	}
+
+	.nav-buttons {
+		display: flex;
+		gap: 10px;
+		margin-right: 3px;
+	}
+
+	.nav-items {
+		text-decoration: none;
+		color: #6b594d;
+		font-size: 11px;
+		transition-duration: 0.2s;
+	}
+}
+
+@media (max-width: 576px) {
+	.shopname {
+		font-size: 11px;
+	}
+
+	.nav-buttons {
+		padding: 5px;
+	}
+
+	.nav-items {
+		font-size: 11px;
+		font-weight: bold;
+	}
+}
+
+@media (max-width: 415px) {
+	.shopname {
+		font-size: 11px;
+	}
+
+	.nav-buttons {
+		padding: 5px;
+		margin-right: 10px;
+	}
+
+	.nav-items {
+		font-size: 11px;
+		font-weight: bold;
+	}
 }
