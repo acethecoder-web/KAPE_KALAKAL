@@ -1,21 +1,23 @@
 import "../CSS_FILES/App.css";
+import { Link } from "react-router-dom";
 function NavBar() {
 	return (
 		<>
 			<nav className="navbar">
 				<div className="maincon">
-					<a href="#">
+					<Link to="/" className="nav-items">
 						<img className="logo" src="/LOGO.svg" alt="Logo" />
-					</a>
+					</Link>
+
 					<p className="shopname">KAPE KALAKAL</p>
 				</div>
 				<div className="nav-buttons">
-					<a className="nav-items" href="">
+					<Link to="/about" className="nav-items">
 						ABOUT
-					</a>
-					<a className="nav-items" href="">
+					</Link>
+					<Link to="/products" className="nav-items">
 						PRODUCTS
-					</a>
+					</Link>
 					{/* <a className="nav-items" href="">
 						ORDER NOW
 					</a>

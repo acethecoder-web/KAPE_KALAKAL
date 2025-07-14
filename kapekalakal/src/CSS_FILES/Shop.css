@@ -1,0 +1,54 @@
+@font-face {
+	font-family: bebas;
+	src: url(../public/fonts/BebasNeue-Regular.otf);
+}
+
+@font-face {
+	font-family: playfair;
+	src: url(../../public/fonts/PlayfairDisplay-Regular.ttf);
+}
+
+@font-face {
+	font-family: playfairb;
+	src: url(../../public/fonts/PlayfairDisplay-Bold.ttf);
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: playfair;
+}
+
+.shop-con {
+	display: flex;
+	padding: 10px;
+	gap: 10px;
+	/* background-color: rgb(61, 129, 181); */
+}
+
+.shop-con1 {
+	width: 20%;
+	height: 570px;
+	/* background-color: cyan; */
+}
+.shop-con2 {
+	width: 80%;
+	height: 570px;
+	/* background-color: lime; */
+}
+
+.cat-hold {
+	font-family: playfair;
+	font-size: 25px;
+	margin-left: 40px;
+}
+
+.shop-head {
+	font-family: playfairb;
+}
+
+li {
+	text-decoration: none;
+	list-style-type: none;
+}

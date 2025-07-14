@@ -1,16 +1,19 @@
 import "../CSS_FILES/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./Home";
-
+import LandingPage from "./LandingPage";
+import NavBar from "./NavBar";
+import About from "./About";
+import Shop from "./Shop";
+import { Routes, Route } from "react-router-dom";
 function App() {
 	return (
 		<>
-			<BrowserRouter>
-				<Routes>
-					<Route index element={<Home />} />
-					<Route path="/home" element={<Home />} />
-				</Routes>
-			</BrowserRouter>
+			<NavBar />
+			<Routes>
+				<Route path="/" element={<LandingPage />} />
+				<Route path="/about" element={<About />} />
+				<Route path="/products" element={<Shop />} />
+			</Routes>
+			{/* <About /> */}
 		</>
 	);
 }
