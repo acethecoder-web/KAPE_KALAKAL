@@ -8,7 +8,6 @@ function NavBar() {
 					<Link to="/" className="nav-items">
 						<img className="logo" src="/LOGO.svg" alt="Logo" />
 					</Link>
-
 					<p className="shopname">KAPE KALAKAL</p>
 				</div>
 				<div className="nav-buttons">

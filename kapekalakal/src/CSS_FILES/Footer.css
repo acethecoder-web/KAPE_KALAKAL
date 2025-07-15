@@ -1,0 +1,158 @@
+@font-face {
+	font-family: bebas;
+	src: url(../public/fonts/BebasNeue-Regular.otf);
+}
+
+@font-face {
+	font-family: playfair;
+	src: url(../../public/fonts/PlayfairDisplay-Regular.ttf);
+}
+
+@font-face {
+	font-family: playfairb;
+	src: url(../../public/fonts/PlayfairDisplay-Bold.ttf);
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: playfairb;
+}
+
+.main-f-con {
+	transform: translate(0px, 300px);
+	display: flex;
+	color: white;
+	width: 99vw;
+	height: 300px;
+	background-color: rgba(65, 44, 23, 0.9);
+}
+
+.footer-con {
+	margin: 20px;
+}
+
+.footcon1 {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 50%;
+	height: 90%;
+	/* background-color: rgba(65, 44, 23, 0.8); */
+}
+
+.footcon2 {
+	width: 20%;
+	height: 90%;
+	/* background-color: rgba(65, 44, 23, 0.8); */
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.footcon3 {
+	width: 30%;
+	height: 90%;
+	/* background-color: rgba(65, 44, 23, 0.8); */
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.foot-sub-div {
+	margin: 5px;
+	width: 90%;
+	height: 20%;
+	/* background-color: rgba(135, 92, 50, 0.8); */
+}
+
+.foot-sub-div1 {
+	height: 30%;
+	display: flex;
+	align-items: center;
+	gap: 30px;
+}
+
+.logo1 {
+	width: 60px;
+	height: 60px;
+	background-color: white;
+	padding: 10px;
+	border-radius: 50%;
+	margin-left: 10px;
+}
+
+.tag2-1 {
+	color: rgb(187, 167, 147);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 5px;
+}
+
+.foot-sub-div3 {
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+}
+
+.f-logo {
+	width: 50px;
+	border-radius: 50%;
+}
+
+.f-logo:hover {
+	transform: scale(1.1);
+	opacity: 50%;
+}
+
+.concon {
+	display: flex;
+	gap: 20px;
+}
+
+.arrow {
+	margin-left: 30px;
+	transition-duration: 0.1s;
+}
+
+.arrow:hover {
+	transform: scale(1.2);
+}
+
+.copyright {
+	margin-top: 30px;
+	margin-left: 50px;
+}
+
+.back {
+	font-family: playfairb;
+	font-size: 20px;
+	margin: 10px;
+	background-color: ;
+	color: rgb(147, 138, 115);
+}
+
+.site-map-header {
+	font-family: playfairb;
+	margin-top: 20px;
+	font-size: 40px;
+	margin-bottom: 30px;
+	color: rgb(187, 167, 147);
+}
+
+.pages {
+	color: rgb(234, 225, 216);
+}
+
+.legal-header {
+	font-family: playfairb;
+	margin-top: 20px;
+	font-size: 40px;
+	margin-bottom: 30px;
+	color: rgb(187, 167, 147);
+}

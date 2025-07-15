@@ -1,4 +1,6 @@
 import "../CSS_FILES/About.css";
+import { Link } from "react-router-dom";
+import Footer from "./Footer";
 
 function About() {
 	return (
@@ -59,7 +61,7 @@ function About() {
 					WITH
 				</h2>
 				<img
-					className="logos logo1"
+					className="logos logo1-1"
 					src="./logos/DUNKIN.png"
 					alt="DUNKIN.png"
 				/>
@@ -74,6 +76,8 @@ function About() {
 					alt="TIMHORTONS.png"
 				/>
 			</div>
+
+			<h2 className="best-header">BEST SELLERS</h2>
 
 			<div className="best">
 				<div className="product-card">
@@ -142,6 +146,14 @@ function About() {
 					</div>
 				</div>
 			</div>
+
+			<Link to="/shop">
+				<button className="shop-but" type="button">
+					OPEN SHOP
+				</button>
+			</Link>
+
+			<Footer />
 		</>
 	);
 }

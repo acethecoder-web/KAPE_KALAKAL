@@ -3,6 +3,7 @@ import LandingPage from "./LandingPage";
 import NavBar from "./NavBar";
 import About from "./About";
 import Shop from "./Shop";
+import Footer from "./Footer";
 import { Routes, Route } from "react-router-dom";
 function App() {
 	return (
@@ -13,7 +14,6 @@ function App() {
 				<Route path="/about" element={<About />} />
 				<Route path="/products" element={<Shop />} />
 			</Routes>
-			{/* <About /> */}
 		</>
 	);
 }
