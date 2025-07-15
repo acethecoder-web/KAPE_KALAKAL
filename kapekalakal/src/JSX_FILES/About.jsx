@@ -30,10 +30,116 @@ function About() {
 					</p>
 				</div>
 				<div className="pic-con">
-					<img className="decor decor1" src="/mugpics/MUG.png" alt="" />
-					<img className="decor decor2" src="/mugpics/SHOP.png" alt="" />
-					<img className="decor decor3" src="/mugpics/SHOP (1).png" alt="" />
-					<img className="decor decor1" src="/mugpics/MUG.png" alt="" />
+					<img className="decor decor1" src="/mugpics/MUG.png" alt="MUG.png" />
+					<img
+						className="decor decor2"
+						src="/mugpics/SHOP.png"
+						alt="SHOP.png"
+					/>
+					<img
+						className="decor decor3"
+						src="/mugpics/SHOP (1).png"
+						alt="SHOP (1).png"
+					/>
+					<img className="decor decor1" src="/mugpics/MUG.png" alt="MUG.png" />
+				</div>
+			</div>
+
+			<img className="bean0" src="./logos/bean.png" alt="bean.png" />
+			<img className="bean1" src="./logos/bean.png" alt="bean.png" />
+			<img
+				className="mug"
+				src="/mugpics/vectormug-removebg-preview.png"
+				alt="vectormug-removebg-preview.png"
+			/>
+
+			<div className="shop-details">
+				<h2 className="ptag">
+					IN <br /> PARTNERSHIP <br />
+					WITH
+				</h2>
+				<img
+					className="logos logo1"
+					src="./logos/DUNKIN.png"
+					alt="DUNKIN.png"
+				/>
+				<img
+					className="logos logo2"
+					src="./logos/STARBUCKS.png"
+					alt="STARBUCKS.png"
+				/>
+				<img
+					className="logos logo3"
+					src="./logos/TIMHORTONS.png"
+					alt="TIMHORTONS.png"
+				/>
+			</div>
+
+			<div className="best">
+				<div className="product-card">
+					<img
+						className="product"
+						src="/products/AeroPress Coffee Maker.png"
+						alt="AeroPress Coffee Maker.png"
+					/>
+					<p>AEROPRESS COFFEE MAKER</p>
+					<p>PHP 4290.00</p>
+					<div className="add">
+						<p className="but add-to-cart">ADD TO CART</p>
+						<p className="but buy-now">BUY NOW</p>
+					</div>
+				</div>
+				<div className="product-card">
+					<img
+						className="product"
+						src="/products/Pourx Oura Coffee Scale.png"
+						alt="AeroPress Coffee Maker.png"
+					/>
+					<p>POURX OURA COFFEE SCALE</p>
+					<p>PHP 10,290.00</p>
+					<div className="add">
+						<p className="but add-to-cart">ADD TO CART</p>
+						<p className="but buy-now">BUY NOW</p>
+					</div>
+				</div>
+				<div className="product-card">
+					<img
+						className="product"
+						src="/products/AeroPress Coffee Maker.png"
+						alt="AeroPress Coffee Maker.png"
+					/>
+					<p>AEROPRESS COFFEE MAKER</p>
+					<p>PHP 4290.00</p>
+					<div className="add">
+						<p className="but add-to-cart">ADD TO CART</p>
+						<p className="but buy-now">BUY NOW</p>
+					</div>
+				</div>
+				<div className="product-card">
+					<img
+						className="product"
+						src="/products/AeroPress Coffee Maker.png"
+						alt="AeroPress Coffee Maker.png"
+					/>
+					<p>AEROPRESS COFFEE MAKER</p>
+					<p>PHP 4290.00</p>
+					<div className="add">
+						<p className="but add-to-cart">ADD TO CART</p>
+						<p className="but buy-now">BUY NOW</p>
+					</div>
+				</div>
+				<div className="product-card">
+					<img
+						className="product"
+						src="/products/AeroPress Coffee Maker.png"
+						alt="AeroPress Coffee Maker.png"
+					/>
+					<p>AEROPRESS COFFEE MAKER</p>
+					<p>PHP 4290.00</p>
+					<div className="add">
+						<p className="but add-to-cart">ADD TO CART</p>
+						<p className="but buy-now">BUY NOW</p>
+					</div>
 				</div>
 			</div>
 		</>

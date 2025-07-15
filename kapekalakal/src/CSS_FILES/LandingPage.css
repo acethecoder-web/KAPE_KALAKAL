@@ -16,31 +16,31 @@
 
 .tagline {
 	font-family: playfair;
-	margin-left: 300px;
-	margin-top: 40px;
+	margin-left: 250px;
+	margin-top: 80px;
 }
 
 span {
-	font-size: 120px;
+	font-size: 150px;
 	font-family: playfair;
 	filter: drop-shadow(1px 5.5px 2px black);
 	font-weight: light;
 }
 
 .register {
-	background-color: rgb(169, 132, 103, 80%);
+	background-color: rgba(72, 53, 38, 0.8);
 	padding: 10px;
 	border: none;
 	border-radius: 25px;
-	margin-left: 295px;
+	margin-left: 255px;
 	margin-top: 20px;
-	color: black;
+	color: white;
 	transition-duration: 0.2s;
 	font-size: 20px;
 }
 
 .register:hover {
-	background-color: rgba(92, 73, 59, 0.8);
+	background-color: rgba(29, 23, 19, 0.8);
 	color: white;
 }
 
