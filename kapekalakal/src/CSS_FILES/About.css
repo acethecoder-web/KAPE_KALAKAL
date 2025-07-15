@@ -156,6 +156,9 @@
 	border-radius: 20px;
 }
 
+.product-card p {
+	padding: 5px;
+}
 .product-card {
 	background-color: rgb(156, 117, 88);
 	display: flex;

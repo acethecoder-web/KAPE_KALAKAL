@@ -105,10 +105,10 @@ function About() {
 				<div className="product-card">
 					<img
 						className="product"
-						src="/products/AeroPress Coffee Maker.png"
+						src="/products/Kalita Wave Tsubame 155 Copper Dripper.png"
 						alt="AeroPress Coffee Maker.png"
 					/>
-					<p>AEROPRESS COFFEE MAKER</p>
+					<p>KALITA WAVE TSUBAME 155</p>
 					<p>PHP 4290.00</p>
 					<div className="add">
 						<p className="but add-to-cart">ADD TO CART</p>
@@ -118,11 +118,11 @@ function About() {
 				<div className="product-card">
 					<img
 						className="product"
-						src="/products/AeroPress Coffee Maker.png"
+						src="/products/Cafec Tritan Coffee Server.png"
 						alt="AeroPress Coffee Maker.png"
 					/>
-					<p>AEROPRESS COFFEE MAKER</p>
-					<p>PHP 4290.00</p>
+					<p>CAFEC TRITAN COFFEE SERVER</p>
+					<p>PHP 1100.00</p>
 					<div className="add">
 						<p className="but add-to-cart">ADD TO CART</p>
 						<p className="but buy-now">BUY NOW</p>
@@ -131,11 +131,11 @@ function About() {
 				<div className="product-card">
 					<img
 						className="product"
-						src="/products/AeroPress Coffee Maker.png"
-						alt="AeroPress Coffee Maker.png"
+						src="/products/Hario Insulated Mug with Lid 300.png"
+						alt="Hario Insulated Mug with Lid 300.png"
 					/>
-					<p>AEROPRESS COFFEE MAKER</p>
-					<p>PHP 4290.00</p>
+					<p>HARIO INSULATED MUG</p>
+					<p>PHP 1050.00</p>
 					<div className="add">
 						<p className="but add-to-cart">ADD TO CART</p>
 						<p className="but buy-now">BUY NOW</p>
