@@ -8,6 +8,11 @@
 	src: url(../../public/fonts/PlayfairDisplay-Regular.ttf);
 }
 
+@font-face {
+	font-family: playfairb;
+	src: url(../../public/fonts/PlayfairDisplay-Bold.ttf);
+}
+
 * {
 	margin: 0;
 	padding: 0;
@@ -37,6 +42,7 @@ span {
 	color: white;
 	transition-duration: 0.2s;
 	font-size: 20px;
+	font-family: playfairb;
 }
 
 .register:hover {
@@ -52,18 +58,18 @@ span {
 
 @media (max-width: 576px) {
 	.tagline {
-		font-size: 20px;
+		font-size: 30px;
 		margin-left: 300px;
 		margin-top: 40px;
 	}
 
 	.register {
 		margin-left: 295px;
-		margin-top: 20px;
+		margin-top: 40px;
 	}
 
 	span {
-		font-size: 60px;
+		font-size: 70px;
 	}
 }
 
@@ -122,6 +128,7 @@ span {
 		margin-left: 80px;
 		margin-top: 10px;
 		font-size: 10px;
+		font-family: playfairb;
 	}
 
 	span {

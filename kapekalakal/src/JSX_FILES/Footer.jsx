@@ -7,13 +7,14 @@ function Footer() {
 				<div className="footer-con footcon1">
 					<div className="foot-sub-div foot-sub-div1">
 						<img className="logo1" src="/LOGO.svg" alt="Logo" />
-						<p className="shopname">KAPE KALAKAL </p>
+						<p className="shopname1">KAPE KALAKAL </p>
 					</div>
+
 					<div className="foot-sub-div foot-sub-div2">
 						{" "}
 						<h3 className="tag2-1">Fueling Mornings, Brewing Connections</h3>
 					</div>
-					<div className="foot-sub-div foot-sub-div3">
+					<div className="foot-sub-div  icons foot-sub-div3">
 						<div>
 							<img
 								className="f-logo f-logo1"
@@ -50,7 +51,7 @@ function Footer() {
 							/>
 						</div>
 					</div>
-
+					<hr />
 					<div className="foot-sub-div foot-sub-div4">
 						<div className="concon">
 							<i className="fa-solid fa-2xl mt-4 arrow fa-arrow-up"></i>{" "}

@@ -23,13 +23,43 @@ function NavBar() {
 					<a className="nav-items" href="">
 						CART
 					</a> */}
-					<a className="nav-items nav-item6" href="">
+					<Link to="/login" className="nav-items nav-item6" href="">
 						LOG IN
-					</a>
+					</Link>
 				</div>
+				<i
+					onClick={
+						("click",
+						function () {
+							document.querySelector(".burger-con").classList.toggle("show");
+						})
+					}
+					className="fa-solid burger fa-bars fa-2xl"></i>
 			</nav>
+
+			<div className="burger-con">
+				<Link to="/about" className="nav-items2">
+					ABOUT
+				</Link>
+				<Link to="/products" className="nav-items2">
+					PRODUCTS
+				</Link>
+				<Link to="/order" className="nav-items2">
+					ORDER NOW
+				</Link>
+				<Link to="/cart" className="nav-items2">
+					CART
+				</Link>
+				<Link to="/login" Link className="nav-items nav-item6-2">
+					LOG IN
+				</Link>
+			</div>
 		</>
 	);
+}
+
+function ShowBurger() {
+	document.querySelector(".burger").classList.add("show");
 }
 
 export default NavBar;

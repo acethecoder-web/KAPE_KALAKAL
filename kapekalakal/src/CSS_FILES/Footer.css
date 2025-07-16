@@ -25,7 +25,7 @@
 	display: flex;
 	color: white;
 	width: 99vw;
-	height: 300px;
+	height: 400px;
 	background-color: rgba(65, 44, 23, 0.9);
 }
 
@@ -88,10 +88,10 @@
 
 .tag2-1 {
 	color: rgb(187, 167, 147);
-	display: flex;
 	justify-content: center;
 	align-items: center;
 	margin-top: 5px;
+	font-size: 30px;
 }
 
 .foot-sub-div3 {
@@ -133,7 +133,6 @@
 	font-family: playfairb;
 	font-size: 20px;
 	margin: 10px;
-	background-color: ;
 	color: rgb(147, 138, 115);
 }
 
@@ -155,4 +154,74 @@
 	font-size: 40px;
 	margin-bottom: 30px;
 	color: rgb(187, 167, 147);
+}
+
+.shopname1 {
+	font-size: 50px;
+}
+
+@media (max-width: 400px) {
+	.main-f-con {
+		height: 400px;
+	}
+}
+
+/* Medium devices (tablets) */
+
+@media (max-width: 768px) {
+}
+
+/* Large devices (small laptops) */
+
+@media (max-width: 992px) {
+}
+
+/* Extra large devices (desktops */
+
+@media (max-width: 1200px) {
+}
+
+/* Huge screens (TVs, etc.) */
+
+@media (min-width: 1200px) {
+}
+
+@media (max-width: 480px) {
+	.main-f-con {
+		flex-direction: column;
+		height: 1500px;
+		width: 100vw;
+	}
+	.shopname1 {
+		font-size: 50px;
+	}
+
+	.tag2-1 {
+		font-size: 30px;
+		text-align: center;
+		display: flex;
+		margin-left: 150px;
+	}
+
+	.icons {
+		margin-left: 150px;
+		margin-top: 50px;
+	}
+
+	.copyright {
+		font-size: 30px;
+		transform: translate(0px, -130px);
+		margin-left: 80px;
+	}
+
+	.concon {
+		margin-bottom: 40px;
+	}
+
+	.footcon2,
+	.footcon3 {
+		text-align: center;
+		margin: 0 auto;
+		margin-top: 40px;
+	}
 }
