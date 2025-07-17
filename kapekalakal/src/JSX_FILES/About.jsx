@@ -88,10 +88,6 @@ function About() {
 					/>
 					<p>AEROPRESS COFFEE MAKER</p>
 					<p>PHP 4290.00</p>
-					<div className="add">
-						<p className="but add-to-cart">ADD TO CART</p>
-						<p className="but buy-now">BUY NOW</p>
-					</div>
 				</div>
 				<div className="product-card">
 					<img
@@ -101,10 +97,6 @@ function About() {
 					/>
 					<p>POURX OURA COFFEE SCALE</p>
 					<p>PHP 10,290.00</p>
-					<div className="add">
-						<p className="but add-to-cart">ADD TO CART</p>
-						<p className="but buy-now">BUY NOW</p>
-					</div>
 				</div>
 				<div className="product-card">
 					<img
@@ -114,10 +106,6 @@ function About() {
 					/>
 					<p>KALITA WAVE TSUBAME 155</p>
 					<p>PHP 4290.00</p>
-					<div className="add">
-						<p className="but add-to-cart">ADD TO CART</p>
-						<p className="but buy-now">BUY NOW</p>
-					</div>
 				</div>
 				<div className="product-card">
 					<img
@@ -127,10 +115,6 @@ function About() {
 					/>
 					<p>CAFEC TRITAN COFFEE SERVER</p>
 					<p>PHP 1100.00</p>
-					<div className="add">
-						<p className="but add-to-cart">ADD TO CART</p>
-						<p className="but buy-now">BUY NOW</p>
-					</div>
 				</div>
 				<div className="product-card">
 					<img
@@ -140,10 +124,6 @@ function About() {
 					/>
 					<p>HARIO INSULATED MUG</p>
 					<p>PHP 1050.00</p>
-					<div className="add">
-						<p className="but add-to-cart">ADD TO CART</p>
-						<p className="but buy-now">BUY NOW</p>
-					</div>
 				</div>
 			</div>
 
