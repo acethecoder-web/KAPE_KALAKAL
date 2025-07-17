@@ -83,10 +83,11 @@ function Login() {
 						</button>
 						<p className="text-black-500/90 text-sm mt-4">
 							Don’t have an account?{" "}
-							<Link to="/register">
-								<a className="text-white hover:underline" href="#">
-									Sign up
-								</a>
+							<Link
+								to="/register"
+								className="text-white hover:underline"
+								href="#">
+								Sign up
 							</Link>
 						</p>
 					</form>

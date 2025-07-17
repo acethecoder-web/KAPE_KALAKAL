@@ -7,6 +7,7 @@ import Footer from "./Footer";
 import { Routes, Route } from "react-router-dom";
 import Login from "./Login";
 import Register from "./register";
+
 function App() {
 	return (
 		<>

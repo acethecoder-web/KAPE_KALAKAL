@@ -1,16 +1,16 @@
 @font-face {
 	font-family: bebas;
-	src: url(../public/fonts/BebasNeue-Regular.otf);
+	src: url(/fonts/BebasNeue-Regular.otf);
 }
 
 @font-face {
 	font-family: playfair;
-	src: url(../../public/fonts/PlayfairDisplay-Regular.ttf);
+	src: url(/fonts/PlayfairDisplay-Regular.ttf);
 }
 
 @font-face {
 	font-family: playfairb;
-	src: url(../../public/fonts/PlayfairDisplay-Bold.ttf);
+	src: url(/fonts/PlayfairDisplay-Bold.ttf);
 }
 
 * {
