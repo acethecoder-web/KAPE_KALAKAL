@@ -4,17 +4,19 @@
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
-		"bserver": "nodemon ./src/backend/Server.js",
+		"bserver": "nodemon ./src/backend/ServerH.js",
 		"dev": "vite",
 		"build": "vite build",
 		"lint": "eslint .",
 		"preview": "vite preview"
 	},
 	"dependencies": {
+		"bcrypt": "^6.0.0",
 		"bcryptjs": "^3.0.2",
 		"cors": "^2.8.5",
 		"dotenv": "^17.2.0",
 		"express": "^5.1.0",
+		"font-awesome": "^4.7.0",
 		"jsonwebtoken": "^9.0.2",
 		"mongoose": "^8.16.4",
 		"node": "^20.19.4",
