@@ -82,7 +82,7 @@ function Register() {
 							</svg>
 							<input
 								type="text"
-								placeholder="Name"
+								placeholder="Full Name"
 								value={formData.name}
 								onChange={handleChange}
 								name="name"
@@ -108,9 +108,34 @@ function Register() {
 							<input
 								type="email"
 								name="email"
-								placeholder="Email id"
+								placeholder="Email"
 								value={formData.email}
 								onChange={handleChange}
+								className="bg-transparent text-black-500 placeholder-black-500/100 outline-none text-sm w-full h-full"
+								required
+							/>
+						</div>
+
+						<div className="flex items-center w-full bg-transparent border border-black-300/60 h-12 rounded-full overflow-hidden pl-6 gap-2">
+							<svg
+								width="16"
+								height="11"
+								viewBox="0 0 16 11"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg">
+								<path
+									fillRule="evenodd"
+									clipRule="evenodd"
+									d="M0 .55.571 0H15.43l.57.55v9.9l-.571.55H.57L0 10.45zm1.143 1.138V9.9h13.714V1.69l-6.503 4.8h-.697zM13.749 1.1H2.25L8 5.356z"
+									fill="#000000ff"
+								/>
+							</svg>
+							<input
+								type="text"
+								placeholder="Address"
+								value={formData.address}
+								onChange={handleChange}
+								name="address"
 								className="bg-transparent text-black-500 placeholder-black-500/100 outline-none text-sm w-full h-full"
 								required
 							/>

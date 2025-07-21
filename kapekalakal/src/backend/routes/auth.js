@@ -1,33 +1,22 @@
-// routes/auth.js
-import express from 'express';
-import Accounts from '../models/registeracc.model.js';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-
+import express from "express";
+import bcrypt from "bcryptjs";
+import Accounts from "../models/registeracc.js";
 const router = express.Router();
 
-router.post("/api/login", async (req, res) => {
+router.post("/login", async (req, res) => {
+    const {
+        email,
+        password
+    } = req.body;
+
     try {
-        const {
-            email,
-            password
-        } = req.body;
-
-        if (!email || !password) {
-            return res.status(400).json({
-                success: false,
-                message: "Please provide email and password"
-            });
-        }
-
-        // Step 2: Find the user by email
         const user = await Accounts.findOne({
             email
         });
         if (!user) {
             return res.status(401).json({
                 success: false,
-                message: "Invalid email or password"
+                message: "User not found"
             });
         }
 
@@ -35,31 +24,16 @@ router.post("/api/login", async (req, res) => {
         if (!isMatch) {
             return res.status(401).json({
                 success: false,
-                message: "Invalid email or password"
+                message: "Incorrect password"
             });
         }
 
-        const token = jwt.sign({
-                id: user._id,
-                email: user.email
-            }, // payload
-            process.env.JWT_SECRET, {
-                expiresIn: '1h'
-            }
-        );
-
+        // You can add JWT here later
         res.status(200).json({
             success: true,
             message: "Login successful",
-            token,
-            user: {
-                id: user._id,
-                name: user.name,
-                email: user.email,
-                role: user.role
-            }
+            // token: jwt.sign(...)
         });
-
     } catch (error) {
         console.error("Login error:", error.message);
         res.status(500).json({
@@ -68,5 +42,57 @@ router.post("/api/login", async (req, res) => {
         });
     }
 });
+
+router.post("/register", async (req, res) => {
+    const {
+        name,
+        email,
+        password,
+        address,
+    } = req.body;
+
+    if (!name || !email || !password || !address) {
+        return res.status(400).json({
+            success: false,
+            message: "Please provide all fields"
+        });
+    }
+
+    try {
+        const existingUser = await Accounts.findOne({
+            email
+        });
+        if (existingUser) {
+            return res.status(400).json({
+                success: false,
+                message: "Email already registered"
+            });
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const newAccount = new Accounts({
+            //name,
+            email,
+            password: hashedPassword,
+        });
+
+        await newAccount.save();
+
+        res.status(201).json({
+            success: true,
+            data: newAccount
+        });
+
+    } catch (error) {
+        console.error("Error in Create Account:", error.message);
+        res.status(500).json({
+            success: false,
+            message: "Server Error"
+        });
+    }
+});
+
 
 export default router;

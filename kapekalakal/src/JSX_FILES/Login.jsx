@@ -1,7 +1,49 @@
 import "../CSS_FILES/Login.css";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+/* useNavigate was usef to redirect the apge you want to redirect if the credentials are correct */
 
 function Login() {
+	const [formData, setFormData] = useState({
+		email: "",
+		password: "",
+	});
+	//================================================
+	const navigate = useNavigate();
+	//================================================
+	const handleChange = (e) => {
+		setFormData({
+			...formData,
+			[e.target.name]: e.target.value,
+		});
+	};
+	//================================================
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		try {
+			const res = await fetch("http://localhost:5174/api/login", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(formData),
+			});
+
+			const data = await res.json();
+
+			if (data.success) {
+				alert("Login Successful");
+				localStorage.setItem("token", data.token);
+				navigate("/products");
+			} else {
+				alert(data.message || "Login.failed");
+			}
+		} catch (err) {
+			console.error("Error:", err);
+			alert("Something went wrong with the server.");
+		}
+	};
+
 	return (
 		<>
 			<div className="flex h-[673px] w-full bg-stone-500/90 text-[rgba(65, 44, 23)]">
@@ -10,7 +52,9 @@ function Login() {
 				</div>
 
 				<div className="w-full flex flex-col items-center justify-center ">
-					<form className="md:w-96 w-80 flex gap-4 flex-col items-center justify-center">
+					<form
+						onSubmit={handleSubmit}
+						className="md:w-96 w-80 flex gap-4 flex-col items-center justify-center">
 						<h2 className="text-4xl text-black-600 font-medium">Sign in</h2>
 						<p className="text-sm text-black-700/90 mt-3">
 							Welcome back! Please sign in to continue
@@ -40,12 +84,14 @@ function Login() {
 							</svg>
 							<input
 								type="email"
+								name="email"
+								value={formData.email}
+								onChange={handleChange}
 								placeholder="Email id"
 								className="bg-transparent text-black-500 placeholder-black-500/100 outline-none text-sm w-full h-full"
 								required
 							/>
 						</div>
-
 						<div className="flex items-center mt-6 w-full bg-transparent border border-gray-300/60 h-12 rounded-full overflow-hidden ml-6 gap-2">
 							<svg
 								width="13"
@@ -60,6 +106,9 @@ function Login() {
 							</svg>
 							<input
 								type="password"
+								name="password"
+								value={formData.password}
+								onChange={handleChange}
 								placeholder="Password"
 								className="bg-transparent text-black-500/80 placeholder-gray-500/80 outline-none text-sm w-full h-full"
 								required
