@@ -1,7 +1,10 @@
 import express from "express";
 import bcrypt from "bcryptjs";
-import Accounts from "../models/registeracc.js";
+import Accounts from "../models/registeracc.model.js";
 const router = express.Router();
+import {
+    generateToken
+} from "../utils/GenerateToken.js";
 
 router.post("/login", async (req, res) => {
     const {
@@ -27,12 +30,18 @@ router.post("/login", async (req, res) => {
                 message: "Incorrect password"
             });
         }
+        const token = generateToken(user._id);
 
-        // You can add JWT here later
         res.status(200).json({
             success: true,
             message: "Login successful",
-            // token: jwt.sign(...)
+            //jwt
+            token,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email
+            }
         });
     } catch (error) {
         console.error("Login error:", error.message);
@@ -73,8 +82,9 @@ router.post("/register", async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         const newAccount = new Accounts({
-            //name,
+            name,
             email,
+            address,
             password: hashedPassword,
         });
 

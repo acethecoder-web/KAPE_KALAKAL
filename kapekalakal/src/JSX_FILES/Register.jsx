@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 function Register() {
 	//================================================
@@ -9,6 +9,7 @@ function Register() {
 		password: "",
 	});
 	//================================================
+	const navigate2 = useNavigate();
 
 	const handleChange = (e) => {
 		setFormData({
@@ -22,7 +23,7 @@ function Register() {
 		e.preventDefault();
 
 		try {
-			const res = await fetch("http://localhost:5174/api/docs", {
+			const res = await fetch("http://localhost:5174/api/register", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -34,6 +35,7 @@ function Register() {
 
 			if (data.success) {
 				alert("Registration successful!");
+				navigate2("/login");
 			} else {
 				alert(data.message || "Registration failed.");
 			}

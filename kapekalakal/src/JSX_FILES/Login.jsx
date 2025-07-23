@@ -1,6 +1,7 @@
 import "../CSS_FILES/Login.css";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
 /* useNavigate was usef to redirect the apge you want to redirect if the credentials are correct */
 
 function Login() {
@@ -34,6 +35,13 @@ function Login() {
 			if (data.success) {
 				alert("Login Successful");
 				localStorage.setItem("token", data.token);
+				// THIS CODE WILL BE PLACED IN THE FILTERING OF ACCESS IN THE CRUD
+				// const res = await axios.get("/profile", {
+				// 	headers: {
+				// 		Authorization: `Bearer ${token}`,
+				// 	},
+				// });
+
 				navigate("/products");
 			} else {
 				alert(data.message || "Login.failed");
