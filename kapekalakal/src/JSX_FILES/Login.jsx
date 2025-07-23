@@ -34,13 +34,17 @@ function Login() {
 
 			if (data.success) {
 				alert("Login Successful");
-				localStorage.setItem("token", data.token);
+				document.cookie = `token=${data.token}; path=/; max-age=3600;secure; samesite=strict`;
+
 				// THIS CODE WILL BE PLACED IN THE FILTERING OF ACCESS IN THE CRUD
 				// const res = await axios.get("/profile", {
 				// 	headers: {
 				// 		Authorization: `Bearer ${token}`,
 				// 	},
 				// });
+
+				// this is the syntax when the user logouts
+				//document.cookie = "token=; path=/; max-age=0";
 
 				navigate("/products");
 			} else {
