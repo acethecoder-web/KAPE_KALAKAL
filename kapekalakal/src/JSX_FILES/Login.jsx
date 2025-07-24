@@ -45,7 +45,6 @@ function Login() {
 
 				// this is the syntax when the user logouts
 				//document.cookie = "token=; path=/; max-age=0";
-
 				navigate("/products");
 			} else {
 				alert(data.message || "Login.failed");

@@ -1,7 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import dotenv from 'dotenv';
-
+import createSuperAdmin from './config/superAdminSeeder.js';
 import {
     connectDB
 } from './db.js';
@@ -18,5 +18,6 @@ app.use("/api",
 
 app.listen(5174, () => {
     connectDB();
+    createSuperAdmin()
     console.log("server started at http://localhost:5174");
 });

@@ -65,7 +65,7 @@ router.post("/login", async (req, res) => {
         });
     }
 });
-
+//==================================================================
 router.post("/register", async (req, res) => {
     const {
         name,
@@ -102,11 +102,11 @@ router.post("/register", async (req, res) => {
             password: hashedPassword,
         });
 
-        await newAccount.save();
-
+        const savedAccount = await newAccount.save();
+        console.log("Saved user:", savedAccount);
         res.status(201).json({
             success: true,
-            data: newAccount
+            data: savedAccount
         });
 
     } catch (error) {

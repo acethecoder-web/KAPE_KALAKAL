@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 const accountSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     email: {
         type: String,
@@ -22,7 +23,8 @@ const accountSchema = new mongoose.Schema({
     role: {
         type: String,
         enum: ["user", "admin", "superadmin"],
-        default: "user"
+        default: "user",
+        required: true
     }
 }, {
     timestamps: true

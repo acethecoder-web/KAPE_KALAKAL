@@ -6,7 +6,7 @@ import Shop from "./Shop";
 import { Routes, Route } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
-
+import AdminNavBar from "./AdminSide/AdminNavBar";
 function App() {
 	return (
 		<>
