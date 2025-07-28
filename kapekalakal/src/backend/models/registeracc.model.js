@@ -14,7 +14,6 @@ const accountSchema = new mongoose.Schema({
     address: {
         type: String,
         required: true,
-        unique: true
     },
     password: {
         type: String,

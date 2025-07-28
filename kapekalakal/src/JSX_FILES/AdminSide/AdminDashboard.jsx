@@ -1,9 +1,11 @@
 import AdminNavBar from "./AdminNavBar";
 
-function Admin() {
+function AdminDashboard() {
 	return (
 		<>
 			<AdminNavBar />
 		</>
 	);
 }
+
+export default AdminDashboard;

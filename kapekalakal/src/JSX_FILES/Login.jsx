@@ -33,25 +33,21 @@ function Login() {
 			const data = await res.json();
 
 			if (data.success) {
-				alert("Login Successful");
-				document.cookie = `token=${data.token}; path=/; max-age=3600;secure; samesite=strict`;
+				alert("Login successful!");
 
-				// THIS CODE WILL BE PLACED IN THE FILTERING OF ACCESS IN THE CRUD
-				// const res = await axios.get("/profile", {
-				// 	headers: {
-				// 		Authorization: `Bearer ${token}`,
-				// 	},
-				// });
+				const userRole = data.user.role;
 
-				// this is the syntax when the user logouts
-				//document.cookie = "token=; path=/; max-age=0";
-				navigate("/products");
+				if (userRole === "admin" || userRole === "superadmin") {
+					navigate("/admin");
+				} else {
+					navigate("/");
+				}
 			} else {
-				alert(data.message || "Login.failed");
+				alert(data.message);
 			}
-		} catch (err) {
-			console.error("Error:", err);
-			alert("Something went wrong with the server.");
+		} catch (error) {
+			console.error("Login error:", error);
+			alert("Something went wrong during login.");
 		}
 	};
 

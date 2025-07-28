@@ -7,6 +7,7 @@ function Register() {
 		name: "",
 		email: "",
 		address: "",
+		role: "",
 		password: "",
 	});
 	//================================================
@@ -160,12 +161,11 @@ function Register() {
 							</svg>
 							<input
 								type="text"
-								placeholder="Address"
-								value="user"
+								placeholder="role"
+								value=""
 								onChange={handleChange}
-								name="address"
+								name="role"
 								className="bg-transparent text-black-500 placeholder-black-500/100 outline-none text-sm w-full h-full"
-								required
 							/>
 						</div>
 

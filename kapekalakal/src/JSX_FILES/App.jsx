@@ -6,7 +6,9 @@ import Shop from "./Shop";
 import { Routes, Route } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
-import AdminNavBar from "./AdminSide/AdminNavBar";
+import AdminDashboard from "./AdminSide/AdminDashboard";
+import ProtectedRoute from "./AdminSide/ProtectedRoute";
+
 function App() {
 	return (
 		<>
@@ -14,9 +16,24 @@ function App() {
 			<Routes>
 				<Route path="/" element={<LandingPage />} />
 				<Route path="/about" element={<About />} />
-				<Route path="/products" element={<Shop />} />
+				<Route
+					path="/products"
+					element={
+						<ProtectedRoute allowedRoles={["user", "admin", "superadmin"]}>
+							<Shop />
+						</ProtectedRoute>
+					}
+				/>{" "}
 				<Route path="/login" element={<Login />} />
 				<Route path="/register" element={<Register />} />
+				<Route
+					path="/admin"
+					element={
+						<ProtectedRoute allowedRoles={["admin", "superadmin"]}>
+							<AdminDashboard />
+						</ProtectedRoute>
+					}
+				/>{" "}
 			</Routes>
 		</>
 	);
