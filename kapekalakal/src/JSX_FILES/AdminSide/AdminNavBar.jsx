@@ -81,6 +81,10 @@ function AdminNavBar() {
 			</div>
 
 			<div className="sidenav-con">
+				<Link to="/usermanage" className="nav-items2-1">
+					<i class="fa-solid s-icon fa-xl  fa-users"></i>
+					MANAGE USERS
+				</Link>
 				<Link to="/products" className="nav-items2-1">
 					<i class="fa-solid s-icon fa-xl fa-hand-holding-heart"></i>
 					MANAGE PRODUCTS
@@ -92,10 +96,6 @@ function AdminNavBar() {
 				<Link to="/cart" className="nav-items2-1">
 					<i class="fa-solid s-icon fa-xl fa-money-bill-1-wave"></i>
 					MANAGE PAYMENTS
-				</Link>
-				<Link to="/cart" className="nav-items2-1">
-					<i class="fa-solid s-icon fa-xl  fa-users"></i>
-					MANAGE USERS
 				</Link>
 			</div>
 		</>

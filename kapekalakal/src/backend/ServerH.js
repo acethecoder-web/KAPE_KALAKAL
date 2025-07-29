@@ -3,7 +3,6 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from "cookie-parser";
 
-
 // import createSuperAdmin from './config/superAdminSeeder.js';
 import {
     connectDB

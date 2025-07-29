@@ -20,7 +20,6 @@ const generateToken = (user) => {
     );
 };
 
-
 function authenticateToken(req, res, next) {
     const token = req.cookies.token;
 
