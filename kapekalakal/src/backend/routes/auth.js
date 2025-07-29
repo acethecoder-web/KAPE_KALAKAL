@@ -20,14 +20,28 @@ const generateToken = (user) => {
     );
 };
 
+
 function authenticateToken(req, res, next) {
     const token = req.cookies.token;
-    if (token == null) return res.sendStatus(401)
+
+    if (!token) {
+        return res.status(401).json({
+            success: false,
+            message: "Not authorized, token missing"
+        });
+    }
+
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) return res.status(403)
-        req.user = user
-        next()
-    })
+        if (err) {
+            return res.status(403).json({
+                success: false,
+                message: "Token is invalid or expired"
+            });
+        }
+
+        req.user = user;
+        next();
+    });
 }
 
 router.post("/login", async (req, res) => {
@@ -155,7 +169,20 @@ function authorizeRoles(...allowedRoles) {
 
 //==================================================================
 
-
+router.get("/me", authenticateToken, async (req, res) => {
+    try {
+        const user = await Accounts.findById(req.user.id).select("-password");
+        res.json({
+            success: true,
+            data: user
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "Server Error"
+        });
+    }
+});
 
 //==================================================================
 router.get(

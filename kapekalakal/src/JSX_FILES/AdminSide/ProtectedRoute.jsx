@@ -7,7 +7,7 @@ function ProtectedRoute({ children, allowedRoles }) {
 	useEffect(() => {
 		const fetchAdmin = async () => {
 			try {
-				const res = await fetch("http://localhost:1574/api/admin", {
+				const res = await fetch("http://localhost:5174/api/me", {
 					method: "GET",
 					credentials: "include",
 				});
@@ -26,8 +26,8 @@ function ProtectedRoute({ children, allowedRoles }) {
 		fetchAdmin();
 	}, [allowedRoles]);
 
-	if (loading) return <Navigate to="/admin" replace />;
-	if (!user) return <Navigate to="/login" replace />;
+	if (loading) return <div> LOADING PLEASE WAIT.... </div>;
+	if (!user) return <Navigate to="/login" />;
 
 	return children;
 }

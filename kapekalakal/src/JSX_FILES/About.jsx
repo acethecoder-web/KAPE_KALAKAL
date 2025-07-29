@@ -1,10 +1,12 @@
 import "../CSS_FILES/About.css";
 import { Link } from "react-router-dom";
 import Footer from "./Footer";
+import NavBar from "./NavBar";
 
 function About() {
 	return (
 		<>
+			<NavBar />
 			<div className="about-con">
 				<div>
 					{" "}
