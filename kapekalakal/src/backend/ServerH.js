@@ -2,7 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from "cookie-parser";
-
+import userRoutes from './routes/userRoutes.js';
 // import createSuperAdmin from './config/superAdminSeeder.js';
 import {
     connectDB
@@ -22,7 +22,7 @@ app.use(cookieParser());
 
 app.use("/api",
     authRoutes);
-
+app.use("/api", userRoutes);
 app.listen(5174, () => {
     connectDB();
     // createSuperAdmin()

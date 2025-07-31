@@ -1,7 +1,10 @@
 import "./AdminNav.css";
 import { Link } from "react-router-dom";
 import { FiSidebar } from "react-icons/fi";
+import { useAdminView } from "./AdminViewContext.jsx";
 function AdminNavBar() {
+	const { setActiveView } = useAdminView();
+
 	const toggleSidebar = () => {
 		const burgerCon1 = document.querySelector(".burger-con1");
 		const sideNav = document.querySelector(".sidenav-con");
@@ -32,12 +35,6 @@ function AdminNavBar() {
 					<p className="shopname">KAPE KALAKAL</p>
 				</div>
 				<div className="nav-buttons">
-					{/* <a className="nav-items" href="">
-						ORDER NOW
-					</a>
-					<a className="nav-items" href="">
-						CART
-					</a> */}
 					<i
 						className="fa-solid fa-bars mt-3 mr-4"
 						onClick={
@@ -81,22 +78,41 @@ function AdminNavBar() {
 			</div>
 
 			<div className="sidenav-con">
-				<Link to="/usermanage" className="nav-items2-1">
+				<div
+					to=""
+					className="nav-items2-1"
+					onClick={() => setActiveView("manage-users")}>
 					<i class="fa-solid s-icon fa-xl  fa-users"></i>
 					MANAGE USERS
-				</Link>
-				<Link to="/products" className="nav-items2-1">
+				</div>
+				<div
+					to=""
+					className="nav-items2-1"
+					onClick={() => setActiveView("manage-products")}>
 					<i class="fa-solid s-icon fa-xl fa-hand-holding-heart"></i>
 					MANAGE PRODUCTS
-				</Link>
-				<Link to="/order" className="nav-items2-1">
+				</div>
+				<div
+					to=""
+					className="nav-items2-1"
+					onClick={() => setActiveView("manage-orders")}>
 					<i class="fa-solid s-icon fa-xl fa-list-check"></i>
 					MANAGE ORDERS
-				</Link>
-				<Link to="/cart" className="nav-items2-1">
+				</div>
+				<div
+					to=""
+					className="nav-items2-1"
+					onClick={() => setActiveView("manage-payments")}>
 					<i class="fa-solid s-icon fa-xl fa-money-bill-1-wave"></i>
 					MANAGE PAYMENTS
-				</Link>
+				</div>
+				<div to="/products" className="nav-items2-1">
+					<i class="fa-solid s-icon fa-hand-holding-heart"></i>
+					PRODUCTS
+				</div>
+				<div to="/cart" className="nav-items2-1">
+					<i class="fa-solid s-icon fa-user-tie"></i> PROFILE
+				</div>
 			</div>
 		</>
 	);

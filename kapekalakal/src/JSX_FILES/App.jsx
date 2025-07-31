@@ -7,7 +7,7 @@ import Login from "./Login";
 import Register from "./Register";
 import AdminDashboard from "./AdminSide/AdminDashboard";
 import ProtectedRoute from "./AdminSide/ProtectedRoute";
-import ManageUser from "./AdminSide/ManageUser";
+import ManageUser from "./AdminSide/ManageUsers";
 
 function App() {
 	return (
@@ -34,7 +34,7 @@ function App() {
 					}
 				/>{" "}
 				<Route
-					path="/usermanage"
+					path="/manageuser"
 					element={
 						<ProtectedRoute allowedRoles={["admin", "superadmin"]}>
 							<ManageUser />
