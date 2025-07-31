@@ -1,6 +1,5 @@
 import { FaEdit } from "react-icons/fa";
 import { FaArchive } from "react-icons/fa";
-import AdminNavBar from "./AdminNavBar";
 import { useEffect, useState } from "react";
 import { IoIosAddCircle } from "react-icons/io";
 function ManageUser() {
@@ -9,7 +8,7 @@ function ManageUser() {
 	useEffect(() => {
 		const fetchUsers = async () => {
 			try {
-				const res = await fetch("http://localhost:5174/api/users"); // update port if needed
+				const res = await fetch("http://localhost:5174/api/users");
 				const data = await res.json();
 				setUsers(data);
 			} catch (err) {
