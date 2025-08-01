@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import userRoutes from "./routes/userRoutes.js";
 import productsRoutes from "./routes/productsRoutes.js";
-// import createSuperAdmin from './config/superAdminSeeder.js';
+// import createSuperAdmin from "./config/superAdminSeeder.js";
 import { connectDB } from "./db.js";
 
 import authRoutes from "./routes/auth.js";
@@ -26,6 +26,6 @@ app.use("/api/users", userRoutes);
 app.use("/api/products", productsRoutes);
 app.listen(5174, () => {
   connectDB();
-  // createSuperAdmin()
+  //   createSuperAdmin();
   console.log("server started at http://localhost:5174");
 });

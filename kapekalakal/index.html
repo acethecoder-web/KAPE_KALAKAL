@@ -1,47 +1,52 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/LOGO.svg" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kape Kalakal</title>
+    <style>
+      body {
+        background-image: url(../kapekalakal/public/bg2.png);
+        background-size: cover;
+        background-position: center;
+        background-repeat: repeat;
+        height: 100vh;
+        overflow-x: hidden;
+      }
+    </style>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/LOGO.svg" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kape Kalakal</title>
-  <style>
-    body {
-      background-image: url(../kapekalakal/public/bg2.png);
-      background-size: cover;
-      background-position: center;
-      background-repeat: repeat;
-      height: 100vh;
-      overflow-x: hidden;
-    }
-  </style>
-</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./src/JSX_FILES/main.jsx"></script>
+    <!-- Compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
 
-<body>
-  <div id="root"></div>
-  <script type="module" src="./src/JSX_FILES/main.jsx"></script>
-  <!-- Compiled and minified CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script>
+      ScrollReveal({
+        reset: true,
+      });
+      ScrollReveal().reveal(".story", {
+        delay: 500,
+      });
 
-  <!-- Compiled and minified JavaScript -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script src="https://unpkg.com/scrollreveal"></script>
-  <script>
-    ScrollReveal({
-      reset: true
-    });
-    ScrollReveal().reveal('.story', {
-      delay: 500
-    });
-
-    ScrollReveal().reveal('.decor', {
-      delay: 1000
-    });
-  </script>
-</body>
-
+      ScrollReveal().reveal(".decor", {
+        delay: 1000,
+      });
+    </script>
+  </body>
 </html>
