@@ -1,30 +1,31 @@
-import cors from 'cors';
-import express from 'express';
-import dotenv from 'dotenv';
+import cors from "cors";
+import express from "express";
+import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import userRoutes from './routes/userRoutes.js';
+import userRoutes from "./routes/userRoutes.js";
+import productsRoutes from "./routes/productsRoutes.js";
 // import createSuperAdmin from './config/superAdminSeeder.js';
-import {
-    connectDB
-} from './db.js';
+import { connectDB } from "./db.js";
 
-import authRoutes from './routes/auth.js';
+import authRoutes from "./routes/auth.js";
 dotenv.config();
 
 const app = express();
 
-app.use(cors({
+app.use(
+  cors({
     origin: "http://localhost:5173",
     credentials: true,
-}));
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/api",
-    authRoutes);
-app.use("/api", userRoutes);
+app.use("/api", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/products", productsRoutes);
 app.listen(5174, () => {
-    connectDB();
-    // createSuperAdmin()
-    console.log("server started at http://localhost:5174");
+  connectDB();
+  // createSuperAdmin()
+  console.log("server started at http://localhost:5174");
 });
