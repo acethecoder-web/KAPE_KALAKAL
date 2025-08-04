@@ -214,7 +214,6 @@ function ManageUsers() {
                 <option value="">Select role</option>
                 <option value="user">User</option>
                 <option value="admin">Admin</option>
-                <option value="superadmin">Superadmin</option>
               </select>
               <input
                 name="address"

@@ -8,42 +8,50 @@ import Register from "./Register";
 import AdminDashboard from "./AdminSide/AdminDashboard";
 import ProtectedRoute from "./AdminSide/ProtectedRoute";
 import ManageUser from "./AdminSide/ManageUsers";
-
+import ManageProducts from "./AdminSide/ManageProducts";
 function App() {
-	return (
-		<>
-			<Routes>
-				<Route path="/" element={<LandingPage />} />
-				<Route path="/about" element={<About />} />
-				<Route
-					path="/products"
-					element={
-						<ProtectedRoute allowedRoles={["user", "admin", "superadmin"]}>
-							<Shop />
-						</ProtectedRoute>
-					}
-				/>{" "}
-				<Route path="/login" element={<Login />} />
-				<Route path="/register" element={<Register />} />
-				<Route
-					path="/admin"
-					element={
-						<ProtectedRoute allowedRoles={["admin", "superadmin"]}>
-							<AdminDashboard />
-						</ProtectedRoute>
-					}
-				/>{" "}
-				<Route
-					path="/manageuser"
-					element={
-						<ProtectedRoute allowedRoles={["admin", "superadmin"]}>
-							<ManageUser />
-						</ProtectedRoute>
-					}
-				/>{" "}
-			</Routes>
-		</>
-	);
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/about" element={<About />} />
+        <Route
+          path="/products"
+          element={
+            <ProtectedRoute allowedRoles={["user", "admin", "superadmin"]}>
+              <Shop />
+            </ProtectedRoute>
+          }
+        />{" "}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "superadmin"]}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />{" "}
+        <Route
+          path="/manageuser"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "superadmin"]}>
+              <ManageUser />
+            </ProtectedRoute>
+          }
+        />{" "}
+        <Route
+          path="/manageproducts"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "superadmin"]}>
+              <ManageProducts />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </>
+  );
 }
 
 export default App;

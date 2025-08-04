@@ -39,7 +39,6 @@ function AdminNavBar() {
           <i class="fa-solid s-icon fa-user-tie"></i> PROFILE
         </div>
       </nav>
-
       <div className="burger-con">
         <Link to="/about" className="nav-items2">
           ABOUT
