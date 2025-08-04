@@ -9,6 +9,7 @@ import AdminDashboard from "./AdminSide/AdminDashboard";
 import ProtectedRoute from "./AdminSide/ProtectedRoute";
 import ManageUser from "./AdminSide/ManageUsers";
 import ManageProducts from "./AdminSide/ManageProducts";
+import ManageOrders from "./AdminSide/ManageOrders";
 function App() {
   return (
     <>
@@ -46,6 +47,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["admin", "superadmin"]}>
               <ManageProducts />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/manageorders"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "superadmin"]}>
+              <ManageOrders />
             </ProtectedRoute>
           }
         />
