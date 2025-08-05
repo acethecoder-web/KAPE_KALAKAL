@@ -177,7 +177,7 @@ function ManageProducts() {
                 onChange={handleChange}
                 placeholder="Product Name"
                 required
-                className="border border-[#D7B899] rounded-lg p-2"
+                className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
               />
               <input
                 name="category"
@@ -185,7 +185,7 @@ function ManageProducts() {
                 onChange={handleChange}
                 placeholder="Category"
                 required
-                className="border border-[#D7B899] rounded-lg p-2"
+                className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
               />
               <input
                 type="number"
@@ -194,7 +194,7 @@ function ManageProducts() {
                 onChange={handleChange}
                 placeholder="Price"
                 required
-                className="border border-[#D7B899] rounded-lg p-2"
+                className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
               />
               <input
                 type="number"
@@ -203,7 +203,7 @@ function ManageProducts() {
                 onChange={handleChange}
                 placeholder="Stock"
                 required
-                className="border border-[#D7B899] rounded-lg p-2"
+                className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
               />
               <div className="flex justify-center gap-4 mt-4">
                 <button
@@ -214,8 +214,8 @@ function ManageProducts() {
                 </button>
                 <button
                   type="button"
+                  className="bg-[#E9D6C0] text-[#4B2E05] px-5 py-2 rounded hover:bg-[#D7B899] transition font-semibold shadow"
                   onClick={closeModal}
-                  className="bg-[#E9D6C0] text-[#4B2E05] px-5 py-2 rounded hover:bg-[#D7B899]"
                 >
                   Cancel
                 </button>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaArchive } from "react-icons/fa";
 
 function ManageOrders() {
   const [orders, setOrders] = useState([]);
@@ -8,7 +8,7 @@ function ManageOrders() {
     product: "",
     quantity: "",
     totalPrice: "",
-    status: "Pending",
+    status: "",
   });
   const [editingId, setEditingId] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -140,27 +140,26 @@ function ManageOrders() {
               <td className="px-4 py-2">{order.quantity}</td>
               <td className="px-4 py-2">{order.totalPrice}</td>
               <td className="px-4 py-2">{order.status}</td>
-              <td className="px-4 py-2 flex gap-2">
+              <td className="px-4 py-2 d-flex gap-2">
                 <button
                   onClick={() => handleEditOrder(order)}
                   className="text-amber-950 hover:text-amber-500"
                   title="Edit"
                 >
-                  <FaEdit size={20} />
+                  <FaEdit size={23} />
                 </button>
                 <button
                   onClick={() => handleDeleteOrder(order._id)}
                   className="text-amber-950 hover:text-amber-500"
                   title="Delete"
                 >
-                  <FaTrash size={20} />
+                  <FaArchive size={23} />
                 </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-
       {/* Modal Form */}
       {showModal && (
         <div className="fixed inset-0 bg-[#4B2E05]/70 flex items-center justify-center z-50">
@@ -184,7 +183,7 @@ function ManageOrders() {
                 onChange={handleChange}
                 placeholder="Customer Name"
                 required
-                className="border border-[#D7B899] rounded-lg p-2"
+                className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
               />
               <input
                 name="product"
@@ -192,7 +191,7 @@ function ManageOrders() {
                 onChange={handleChange}
                 placeholder="Product Name"
                 required
-                className="border border-[#D7B899] rounded-lg p-2"
+                className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
               />
               <input
                 type="number"
@@ -201,7 +200,7 @@ function ManageOrders() {
                 onChange={handleChange}
                 placeholder="Quantity"
                 required
-                className="border border-[#D7B899] rounded-lg p-2"
+                className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
               />
               <input
                 type="number"
@@ -210,13 +209,13 @@ function ManageOrders() {
                 onChange={handleChange}
                 placeholder="Total Price"
                 required
-                className="border border-[#D7B899] rounded-lg p-2"
+                className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
               />
               <select
                 name="status"
                 value={form.status}
                 onChange={handleChange}
-                className="border border-[#D7B899] rounded-lg p-2"
+                className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
               >
                 <option value="Pending">Pending</option>
                 <option value="Completed">Completed</option>
@@ -231,8 +230,8 @@ function ManageOrders() {
                 </button>
                 <button
                   type="button"
+                  className="bg-[#E9D6C0] text-[#4B2E05] px-5 py-2 rounded hover:bg-[#D7B899] transition font-semibold shadow"
                   onClick={closeModal}
-                  className="bg-[#E9D6C0] text-[#4B2E05] px-5 py-2 rounded hover:bg-[#D7B899]"
                 >
                   Cancel
                 </button>

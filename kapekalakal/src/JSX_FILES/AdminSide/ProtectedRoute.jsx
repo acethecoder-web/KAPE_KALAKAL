@@ -1,5 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+
 function ProtectedRoute({ children, allowedRoles }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -26,9 +27,8 @@ function ProtectedRoute({ children, allowedRoles }) {
     fetchAdmin();
   }, [allowedRoles]);
 
-  if (loading) return <div> LOADING PLEASE WAIT.... </div>;
+  if (loading) return <div> </div>;
   if (!user) return <Navigate to="/login" />;
-
   return children;
 }
 

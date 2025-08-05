@@ -1,21 +1,13 @@
 import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  customerName: { type: String, required: true },
-  product: { type: String, required: true },
-  quantity: { type: Number, required: true },
-  totalPrice: { type: Number, required: true },
-  status: {
-    type: String,
-    required: true,
-    enum: ["pending", "shipped", "delivered", "cancelled"],
-  },
-  orderDate: { type: Date, default: Date.now },
+  id: Number,
+  customerName: String,
+  product: String,
+  quantity: Number,
+  totalPrice: Number,
+  status: String,
+  orderDate: Date,
 });
 
 export default mongoose.model("Order", orderSchema);

@@ -1,18 +1,47 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import AdminNavBar from "./AdminNavBar";
 import ManageUsers from "./ManageUsers.jsx";
 import ManageOrders from "./ManageOrders.jsx";
 import ManagePayments from "./ManagePayments.jsx";
 import { AdminViewProvider, useAdminView } from "./AdminViewContext.jsx";
 import ManageProducts from "./ManageProducts.jsx";
+import coffeeAnimation from "../../assets/coffee_animation.json";
+import Lottie from "lottie-react";
+
 function AdminDashboardContent() {
   const { activeView, setActiveView } = useAdminView();
+  const [loading, setLoading] = useState(false);
+  const [currentView, setCurrentView] = useState("manage-users");
 
   useEffect(() => {
     setActiveView("manage-users");
   }, [setActiveView]);
 
+  // Add loading animation when view changes
+  useEffect(() => {
+    if (activeView !== currentView) {
+      setLoading(true);
+      const timeout = setTimeout(() => {
+        setCurrentView(activeView);
+        setLoading(false);
+      }, 500); // animation duration
+
+      return () => clearTimeout(timeout);
+    }
+  }, [activeView, currentView]);
+
   const renderContent = () => {
+    if (loading) {
+      return (
+        <div
+          className="flex justify-center items-center h-96 drop-shadow-neutral-950"
+          style={{ width: 500, height: 500 }}
+        >
+          <Lottie animationData={coffeeAnimation} loop autoplay />
+        </div>
+      );
+    }
+
     switch (activeView) {
       case "manage-users":
         return <ManageUsers />;

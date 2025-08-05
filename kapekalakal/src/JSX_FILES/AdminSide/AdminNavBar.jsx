@@ -2,6 +2,7 @@ import "./AdminNav.css";
 import { Link } from "react-router-dom";
 import { FiSidebar } from "react-icons/fi";
 import { useAdminView } from "./AdminViewContext.jsx";
+
 function AdminNavBar() {
   const { setActiveView } = useAdminView();
 
@@ -10,14 +11,6 @@ function AdminNavBar() {
     const sideNav = document.querySelector(".sidenav-con");
 
     burgerCon1.classList.remove("show");
-    sideNav.classList.toggle("showside");
-  };
-
-  const toggleBurger1 = () => {
-    const burgerCon1 = document.querySelector(".burger-con1");
-    const sideNav = document.querySelector(".sidenav-con");
-
-    burgerCon1.classList.toggle("show");
     sideNav.classList.toggle("showside");
   };
 
