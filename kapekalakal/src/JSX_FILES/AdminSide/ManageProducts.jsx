@@ -7,6 +7,7 @@ function ManageProducts() {
   const [form, setForm] = useState({
     name: "",
     category: "",
+    description: "",
     price: "",
     stock: "",
   });
@@ -117,11 +118,12 @@ function ManageProducts() {
         <IoIosAddCircle size={24} />
         Add Product
       </button>
-      <table className="min-w-full bg-white border rounded overflow-hidden">
+      <table className="min-w-full bg-white border rounded overflow-hidden ">
         <thead className="bg-amber-800 text-white">
           <tr>
             <th className="px-4 py-2 text-left">Name</th>
             <th className="px-4 py-2 text-left">Category</th>
+            <th className="px-4 py-2 text-left ">Description</th>
             <th className="px-4 py-2 text-left">Price</th>
             <th className="px-4 py-2 text-left">Stock</th>
             <th className="px-4 py-2 text-left">Action</th>
@@ -132,18 +134,19 @@ function ManageProducts() {
             <tr key={product._id} className="border-b">
               <td className="px-4 py-2">{product.name}</td>
               <td className="px-4 py-2">{product.category}</td>
+              <td className="px-4 py-2 truncate-text">{product.description}</td>
               <td className="px-4 py-2">{product.price}</td>
               <td className="px-4 py-2">{product.stock}</td>
               <td className="px-4 py-2 d-flex gap-2">
                 <button
-                  className="text-amber-950 hover:txt-amber-500"
+                  className="text-amber-50 hover:txt-amber-500"
                   onClick={() => handleEditProduct(product)}
                   title="Edit"
                 >
                   <FaEdit size={22} />
                 </button>
                 <button
-                  className="text-amber-950 hover:txt-amber-500"
+                  className="text-amber-50 hover:txt-amber-500"
                   onClick={() => handleDeleteProduct(product._id)}
                   title="Delete"
                 >
@@ -184,6 +187,14 @@ function ManageProducts() {
                 value={form.category}
                 onChange={handleChange}
                 placeholder="Category"
+                required
+                className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
+              />
+              <input
+                name="description"
+                value={form.description}
+                onChange={handleChange}
+                placeholder="Description"
                 required
                 className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
               />

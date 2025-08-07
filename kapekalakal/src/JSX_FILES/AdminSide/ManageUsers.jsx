@@ -124,7 +124,7 @@ function ManageUsers() {
       <h2 className="">MANAGE USERS</h2>
       <div className="d-flex gap-2 align-items-center  ">
         <button
-          className="flex items-center gap-2 bg-amber-950 text-white px-4 py-2 mb-3 rounded hover:bg-amber-800 transition"
+          className="flex items-center gap-2  text-white px-4 py-2 mb-3 rounded hover:bg-amber-800 transition"
           onClick={openAddModal}
         >
           <IoIosAddCircle size={24} />
@@ -150,14 +150,14 @@ function ManageUsers() {
               <td className="px-4 py-2">{user.address}</td>
               <td className="px-4 py-2 d-flex gap-2">
                 <button
-                  className="text-amber-950 hover:txt-amber-500"
+                  className="text-amber-50 hover:txt-amber-500 "
                   onClick={() => handleEditUser(user)}
                   title="Edit"
                 >
                   <FaEdit size={22} />
                 </button>
                 <button
-                  className="text-amber-950 hover:txt-amber-500"
+                  className="text-amber-50 hover:txt-amber-500"
                   onClick={() => handleDeleteUser(user._id)}
                   title="Delete"
                 >

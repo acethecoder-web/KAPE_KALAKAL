@@ -143,14 +143,14 @@ function ManageOrders() {
               <td className="px-4 py-2 d-flex gap-2">
                 <button
                   onClick={() => handleEditOrder(order)}
-                  className="text-amber-950 hover:text-amber-500"
+                  className="text-amber-50 hover:text-amber-500"
                   title="Edit"
                 >
                   <FaEdit size={23} />
                 </button>
                 <button
                   onClick={() => handleDeleteOrder(order._id)}
-                  className="text-amber-950 hover:text-amber-500"
+                  className="text-amber-50 hover:text-amber-500"
                   title="Delete"
                 >
                   <FaArchive size={23} />
