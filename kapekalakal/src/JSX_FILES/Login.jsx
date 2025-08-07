@@ -37,13 +37,13 @@ function Login() {
 
       if (data.success) {
         alert("Login successful!");
-        const user = JSON.parse(localStorage.getItem("user"));
+
         const userRole = data.user.role;
 
         if (userRole === "admin" || userRole === "superadmin") {
           navigate("/admin");
         } else if (userRole === "user") {
-          navigate("/products");
+          navigate("/customer");
         } else {
           navigate("/");
         }

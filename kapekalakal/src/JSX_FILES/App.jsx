@@ -10,6 +10,8 @@ import ProtectedRoute from "./AdminSide/ProtectedRoute";
 import ManageUser from "./AdminSide/ManageUsers";
 import ManageProducts from "./AdminSide/ManageProducts";
 import ManageOrders from "./AdminSide/ManageOrders";
+import ClientDashboard from "../JSX_FILES/ClientSide/ClientDashboard";
+
 function App() {
   return (
     <>
@@ -55,6 +57,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["admin", "superadmin"]}>
               <ManageOrders />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/customer"
+          element={
+            <ProtectedRoute allowedRoles={["user", "admin", "superadmin"]}>
+              <ClientDashboard />
             </ProtectedRoute>
           }
         />
