@@ -18,7 +18,7 @@ function ViewProducts() {
   }, [setproducts]);
 
   return (
-    <div>
+    <div className="d-flex justify-content-center flex-wrap gap-10">
       {products.map((product) => (
         <div className="productcard-container">
           <div className="image">
