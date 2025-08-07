@@ -102,7 +102,7 @@ function Login() {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Password"
-                className="bg-transparent text-black-500/80 placeholder-gray-500/80 outline-none text-sm w-full h-full"
+                className="bg-transparent text-black-500/80 placeholder-gray-300/60 outline-none text-sm w-full h-full"
                 required
               />
             </div>
@@ -119,11 +119,11 @@ function Login() {
 
             <button
               type="submit"
-              className="mt-8 w-full h-11 rounded-full text-white bg-stone-950"
+              className="mt-2 w-full h-10 rounded-full text-white bg-stone-950"
             >
               Login
             </button>
-            <p className="text-black-500/90 text-sm mt-4">
+            <p className="text-black-500/90 text-sm ">
               Don’t have an account?{" "}
               <Link
                 to="/register"

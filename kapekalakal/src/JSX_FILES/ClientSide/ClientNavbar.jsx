@@ -10,7 +10,6 @@ function ClientNavbar() {
           </Link>
           <p className="shopname mb-4">KAPE KALAKAL</p>
         </div>
-
         <div className="nav-buttons ">
           <Link to="/about" className="nav-items mb-4">
             ABOUT
