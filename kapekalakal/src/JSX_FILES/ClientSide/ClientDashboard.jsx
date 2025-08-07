@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import ClientNavBar from "../NavBar.jsx";
+import ClientNavBar from "./ClientNavbar.jsx";
 import ViewProducts from "./ViewProducts.jsx";
 import MyOrders from "./MyOrders.jsx";
 import MyPayments from "./MyPayments.jsx";
