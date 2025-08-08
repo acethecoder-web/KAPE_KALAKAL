@@ -1,0 +1,74 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.filter-controls-main-container {
+  display: flex;
+  text-align: center;
+  margin-top: 20px;
+  gap: 38.5px;
+  justify-content: center;
+}
+
+.shows {
+  display: inline;
+}
+
+.cat-label-category {
+  color: black;
+  font-size: 15px;
+}
+
+option {
+  text-align: center;
+}
+
+.category-options {
+  margin-top: 10px;
+}
+
+.search-con {
+  width: 450px;
+  text-align: center;
+  transform: translate(0px, 38.5px);
+  background-color: white;
+  text-decoration: none;
+  height: 49px;
+}
+
+.price-filter {
+  width: 50px;
+}
+
+.pf {
+  width: 100px;
+  height: 49px;
+  background-color: white;
+  text-align: center;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+.price-filter-con {
+  display: flex;
+  flex-direction: column;
+}
+
+.category-label3 {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 8px;
+}
+
+.pf-maincon {
+  background-color: rgba(139, 92, 57, 0.8);
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin: 0;
+}
+
+.pf-container {
+  display: flex;
+  gap: 20px;
+}

@@ -201,6 +201,7 @@ color standards
   .burger-con {
     display: none;
   }
+
   .show {
     display: flex;
     transition-duration: 0.2s;
