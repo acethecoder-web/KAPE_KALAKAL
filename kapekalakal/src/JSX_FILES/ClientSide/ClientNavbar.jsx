@@ -1,4 +1,5 @@
 import "../../CSS_FILES/App.css";
+import "./ClientNavbar.css";
 import { Link } from "react-router-dom";
 function ClientNavbar() {
   return (
@@ -17,11 +18,8 @@ function ClientNavbar() {
           <Link to="/products" className="nav-items mb-4">
             PRODUCTS
           </Link>
-          <div className="nav-items mb-4" href="">
-            ORDER NOW
-          </div>
-          <div className="nav-items mb-4 " href="">
-            CART
+          <div className="nav-items mb-2 " href="">
+            <i class="fa-solid fa-cart-shopping"></i>
           </div>
           <div to="/" className="nav-items nav-item6" href="">
             <i className="fa-solid s-icon fa-user-tie mb-2"></i> PROFILE
@@ -39,21 +37,23 @@ function ClientNavbar() {
       </nav>
 
       <div className="burger-con">
-        <Link to="/about" className="nav-items2">
-          ABOUT
-        </Link>
-        <Link to="/products" className="nav-items2">
-          PRODUCTS
-        </Link>
-        <Link to="/order" className="nav-items2">
-          MY ORDERS
-        </Link>
-        <Link to="/cart" className="nav-items2">
-          CART
-        </Link>
-        <Link to="/login" Link className="nav-items nav-item6-2">
-          LOGIN
-        </Link>
+        <div className="burger-items">
+          <Link to="/about" className="nav-items2">
+            ABOUT
+          </Link>
+          <Link to="/products" className="nav-items2">
+            PRODUCTS
+          </Link>
+          <Link to="/order" className="nav-items2">
+            MY ORDERS
+          </Link>
+          <Link to="/cart" className="nav-items2">
+            CART
+          </Link>
+          <Link to="/login" Link className="nav-items nav-item6-2">
+            LOGIN
+          </Link>
+        </div>
       </div>
     </>
   );

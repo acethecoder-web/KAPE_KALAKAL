@@ -13,6 +13,9 @@ function ProductsFilter() {
             </label>
             <select className="category-options shows" name="cars" id="cars">
               <option className="cat-option car-option-1" value="Coffee Beans">
+                ALL
+              </option>
+              <option className="cat-option car-option-1" value="Coffee Beans">
                 COFFEE BEANS
               </option>
               <option className="cat-option car-option-2" value="Equipment">
@@ -82,7 +85,3 @@ function ProductsFilter() {
 }
 
 export default ProductsFilter;
-
-<div className="search-con">
-  <input type="search" name="" id="" placeholder="Search a product" />
-</div>;

@@ -1,0 +1,31 @@
+/* Extra large devices down */
+@media (max-width: 1399.98px) {
+}
+
+/* Large devices down */
+@media (max-width: 1199.98px) {
+}
+
+/* Medium devices down */
+@media (max-width: 991.98px) {
+  .burger-con {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-buttons {
+    display: none;
+  }
+
+  .burger-items {
+    margin-left: 30px;
+  }
+}
+
+/* Small devices down */
+@media (max-width: 767.98px) {
+}
+
+/* Extra small devices */
+@media (max-width: 575.98px) {
+}
