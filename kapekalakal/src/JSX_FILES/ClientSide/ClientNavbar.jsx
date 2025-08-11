@@ -1,7 +1,9 @@
 import "../../CSS_FILES/App.css";
 import "./ClientNavbar.css";
 import { Link } from "react-router-dom";
+import { useClientView } from "./ClientViewContext";
 function ClientNavbar() {
+  const { setActiveView } = useClientView();
   return (
     <>
       <nav className="navbar">
@@ -15,10 +17,17 @@ function ClientNavbar() {
           <Link to="/about" className="nav-items mb-4">
             ABOUT
           </Link>
-          <Link to="/products" className="nav-items mb-4">
+          <div
+            onClick={() => setActiveView("view-products")}
+            className="nav-items mb-4"
+          >
             PRODUCTS
-          </Link>
-          <div className="nav-items mb-2 " href="">
+          </div>
+          <div
+            onClick={() => setActiveView("cart")}
+            className="nav-items mb-2 "
+            href=""
+          >
             <i class="fa-solid fa-cart-shopping"></i>
           </div>
           <div to="/" className="nav-items nav-item6" href="">

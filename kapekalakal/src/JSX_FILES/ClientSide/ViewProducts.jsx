@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import "../AdminSide/ViewProducts.css";
 import ProductsFilter from "./ProductsFilter";
+import { useClientView } from "./ClientViewContext";
 function ViewProducts() {
   const [products, setproducts] = useState([]);
+  const { setActiveView } = useClientView();
 
   const fetchProducts = async () => {
     try {
@@ -24,7 +26,10 @@ function ViewProducts() {
       <div className="d-flex main-prod-container flex-wrap gap-10">
         {products.map((product) => (
           <div className="productcard-container">
-            <div className="image">
+            <div
+              onClick={() => setActiveView("product-details")}
+              className="image"
+            >
               <img
                 src="/placeholder.png"
                 alt="placeholder"

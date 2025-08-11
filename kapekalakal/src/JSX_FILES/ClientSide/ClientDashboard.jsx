@@ -6,6 +6,8 @@ import MyPayments from "./MyPayments.jsx";
 import { ClientViewProvider, useClientView } from "./ClientViewContext.jsx";
 import coffeeAnimation from "../../assets/coffee_animation.json";
 import Lottie from "lottie-react";
+import CartPage from "./Cart.jsx";
+import ProductDetails from "./ProductDetails.jsx";
 
 function ClientDashboardContent() {
   const { activeView, setActiveView } = useClientView();
@@ -47,6 +49,10 @@ function ClientDashboardContent() {
         return <MyOrders />;
       case "my-payments":
         return <MyPayments />;
+      case "cart":
+        return <CartPage />;
+      case "product-details":
+        return <ProductDetails />;
       default:
         return <div>Select a section from the menu.</div>;
     }
