@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useClientView } from "./ClientViewContext";
 import "./Cart.css";
 function CartPage() {
+  const { setActiveView } = useClientView();
   return (
     <>
       <h1 className="cart-header">SHOPPING CART</h1>
@@ -19,6 +21,13 @@ function CartPage() {
             <h6 className="m-2">------------------------</h6>
             <h6>TOTAL :</h6>
           </div>
+          <button
+            onClick={() => setActiveView("my-payments")}
+            className="checkout"
+            type="button"
+          >
+            CHECK OUT
+          </button>
         </div>
       </div>
     </>

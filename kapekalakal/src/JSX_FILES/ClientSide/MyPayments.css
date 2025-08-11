@@ -1,0 +1,118 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.payments-new-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  align-content: center;
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.pay-con-1 {
+  width: 30vw;
+  height: 80vh;
+  background-color: #a27447;
+  border-radius: 50px;
+}
+
+.pay-con-2 {
+  width: 40vw;
+  height: 80vh;
+  background-color: #816b55;
+  border-radius: 50px;
+  text-align: center;
+}
+
+.payment-method-header {
+  display: flex;
+  justify-self: center;
+  margin-bottom: 50px;
+}
+
+.pays {
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  gap: 20px;
+}
+
+.gcash,
+.grabpay,
+.mastercard,
+.confirm {
+  display: flex;
+  align-items: center;
+  background-color: #dcd8d4;
+  padding: 10px;
+  gap: 10px;
+  border-radius: 40px;
+  transition-duration: 0.1s;
+}
+
+.gcash:hover,
+.grabpay:hover,
+.mastercard:hover,
+.confirm:hover {
+  background-color: #816b55;
+  color: #dcd8d4;
+  /* border: 1px solid whitesmoke; */
+  transform: scale(1.1);
+  filter: drop-shadow(1px 1px 1px black);
+}
+
+.gcash-img,
+.grabpay-img,
+.mastercard-img {
+  width: 50px;
+  border-radius: 50%;
+}
+
+.gcash-header,
+.grabpay-header,
+.mastercard-header {
+  margin-top: 10px;
+  font-size: 20px;
+}
+
+.accs {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.confirm {
+  display: flex;
+  justify-content: center;
+}
+
+.receipt-head {
+  display: flex;
+  justify-self: center;
+  align-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 15px;
+}
+
+.receipt-logo {
+  width: 70px;
+  background-color: whitesmoke;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.dividerr {
+  text-align: center;
+}
+
+.order-products {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: center;
+}

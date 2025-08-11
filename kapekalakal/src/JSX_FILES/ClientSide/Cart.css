@@ -61,7 +61,7 @@
 
 .con2 {
   width: 30vw;
-  height: 40vh;
+  height: 60vh;
   display: flex;
   flex-direction: column;
   background-color: #412c17;
@@ -80,4 +80,11 @@
 .cart-total-header {
   padding: 0;
   margin: 0;
+}
+
+.checkout {
+  margin-top: 50px;
+  background-color: #dcd8d4;
+  color: #a27447;
+  font-weight: bold;
 }

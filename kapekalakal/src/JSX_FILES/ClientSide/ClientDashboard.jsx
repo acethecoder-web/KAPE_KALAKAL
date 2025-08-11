@@ -53,6 +53,8 @@ function ClientDashboardContent() {
         return <CartPage />;
       case "product-details":
         return <ProductDetails />;
+      case "my-payments":
+        return <MyPayments />;
       default:
         return <div>Select a section from the menu.</div>;
     }
