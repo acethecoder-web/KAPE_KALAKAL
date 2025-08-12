@@ -3,7 +3,7 @@
   margin: 0;
 }
 
-.profile-container {
+.profile-container-admin {
   padding: 40px;
   min-height: 85vh;
   display: flex;
@@ -12,7 +12,7 @@
   font-family: Arial, sans-serif;
 }
 
-.profile-card {
+.profile-card-admin {
   background-color: #a27447;
   border-radius: 20px;
   padding: 30px;
@@ -21,7 +21,7 @@
   position: relative;
 }
 
-.logout-button {
+.logout-button-admin {
   position: absolute;
   top: 20px;
   right: 20px;
@@ -40,21 +40,21 @@
   transition: background-color 0.3s ease;
 }
 
-.logout-button:hover {
+.logout-button-admin:hover {
   background-color: #b71c1c;
 }
 
-.profile-header {
+.profile-header-admin {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.avatar-container {
+.avatar-container-admin {
   margin-right: 20px;
 }
 
-.profile-avatar {
+.profile-avatar-admin {
   width: 80px;
   height: 80px;
   border-radius: 50%;
@@ -62,18 +62,17 @@
   border: 3px solid #8b4513;
 }
 
-.header-info {
-  flex: 1;
+.header-info-admin {
 }
 
-.profile-name {
+.profile-name-admin {
   margin: 0 0 8px 0;
   font-size: 28px;
   font-weight: bold;
   color: #333;
 }
 
-.role-tag {
+.role-tag-admin {
   background-color: #8b4513;
   color: white;
   padding: 4px 12px;
@@ -83,56 +82,58 @@
   letter-spacing: 1px;
 }
 
-.profile-divider {
+.profile-divider-admin {
   height: 3px;
   background-color: #8b4513;
   margin: 20px 0;
   border-radius: 2px;
 }
 
-.profile-content {
+.profile-content-admin {
   margin-bottom: 30px;
 }
 
-.field-row {
+.field-row-admin {
   display: flex;
   gap: 20px;
   margin-bottom: 20px;
 }
 
-.profile-field {
+.profile-field-admin {
   margin-bottom: 20px;
   flex: 1;
 }
 
-.field-label {
-  display: block;
+.field-label-admin {
+  display: flex;
+  justify-self: flex-start;
   font-size: 16px;
   font-weight: bold;
   color: white;
   margin-bottom: 8px;
 }
 
-.input-field,
-.role-field,
-.address-field {
+.input-field-admin,
+.role-field-admin,
+.address-field-admin {
   background-color: rgb(243, 214, 177);
-  padding: 12px 16px;
+  padding: 10px 12px;
   border-radius: 8px;
   display: flex;
+  justify-content: flex-start;
   align-items: center;
   gap: 10px;
 }
 
-.role-field {
+.role-field-admin {
   width: fit-content;
 }
 
-.field-icon {
+.field-icon-admin {
   font-size: 16px;
 }
 
-.field-value {
+.field-value-admin {
   color: #333;
   font-size: 18px;
   font-weight: 500;
@@ -140,14 +141,14 @@
   filter: drop-shadow(0 0 0);
 }
 
-.profile-actions {
+.profile-actions-admin {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
 }
 
-.edit-button,
-.save-button {
+.edit-button-admin,
+.save-button-admin {
   background-color: #8b4513;
   color: white;
   border: none;
@@ -163,51 +164,110 @@
   transition: background-color 0.3s ease;
 }
 
-.edit-button:hover,
-.save-button:hover {
+.edit-button-admin:hover,
+.save-button-admin:hover {
   background-color: #6d3410;
 }
 
-.button-icon {
+.button-icon-admin {
   font-size: 12px;
 }
 
-.whitet {
+.whitet-admin {
   color: white;
 }
+
+.cancel-button-admin {
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 1px;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-button-admin:hover {
+  background-color: #b71c1c;
+}
+
+.edit-input-container-admin {
+  flex: 1;
+}
+
+.field-input-admin {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+  outline: none;
+}
+
+.field-textarea-admin {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+  outline: none;
+  resize: vertical;
+  min-height: 40px;
+  font-family: Arial, sans-serif;
+}
+
+.error-message-admin {
+  color: #d32f2f;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}
+
+.saving-admin {
+  opacity: 0.7;
+}
+
 /* Responsive design */
 @media (max-width: 600px) {
-  .profile-container {
+  .profile-container-admin {
     padding: 20px;
   }
 
-  .profile-card {
+  .profile-card-admin {
     width: 100%;
     max-width: 400px;
     padding: 20px;
   }
 
-  .field-row {
+  .field-row-admin {
     flex-direction: column;
     gap: 0;
   }
 
-  .profile-name {
+  .profile-name-admin {
     font-size: 20px;
   }
 
-  .logout-button {
+  .logout-button-admin {
     position: static;
     align-self: flex-start;
     margin-bottom: 15px;
   }
 
-  .profile-header {
+  .profile-header-admin {
     flex-direction: column;
     text-align: center;
   }
 
-  .avatar-container {
+  .avatar-container-admin {
     margin-right: 0;
     margin-bottom: 15px;
   }

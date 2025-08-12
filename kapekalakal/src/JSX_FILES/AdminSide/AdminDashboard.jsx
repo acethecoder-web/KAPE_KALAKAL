@@ -7,7 +7,7 @@ import { AdminViewProvider, useAdminView } from "./AdminViewContext.jsx";
 import ManageProducts from "./ManageProducts.jsx";
 import coffeeAnimation from "../../assets/coffee_animation.json";
 import Lottie from "lottie-react";
-
+import ProfileAdmin from "./ProfileAdmin.jsx";
 function AdminDashboardContent() {
   const { activeView, setActiveView } = useAdminView();
   const [loading, setLoading] = useState(false);
@@ -51,6 +51,8 @@ function AdminDashboardContent() {
         return <ManageOrders />;
       case "manage-payments":
         return <ManagePayments />;
+      case "profile":
+        return <ProfileAdmin />;
       default:
         return <div>Select a section from the sidebar.</div>;
     }

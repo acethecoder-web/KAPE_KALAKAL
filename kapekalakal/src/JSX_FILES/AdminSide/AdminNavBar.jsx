@@ -28,7 +28,11 @@ function AdminNavBar() {
           <p className="shopname">KAPE KALAKAL</p>
         </div>
 
-        <div to="/" className="nav-items2-1 profile">
+        <div
+          onClick={() => setActiveView("profile")}
+          to="/"
+          className="nav-items2-1 profile"
+        >
           <i class="fa-solid s-icon fa-user-tie"></i> PROFILE
         </div>
       </nav>
@@ -92,10 +96,6 @@ function AdminNavBar() {
         >
           <i class="fa-solid s-icon fa-xl fa-money-bill-1-wave"></i>
           MANAGE PAYMENTS
-        </div>
-        <div to="/products" className="nav-items2-1">
-          <i class="fa-solid s-icon fa-hand-holding-heart"></i>
-          PRODUCTS
         </div>
       </div>
     </>

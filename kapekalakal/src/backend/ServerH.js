@@ -10,7 +10,6 @@ import { connectDB } from "./db.js";
 
 import authRoutes from "./routes/auth.js";
 dotenv.config();
-
 const app = express();
 
 app.use(

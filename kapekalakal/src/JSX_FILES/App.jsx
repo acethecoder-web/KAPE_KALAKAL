@@ -1,7 +1,6 @@
 import "../CSS_FILES/App.css";
 import LandingPage from "./LandingPage";
 import About from "./About";
-import Shop from "./Shop";
 import { Routes, Route } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
@@ -11,6 +10,7 @@ import ManageUser from "./AdminSide/ManageUsers";
 import ManageProducts from "./AdminSide/ManageProducts";
 import ManageOrders from "./AdminSide/ManageOrders";
 import ClientDashboard from "../JSX_FILES/ClientSide/ClientDashboard";
+import ViewProducts from "./ClientSide/ViewProducts";
 function App() {
   return (
     <>
@@ -21,7 +21,7 @@ function App() {
           path="/products"
           element={
             <ProtectedRoute allowedRoles={["user", "admin", "superadmin"]}>
-              <Shop />
+              <ViewProducts />
             </ProtectedRoute>
           }
         />{" "}

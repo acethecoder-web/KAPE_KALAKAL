@@ -6,6 +6,7 @@ import { IoIosAddCircle } from "react-icons/io";
 function ManageUsers() {
   const [users, setUsers] = useState([]);
   const [form, setForm] = useState({
+    image: "",
     name: "",
     email: "",
     role: "",
@@ -14,6 +15,29 @@ function ManageUsers() {
   });
   const [editingId, setEditingId] = useState(null);
   const [showModal, setShowModal] = useState(false);
+
+  const handleUpload = async (event) => {
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "kapekalakal");
+    data.append("cloud_name", "dm2eo9umm");
+
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/dm2eo9umm/image/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    );
+
+    const uploadedImageURL = await res.json();
+    console.log(uploadedImageURL.url);
+    console.log(file);
+  };
 
   // Fetch users (READ)
   const fetchUsers = async () => {
@@ -54,7 +78,14 @@ function ManageUsers() {
         body: JSON.stringify(form),
       });
       if (res.ok) {
-        setForm({ name: "", email: "", role: "", address: "", password: "" });
+        setForm({
+          image: "",
+          ame: "",
+          email: "",
+          role: "",
+          address: "",
+          password: "",
+        });
         setShowModal(false);
         fetchUsers();
       }
@@ -67,6 +98,7 @@ function ManageUsers() {
   const handleEditUser = (user) => {
     setEditingId(user._id);
     setForm({
+      image: user.image,
       name: user.name,
       email: user.email,
       role: user.role,
@@ -86,7 +118,14 @@ function ManageUsers() {
       });
       if (res.ok) {
         setEditingId(null);
-        setForm({ name: "", email: "", role: "", address: "", password: "" });
+        setForm({
+          image: "",
+          name: "",
+          email: "",
+          role: "",
+          address: "",
+          password: "",
+        });
         fetchUsers();
       }
     } catch (err) {
@@ -109,14 +148,28 @@ function ManageUsers() {
 
   const openAddModal = () => {
     setEditingId(null);
-    setForm({ name: "", email: "", role: "", address: "", password: "" });
+    setForm({
+      image: "",
+      name: "",
+      email: "",
+      role: "",
+      address: "",
+      password: "",
+    });
     setShowModal(true);
   };
 
   const closeModal = () => {
     setEditingId(null);
     setShowModal(false);
-    setForm({ name: "", email: "", role: "", address: "", password: "" });
+    setForm({
+      image: "",
+      name: "",
+      email: "",
+      role: "",
+      address: "",
+      password: "",
+    });
   };
 
   return (
@@ -134,6 +187,8 @@ function ManageUsers() {
       <table className="min-w-full bg-white border rounded overflow-hidden ">
         <thead className="bg-amber-800 text-white">
           <tr>
+            {" "}
+            <th className="px-4 py-2 text-left">Picture</th>
             <th className="px-4 py-2 text-left">Name</th>
             <th className="px-4 py-2 text-left">Email</th>
             <th className="px-4 py-2 text-left">Role</th>
@@ -144,6 +199,7 @@ function ManageUsers() {
         <tbody>
           {users.map((user) => (
             <tr key={user._id} className="border-b">
+              <td className="px-4 py-2">{user.image}</td>
               <td className="px-4 py-2">{user.name}</td>
               <td className="px-4 py-2">{user.email}</td>
               <td className="px-4 py-2">{user.role}</td>
@@ -203,19 +259,29 @@ function ManageUsers() {
                 required
                 className="border border-[#D7B899 center rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
               />
+              <div className="inputss d-flex gap-2 align-items-center">
+                <select
+                  name="role"
+                  value={form.role}
+                  onChange={handleChange}
+                  required
+                  className="form-select w-auto"
+                >
+                  <option value="">Select role</option>
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
 
-              <select
-                style={{ display: "inline-block" }}
-                name="role"
-                value={form.role}
-                onChange={handleChange}
-                required
-                className="border border-[#D7B899] w-50 h-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
-              >
-                <option value="">Select role</option>
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
-              </select>
+                <input
+                  name="image"
+                  value={form.image}
+                  type="file"
+                  id="fileUpload"
+                  className="form-control w-20"
+                  onChange={handleUpload}
+                />
+              </div>
+
               <input
                 name="address"
                 value={form.address}

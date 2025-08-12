@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./ProfileCard.css";
+import "./ProfileAdmin.css";
 
-function ProfileCard() {
+function ProfileAdmin() {
   const [profileData, setProfileData] = useState(null);
   const [editData, setEditData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -190,9 +190,9 @@ function ProfileCard() {
   // Show loading state
   if (loading) {
     return (
-      <div className="profile-container">
+      <div className="profile-container-admin">
         <div
-          className="profile-card"
+          className="profile-card-admin"
           style={{ textAlign: "center", padding: "50px" }}
         >
           <h3>Loading profile...</h3>
@@ -204,9 +204,9 @@ function ProfileCard() {
   // Show error state
   if (error) {
     return (
-      <div className="profile-container">
+      <div className="profile-container-admin">
         <div
-          className="profile-card"
+          className="profile-card-admin"
           style={{ textAlign: "center", padding: "50px" }}
         >
           <h3>Error: {error}</h3>
@@ -224,9 +224,9 @@ function ProfileCard() {
   // Show profile if data is loaded
   if (!profileData) {
     return (
-      <div className="profile-container">
+      <div className="profile-container-admin">
         <div
-          className="profile-card"
+          className="profile-card-admin"
           style={{ textAlign: "center", padding: "50px" }}
         >
           <h3>No profile data found</h3>
@@ -236,48 +236,52 @@ function ProfileCard() {
   }
 
   return (
-    <div className="profile-container">
-      <div className="profile-card">
+    <div className="profile-container-admin">
+      <div className="profile-card-admin">
         {/* Logout Button */}
-        <button className="logout-button" onClick={handleLogout}>
-          <span className="button-icon">🚪</span>
+        <button className="logout-button-admin" onClick={handleLogout}>
+          <span className="button-icon-admin">🚪</span>
           LOGOUT
         </button>
 
         {/* Header Section */}
-        <div className="profile-header">
-          <div className="avatar-container">
+        <div className="profile-header-admin">
+          <div className="avatar-container-admin">
             <img
               src={profileData.avatar}
               alt="Profile"
-              className="profile-avatar"
+              className="profile-avatar-admin"
               onError={(e) => {
                 e.target.src =
                   "https://via.placeholder.com/120/cccccc/666666?text=User";
               }}
             />
           </div>
-          <div className="header-info">
-            <h2 className="profile-name">{profileData.name}</h2>
-            <span className="role-tag">{profileData.role}</span>
+          <div className="header-info-admin">
+            <h2 className="profile-name-admin">{profileData.name}</h2>
+            <span className="role-tag-admin">{profileData.role}</span>
           </div>
         </div>
 
         {/* Divider */}
-        <div className="profile-divider"></div>
+        <div className="profile-divider-admin"></div>
 
         {/* Content Section */}
-        <div className="profile-content">
-          <div className="field-row">
-            <div className="profile-field">
-              <label className="field-label">Full Name:</label>
-              <div className={`input-field ${isEditMode ? "edit-mode" : ""}`}>
-                <span className="field-icon">👤</span>
+        <div className="profile-content-admin">
+          <div className="field-row-admin">
+            <div className="profile-field-admin">
+              <label className="field-label-admin">Full Name:</label>
+              <div
+                className={`input-field-admin ${
+                  isEditMode ? "edit-mode-admin" : ""
+                }`}
+              >
+                <span className="field-icon-admin">👤</span>
                 {isEditMode ? (
-                  <div className="edit-input-container">
+                  <div className="edit-input-container-admin">
                     <input
                       type="text"
-                      className="field-input"
+                      className="field-input-admin"
                       value={editData.name}
                       onChange={(e) =>
                         handleInputChange("name", e.target.value)
@@ -285,25 +289,29 @@ function ProfileCard() {
                       placeholder="Enter your full name"
                     />
                     {validationErrors.name && (
-                      <span className="error-message">
+                      <span className="error-message-admin">
                         {validationErrors.name}
                       </span>
                     )}
                   </div>
                 ) : (
-                  <span className="field-value">{profileData.name}</span>
+                  <span className="field-value-admin">{profileData.name}</span>
                 )}
               </div>
             </div>
-            <div className="profile-field">
-              <label className="field-label">Email:</label>
-              <div className={`input-field ${isEditMode ? "edit-mode" : ""}`}>
-                <span className="field-icon">✉️</span>
+            <div className="profile-field-admin">
+              <label className="field-label-admin">Email:</label>
+              <div
+                className={`input-field-admin ${
+                  isEditMode ? "edit-mode-admin" : ""
+                }`}
+              >
+                <span className="field-icon-admin">✉️</span>
                 {isEditMode ? (
-                  <div className="edit-input-container">
+                  <div className="edit-input-container-admin">
                     <input
                       type="email"
-                      className="field-input"
+                      className="field-input-admin"
                       value={editData.email}
                       onChange={(e) =>
                         handleInputChange("email", e.target.value)
@@ -311,34 +319,38 @@ function ProfileCard() {
                       placeholder="Enter your email"
                     />
                     {validationErrors.email && (
-                      <span className="error-message">
+                      <span className="error-message-admin">
                         {validationErrors.email}
                       </span>
                     )}
                   </div>
                 ) : (
-                  <span className="field-value">{profileData.email}</span>
+                  <span className="field-value-admin">{profileData.email}</span>
                 )}
               </div>
             </div>
           </div>
 
-          <div className="profile-field">
-            <label className="field-label">Role:</label>
-            <div className="role-field readonly">
-              <span className="field-icon">⚙️</span>
-              <span className="field-value">{profileData.role}</span>
+          <div className="profile-field-admin">
+            <label className="field-label-admin">Role:</label>
+            <div className="role-field-admin readonly-admin">
+              <span className="field-icon-admin">⚙️</span>
+              <span className="field-value-admin">{profileData.role}</span>
             </div>
           </div>
 
-          <div className="profile-field">
-            <label className="field-label">Address:</label>
-            <div className={`address-field ${isEditMode ? "edit-mode" : ""}`}>
-              <span className="field-icon">📍</span>
+          <div className="profile-field-admin">
+            <label className="field-label-admin">Address:</label>
+            <div
+              className={`address-field-admin ${
+                isEditMode ? "edit-mode-admin" : ""
+              }`}
+            >
+              <span className="field-icon-admin">📍</span>
               {isEditMode ? (
-                <div className="edit-input-container">
+                <div className="edit-input-container-admin">
                   <textarea
-                    className="field-textarea"
+                    className="field-textarea-admin"
                     value={editData.address}
                     onChange={(e) =>
                       handleInputChange("address", e.target.value)
@@ -347,42 +359,44 @@ function ProfileCard() {
                     rows="2"
                   />
                   {validationErrors.address && (
-                    <span className="error-message">
+                    <span className="error-message-admin">
                       {validationErrors.address}
                     </span>
                   )}
                 </div>
               ) : (
-                <span className="field-value">{profileData.address}</span>
+                <span className="field-value-admin">{profileData.address}</span>
               )}
             </div>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="profile-actions">
+        <div className="profile-actions-admin">
           {isEditMode ? (
             <>
               <button
-                className="cancel-button"
+                className="cancel-button-admin"
                 onClick={handleCancelEdit}
                 disabled={saving}
               >
-                <span className="button-icon">❌</span>
+                <span className="button-icon-admin">❌</span>
                 CANCEL
               </button>
               <button
-                className={`save-button ${saving ? "saving" : ""}`}
+                className={`save-button-admin ${saving ? "saving-admin" : ""}`}
                 onClick={handleSave}
                 disabled={saving}
               >
-                <span className="button-icon">{saving ? "⏳" : "💾"}</span>
+                <span className="button-icon-admin">
+                  {saving ? "⏳" : "💾"}
+                </span>
                 {saving ? "SAVING..." : "SAVE"}
               </button>
             </>
           ) : (
-            <button className="edit-button" onClick={handleEdit}>
-              <span className="button-icon">✏️</span>
+            <button className="edit-button-admin" onClick={handleEdit}>
+              <span className="button-icon-admin">✏️</span>
               EDIT
             </button>
           )}
@@ -392,4 +406,4 @@ function ProfileCard() {
   );
 }
 
-export default ProfileCard;
+export default ProfileAdmin;
