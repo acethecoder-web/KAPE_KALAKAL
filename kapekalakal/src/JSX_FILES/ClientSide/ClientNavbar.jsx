@@ -30,7 +30,12 @@ function ClientNavbar() {
           >
             <i class="fa-solid fa-cart-shopping"></i>
           </div>
-          <div to="/" className="nav-items nav-item6" href="">
+          <div
+            onClick={() => setActiveView("profile")}
+            to="/"
+            className="nav-items nav-item6"
+            href=""
+          >
             <i className="fa-solid s-icon fa-user-tie mb-2"></i> PROFILE
           </div>
         </div>

@@ -196,9 +196,30 @@ router.get(
   }
 );
 //==================================================================
-// routes/auth.js
 router.get("/profile", authenticateToken, (req, res) => {
   res.json(req.user); // req.user was set by your middleware after verifying the JWT
 });
+//==================================================================
 
+router.post("/logout", (req, res) => {
+  try {
+    // Clear the httpOnly cookie
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    console.error("Logout error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error during logout",
+    });
+  }
+});
 export default router;

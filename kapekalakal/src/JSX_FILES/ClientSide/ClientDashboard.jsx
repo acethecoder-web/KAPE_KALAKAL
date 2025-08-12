@@ -8,7 +8,7 @@ import coffeeAnimation from "../../assets/coffee_animation.json";
 import Lottie from "lottie-react";
 import CartPage from "./Cart.jsx";
 import ProductDetails from "./ProductDetails.jsx";
-
+import Profile from "./Profile.jsx";
 function ClientDashboardContent() {
   const { activeView, setActiveView } = useClientView();
   const [loading, setLoading] = useState(false);
@@ -53,8 +53,8 @@ function ClientDashboardContent() {
         return <CartPage />;
       case "product-details":
         return <ProductDetails />;
-      case "my-payments":
-        return <MyPayments />;
+      case "profile":
+        return <Profile />;
       default:
         return <div>Select a section from the menu.</div>;
     }
