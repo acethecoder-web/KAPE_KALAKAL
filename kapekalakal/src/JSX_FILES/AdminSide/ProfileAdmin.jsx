@@ -34,6 +34,7 @@ function ProfileAdmin() {
       if (result.success) {
         const userData = {
           id: result.data._id,
+          image: result.data.image,
           name: result.data.name,
           role: result.data.role.toUpperCase(),
           email: result.data.email,
@@ -248,7 +249,7 @@ function ProfileAdmin() {
         <div className="profile-header-admin">
           <div className="avatar-container-admin">
             <img
-              src={profileData.avatar}
+              src={profileData.image}
               alt="Profile"
               className="profile-avatar-admin"
               onError={(e) => {

@@ -16,6 +16,7 @@ function ManageUsers() {
   const [editingId, setEditingId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+
   const handleUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -103,24 +104,45 @@ function ManageUsers() {
   const handleEditUser = (user) => {
     setEditingId(user._id);
     setForm({
-      image: user.image,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      address: user.address,
-      password: user.password,
+      image: user.image || "",
+      name: user.name || "",
+      email: user.email || "",
+      role: user.role || "",
+      address: user.address || "",
+      password: user.password || "",
     });
+    setSelectedFile(null); // reset any previously selected file
     setShowModal(true);
   };
 
   const handleUpdateUser = async (e) => {
     e.preventDefault();
     try {
+      let imageUrl = form.image;
+
+      // If a new file was chosen, upload it to Cloudinary
+      if (selectedFile) {
+        const data = new FormData();
+        data.append("file", selectedFile);
+        data.append("upload_preset", "kapekalakal");
+        data.append("cloud_name", "dm2eo9umm");
+        data.append("folder", "users_images");
+
+        const resUpload = await fetch(
+          "https://api.cloudinary.com/v1_1/dm2eo9umm/image/upload",
+          { method: "POST", body: data }
+        );
+        const uploadRes = await resUpload.json();
+        imageUrl = uploadRes.url;
+      }
+
+      // Update user in backend
       const res = await fetch(`http://localhost:5174/api/users/${editingId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, image: imageUrl }),
       });
+
       if (res.ok) {
         setEditingId(null);
         setForm({
@@ -131,6 +153,8 @@ function ManageUsers() {
           address: "",
           password: "",
         });
+        setSelectedFile(null);
+        setShowModal(false);
         fetchUsers();
       }
     } catch (err) {

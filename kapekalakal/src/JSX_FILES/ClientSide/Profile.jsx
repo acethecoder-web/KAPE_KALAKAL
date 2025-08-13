@@ -34,6 +34,7 @@ function ProfileCard() {
       if (result.success) {
         const userData = {
           id: result.data._id,
+          image: result.data.image,
           name: result.data.name,
           role: result.data.role.toUpperCase(),
           email: result.data.email,
@@ -248,7 +249,7 @@ function ProfileCard() {
         <div className="profile-header">
           <div className="avatar-container">
             <img
-              src={profileData.avatar}
+              src={profileData.image}
               alt="Profile"
               className="profile-avatar"
               onError={(e) => {

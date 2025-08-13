@@ -31,10 +31,10 @@ function ViewProducts() {
               className="image"
             >
               <img
-                src="/placeholder.png"
-                alt="placeholder"
-                className="product-img"
-              />
+                src={product.image ? product.image : "placeholder.jpg"}
+                alt={product.name || "No Image"}
+                className="w-100 h-100 object-cover rounded-full"
+              />{" "}
             </div>
             <div className="product-details">
               <h1 className="product-name">{product.name}</h1>

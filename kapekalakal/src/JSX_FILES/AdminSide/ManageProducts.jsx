@@ -5,6 +5,7 @@ import { FaEdit, FaArchive } from "react-icons/fa";
 function ManageProducts() {
   const [products, setProducts] = useState([]);
   const [form, setForm] = useState({
+    image: "",
     name: "",
     category: "",
     description: "",
@@ -13,6 +14,13 @@ function ManageProducts() {
   });
   const [editingId, setEditingId] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  // Handle file upload selection
+  const handleUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) setSelectedFile(file);
+  };
 
   // Fetch all products (READ)
   const fetchProducts = async () => {
@@ -29,48 +37,104 @@ function ManageProducts() {
     fetchProducts();
   }, []);
 
-  // Handle form inputs
+  // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({
-      ...prev,
+    setForm({
+      ...form,
       [name]: name === "price" || name === "stock" ? Number(value) : value,
-    }));
+    });
   };
 
-  // Create product (CREATE)
+  // Add product (CREATE)
   const handleAddProduct = async (e) => {
     e.preventDefault();
+
     try {
+      let imageUrl = "";
+
+      // Upload image if selected
+      if (selectedFile) {
+        const data = new FormData();
+        data.append("file", selectedFile);
+        data.append("upload_preset", "kapekalakal");
+        data.append("cloud_name", "dm2eo9umm");
+        data.append("folder", "products_images");
+
+        const resUpload = await fetch(
+          "https://api.cloudinary.com/v1_1/dm2eo9umm/image/upload",
+          { method: "POST", body: data }
+        );
+        const uploadRes = await resUpload.json();
+        imageUrl = uploadRes.url;
+      }
+
       const res = await fetch("http://localhost:5174/api/products", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, image: imageUrl }),
       });
+
       if (res.ok) {
+        resetForm();
         fetchProducts();
-        closeModal();
+        setShowModal(false);
       }
     } catch (err) {
       console.error("Failed to add product", err);
     }
   };
 
+  // Edit product (open modal with data)
+  const handleEditProduct = (product) => {
+    setEditingId(product._id);
+    setForm({
+      image: product.image || "",
+      name: product.name || "",
+      category: product.category || "",
+      description: product.description || "",
+      price: product.price || "",
+      stock: product.stock || "",
+    });
+    setSelectedFile(null);
+    setShowModal(true);
+  };
+
   // Update product (UPDATE)
   const handleUpdateProduct = async (e) => {
     e.preventDefault();
+
     try {
+      let imageUrl = form.image;
+
+      if (selectedFile) {
+        const data = new FormData();
+        data.append("file", selectedFile);
+        data.append("upload_preset", "kapekalakal");
+        data.append("cloud_name", "dm2eo9umm");
+        data.append("folder", "products_images");
+
+        const resUpload = await fetch(
+          "https://api.cloudinary.com/v1_1/dm2eo9umm/image/upload",
+          { method: "POST", body: data }
+        );
+        const uploadRes = await resUpload.json();
+        imageUrl = uploadRes.url;
+      }
+
       const res = await fetch(
         `http://localhost:5174/api/products/${editingId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
+          body: JSON.stringify({ ...form, image: imageUrl }),
         }
       );
+
       if (res.ok) {
+        resetForm();
         fetchProducts();
-        closeModal();
+        setShowModal(false);
       }
     } catch (err) {
       console.error("Failed to update product", err);
@@ -90,22 +154,27 @@ function ManageProducts() {
     }
   };
 
-  const handleEditProduct = (product) => {
-    setEditingId(product._id);
-    setForm(product);
-    setShowModal(true);
-  };
-
   const openAddModal = () => {
-    setEditingId(null);
-    setForm({ name: "", category: "", price: "", stock: "" });
+    resetForm();
     setShowModal(true);
   };
 
   const closeModal = () => {
-    setEditingId(null);
+    resetForm();
     setShowModal(false);
-    setForm({ name: "", category: "", price: "", stock: "" });
+  };
+
+  const resetForm = () => {
+    setEditingId(null);
+    setForm({
+      image: "",
+      name: "",
+      category: "",
+      description: "",
+      price: "",
+      stock: "",
+    });
+    setSelectedFile(null);
   };
 
   return (
@@ -118,37 +187,49 @@ function ManageProducts() {
         <IoIosAddCircle size={24} />
         Add Product
       </button>
-      <table className="min-w-full bg-white border rounded overflow-hidden ">
+      <table className="min-w-full bg-white border rounded overflow-hidden">
         <thead className="bg-amber-800 text-white">
           <tr>
-            <th className="px-4 py-2 text-left">Name</th>
-            <th className="px-4 py-2 text-left">Category</th>
-            <th className="px-4 py-2 text-left ">Description</th>
-            <th className="px-4 py-2 text-left">Price</th>
-            <th className="px-4 py-2 text-left">Stock</th>
-            <th className="px-4 py-2 text-left">Action</th>
+            <th className="px-4 py-2">Image</th>
+            <th className="px-4 py-2">Name</th>
+            <th className="px-4 py-2">Category</th>
+            <th className="px-4 py-2">Description</th>
+            <th className="px-4 py-2">Price</th>
+            <th className="px-4 py-2">Stock</th>
+            <th className="px-4 py-2">Action</th>
           </tr>
         </thead>
         <tbody>
           {products.map((product) => (
             <tr key={product._id} className="border-b">
+              <td className="px-4 py-2">
+                {product.image ? (
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-12 h-12 object-cover rounded"
+                  />
+                ) : (
+                  "No Image"
+                )}
+              </td>
               <td className="px-4 py-2">{product.name}</td>
               <td className="px-4 py-2">{product.category}</td>
               <td className="px-4 py-2 truncate-text">{product.description}</td>
               <td className="px-4 py-2">{product.price}</td>
               <td className="px-4 py-2">{product.stock}</td>
-              <td className="px-4 py-2 d-flex gap-2">
+              <td className="px-4 py-2 flex gap-2">
                 <button
-                  className="text-amber-50 hover:txt-amber-500"
                   onClick={() => handleEditProduct(product)}
                   title="Edit"
+                  className="text-amber-50"
                 >
                   <FaEdit size={22} />
                 </button>
                 <button
-                  className="text-amber-50 hover:txt-amber-500"
                   onClick={() => handleDeleteProduct(product._id)}
                   title="Delete"
+                  className="text-amber-50"
                 >
                   <FaArchive size={22} />
                 </button>
@@ -180,7 +261,7 @@ function ManageProducts() {
                 onChange={handleChange}
                 placeholder="Product Name"
                 required
-                className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
+                className="border border-[#D7B899] rounded-lg p-2"
               />
               <input
                 name="category"
@@ -188,7 +269,7 @@ function ManageProducts() {
                 onChange={handleChange}
                 placeholder="Category"
                 required
-                className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
+                className="border border-[#D7B899] rounded-lg p-2"
               />
               <input
                 name="description"
@@ -196,7 +277,7 @@ function ManageProducts() {
                 onChange={handleChange}
                 placeholder="Description"
                 required
-                className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
+                className="border border-[#D7B899] rounded-lg p-2"
               />
               <input
                 type="number"
@@ -205,7 +286,7 @@ function ManageProducts() {
                 onChange={handleChange}
                 placeholder="Price"
                 required
-                className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
+                className="border border-[#D7B899] rounded-lg p-2"
               />
               <input
                 type="number"
@@ -214,7 +295,12 @@ function ManageProducts() {
                 onChange={handleChange}
                 placeholder="Stock"
                 required
-                className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
+                className="border border-[#D7B899] rounded-lg p-2"
+              />
+              <input
+                type="file"
+                onChange={handleUpload}
+                className="border border-[#D7B899] rounded-lg p-2"
               />
               <div className="flex justify-center gap-4 mt-4">
                 <button
@@ -225,8 +311,8 @@ function ManageProducts() {
                 </button>
                 <button
                   type="button"
-                  className="bg-[#E9D6C0] text-[#4B2E05] px-5 py-2 rounded hover:bg-[#D7B899] transition font-semibold shadow"
                   onClick={closeModal}
+                  className="bg-[#E9D6C0] text-[#4B2E05] px-5 py-2 rounded hover:bg-[#D7B899]"
                 >
                   Cancel
                 </button>
