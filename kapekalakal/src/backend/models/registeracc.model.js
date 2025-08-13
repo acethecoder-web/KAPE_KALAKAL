@@ -26,6 +26,10 @@ const accountSchema = new mongoose.Schema(
       default: "user",
       required: true,
     },
+    image: {
+      type: String, // will store Cloudinary URL
+      default: "",
+    },
   },
   {
     timestamps: true,

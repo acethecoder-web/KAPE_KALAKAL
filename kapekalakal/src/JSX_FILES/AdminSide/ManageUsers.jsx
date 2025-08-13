@@ -15,28 +15,12 @@ function ManageUsers() {
   });
   const [editingId, setEditingId] = useState(null);
   const [showModal, setShowModal] = useState(false);
-
-  const handleUpload = async (event) => {
+  const [selectedFile, setSelectedFile] = useState(null);
+  const handleUpload = (event) => {
     const file = event.target.files[0];
-
-    if (!file) return;
-
-    const data = new FormData();
-    data.append("file", file);
-    data.append("upload_preset", "kapekalakal");
-    data.append("cloud_name", "dm2eo9umm");
-
-    const res = await fetch(
-      "https://api.cloudinary.com/v1_1/dm2eo9umm/image/upload",
-      {
-        method: "POST",
-        body: data,
-      }
-    );
-
-    const uploadedImageURL = await res.json();
-    console.log(uploadedImageURL.url);
-    console.log(file);
+    if (file) {
+      setSelectedFile(file);
+    }
   };
 
   // Fetch users (READ)
@@ -71,21 +55,43 @@ function ManageUsers() {
   // Create user (CREATE)
   const handleAddUser = async (e) => {
     e.preventDefault();
+
     try {
+      let imageUrl = "";
+
+      // If there's a selected file, upload to Cloudinary first
+      if (selectedFile) {
+        const data = new FormData();
+        data.append("file", selectedFile);
+        data.append("upload_preset", "kapekalakal");
+        data.append("cloud_name", "dm2eo9umm");
+        data.append("folder", "users_images");
+
+        const res = await fetch(
+          "https://api.cloudinary.com/v1_1/dm2eo9umm/image/upload",
+          { method: "POST", body: data }
+        );
+        const uploadRes = await res.json();
+        imageUrl = uploadRes.url;
+      }
+
+      // Now send all form data + image URL to backend
       const res = await fetch("http://localhost:5174/api/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, image: imageUrl }),
       });
+
       if (res.ok) {
         setForm({
           image: "",
-          ame: "",
+          name: "",
           email: "",
           role: "",
           address: "",
           password: "",
         });
+        setSelectedFile(null);
         setShowModal(false);
         fetchUsers();
       }
@@ -93,7 +99,6 @@ function ManageUsers() {
       console.error("Failed to add user", err);
     }
   };
-
   // Edit user (UPDATE)
   const handleEditUser = (user) => {
     setEditingId(user._id);
@@ -199,7 +204,18 @@ function ManageUsers() {
         <tbody>
           {users.map((user) => (
             <tr key={user._id} className="border-b">
-              <td className="px-4 py-2">{user.image}</td>
+              <td className="px-4 py-2">
+                {" "}
+                {user.image ? (
+                  <img
+                    src={user.image}
+                    alt={user.name}
+                    className="w-12 h-12 object-cover rounded-full"
+                  />
+                ) : (
+                  "No Image"
+                )}
+              </td>
               <td className="px-4 py-2">{user.name}</td>
               <td className="px-4 py-2">{user.email}</td>
               <td className="px-4 py-2">{user.role}</td>

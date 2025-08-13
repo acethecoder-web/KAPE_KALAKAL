@@ -34,7 +34,7 @@ router.get("/:id", async (req, res) => {
 // CREATE user
 router.post("/", async (req, res) => {
   try {
-    const { name, email, address, role, password } = req.body;
+    const { image, name, email, address, role, password } = req.body;
 
     const existingUser = await Accounts.findOne({ email });
     if (existingUser) {
@@ -45,6 +45,7 @@ router.post("/", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const newUser = new Accounts({
+      image,
       name,
       email,
       address,
