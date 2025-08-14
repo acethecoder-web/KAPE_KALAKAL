@@ -54,6 +54,7 @@
   margin-bottom: 15px;
   background-color: rgba(139, 92, 57, 0.8);
   padding: 7px;
+  text-align: center;
 }
 
 .product-description {
@@ -115,4 +116,8 @@ button:hover {
   justify-content: center;
   height: 20px;
   width: 15px;
+}
+
+.prod-head {
+  text-align: center;
 }
