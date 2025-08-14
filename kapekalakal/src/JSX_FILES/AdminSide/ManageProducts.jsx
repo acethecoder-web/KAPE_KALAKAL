@@ -16,13 +16,15 @@ function ManageProducts() {
   const [showModal, setShowModal] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
-  // Handle file upload selection
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
   const handleUpload = (event) => {
     const file = event.target.files[0];
     if (file) setSelectedFile(file);
   };
 
-  // Fetch all products (READ)
   const fetchProducts = async () => {
     try {
       const res = await fetch("http://localhost:5174/api/products");
@@ -37,7 +39,6 @@ function ManageProducts() {
     fetchProducts();
   }, []);
 
-  // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({
@@ -46,14 +47,10 @@ function ManageProducts() {
     });
   };
 
-  // Add product (CREATE)
   const handleAddProduct = async (e) => {
     e.preventDefault();
-
     try {
       let imageUrl = "";
-
-      // Upload image if selected
       if (selectedFile) {
         const data = new FormData();
         data.append("file", selectedFile);
@@ -85,7 +82,6 @@ function ManageProducts() {
     }
   };
 
-  // Edit product (open modal with data)
   const handleEditProduct = (product) => {
     setEditingId(product._id);
     setForm({
@@ -100,13 +96,10 @@ function ManageProducts() {
     setShowModal(true);
   };
 
-  // Update product (UPDATE)
   const handleUpdateProduct = async (e) => {
     e.preventDefault();
-
     try {
       let imageUrl = form.image;
-
       if (selectedFile) {
         const data = new FormData();
         data.append("file", selectedFile);
@@ -141,7 +134,6 @@ function ManageProducts() {
     }
   };
 
-  // Delete product (DELETE)
   const handleDeleteProduct = async (id) => {
     if (!window.confirm("Delete this product?")) return;
     try {
@@ -177,8 +169,14 @@ function ManageProducts() {
     setSelectedFile(null);
   };
 
+  // Pagination calculations
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentProducts = products.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+
   return (
-    <div className="manage-products-container bg-amber-50 p-3 rounded my-5">
+    <div className="manage-products-container bg-amber-50 p-3 rounded my-4">
       <h2 className="mb-4">MANAGE PRODUCTS</h2>
       <button
         onClick={openAddModal}
@@ -187,6 +185,7 @@ function ManageProducts() {
         <IoIosAddCircle size={24} />
         Add Product
       </button>
+
       <table className="min-w-full bg-white border rounded overflow-hidden">
         <thead className="bg-amber-800 text-white">
           <tr>
@@ -200,7 +199,7 @@ function ManageProducts() {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
+          {currentProducts.map((product) => (
             <tr key={product._id} className="border-b">
               <td className="px-4 py-2">
                 {product.image ? (
@@ -238,6 +237,49 @@ function ManageProducts() {
           ))}
         </tbody>
       </table>
+
+      {/* Pagination Controls */}
+      <div className="flex justify-center items-center gap-2 mt-4">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          className={`px-3 py-1 rounded ${
+            currentPage === 1
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-amber-800 text-white hover:bg-amber-700"
+          }`}
+        >
+          Prev
+        </button>
+        {[...Array(totalPages)].map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentPage(index + 1)}
+            className={`px-3 py-1 rounded ${
+              currentPage === index + 1
+                ? "bg-amber-950 text-white"
+                : "bg-amber-200 hover:bg-amber-300"
+            }`}
+          >
+            {index + 1}
+          </button>
+        ))}
+        <button
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
+          disabled={currentPage === totalPages}
+          className={`px-3 py-1 rounded ${
+            currentPage === totalPages
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-amber-800 text-white hover:bg-amber-700"
+          }`}
+        >
+          Next
+        </button>
+      </div>
+
+      {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-[#4B2E05]/70 flex items-center justify-center z-50">
           <div className="bg-[#F5E9DA] rounded-2xl shadow-2xl w-[700px] max-w-3xl relative border border-[#D7B899]">
@@ -262,7 +304,7 @@ function ManageProducts() {
                   onChange={handleChange}
                   placeholder="Product Name"
                   required
-                  className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
+                  className="border border-[#D7B899] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
                 />
 
                 <select
@@ -270,7 +312,7 @@ function ManageProducts() {
                   value={form.category}
                   onChange={handleChange}
                   required
-                  className="border show border-[#D7B899 center rounded-lg  bg-white"
+                  className="border border-[#D7B899] rounded-lg bg-white"
                 >
                   <option value="" disabled>
                     Select Category
@@ -287,7 +329,7 @@ function ManageProducts() {
                   onChange={handleChange}
                   placeholder="Price"
                   required
-                  className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
+                  className="border border-[#D7B899] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
                 />
 
                 <input
@@ -297,13 +339,13 @@ function ManageProducts() {
                   onChange={handleChange}
                   placeholder="Stock"
                   required
-                  className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
+                  className="border border-[#D7B899] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
                 />
 
                 <input
                   type="file"
                   onChange={handleUpload}
-                  className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] p-2 bg-white"
+                  className="border border-[#D7B899] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] p-2 bg-white"
                 />
               </div>
 
@@ -316,7 +358,7 @@ function ManageProducts() {
                   placeholder="Description"
                   required
                   rows={10}
-                  className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
+                  className="border border-[#D7B899] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
                 />
               </div>
 

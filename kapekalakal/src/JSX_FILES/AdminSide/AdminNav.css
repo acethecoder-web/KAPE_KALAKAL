@@ -137,10 +137,9 @@ color standards
 }
 
 .sidenav-con {
-  padding-top: 35px;
+  padding-top: 200px;
   display: none;
   z-index: 100;
-  height: 100%;
   overflow: hidden;
 }
 
@@ -149,9 +148,10 @@ color standards
   display: flex;
   flex-direction: column;
   width: 15%;
-  height: 100%;
   position: absolute;
   align-items: center;
+  height: 89.4%;
+  overflow: hidden;
 }
 
 .s-icon {

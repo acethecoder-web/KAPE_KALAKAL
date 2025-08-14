@@ -17,6 +17,10 @@ function ManageUsers() {
   const [showModal, setShowModal] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 5;
+
   const handleUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -24,7 +28,6 @@ function ManageUsers() {
     }
   };
 
-  // Fetch users (READ)
   const fetchUsers = async () => {
     try {
       const res = await fetch("http://localhost:5174/api/users");
@@ -36,31 +39,18 @@ function ManageUsers() {
   };
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await fetch("http://localhost:5174/api/users");
-        const data = await res.json();
-        setUsers(data);
-      } catch (err) {
-        console.error("Failed to fetch users", err);
-      }
-    };
     fetchUsers();
   }, []);
 
-  // Handle form input
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Create user (CREATE)
   const handleAddUser = async (e) => {
     e.preventDefault();
 
     try {
       let imageUrl = "";
-
-      // If there's a selected file, upload to Cloudinary first
       if (selectedFile) {
         const data = new FormData();
         data.append("file", selectedFile);
@@ -76,7 +66,6 @@ function ManageUsers() {
         imageUrl = uploadRes.url;
       }
 
-      // Now send all form data + image URL to backend
       const res = await fetch("http://localhost:5174/api/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -100,7 +89,7 @@ function ManageUsers() {
       console.error("Failed to add user", err);
     }
   };
-  // Edit user (UPDATE)
+
   const handleEditUser = (user) => {
     setEditingId(user._id);
     setForm({
@@ -111,7 +100,7 @@ function ManageUsers() {
       address: user.address || "",
       password: user.password || "",
     });
-    setSelectedFile(null); // reset any previously selected file
+    setSelectedFile(null);
     setShowModal(true);
   };
 
@@ -120,7 +109,6 @@ function ManageUsers() {
     try {
       let imageUrl = form.image;
 
-      // If a new file was chosen, upload it to Cloudinary
       if (selectedFile) {
         const data = new FormData();
         data.append("file", selectedFile);
@@ -136,7 +124,6 @@ function ManageUsers() {
         imageUrl = uploadRes.url;
       }
 
-      // Update user in backend
       const res = await fetch(`http://localhost:5174/api/users/${editingId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -162,7 +149,6 @@ function ManageUsers() {
     }
   };
 
-  // Delete user (DELETE)
   const handleDeleteUser = async (id) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
@@ -201,22 +187,27 @@ function ManageUsers() {
     });
   };
 
+  // Pagination calculations
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+  const totalPages = Math.ceil(users.length / usersPerPage);
+
   return (
     <div className="manage-users-container bg-amber-50 p-3 rounded my-5">
       <h2 className="">MANAGE USERS</h2>
-      <div className="d-flex gap-2 align-items-center  ">
+      <div className="d-flex gap-2 align-items-center">
         <button
-          className="flex items-center gap-2  text-white px-4 py-2 mb-3 rounded hover:bg-amber-800 transition"
+          className="flex items-center gap-2 text-white px-4 py-2 mb-3 rounded hover:bg-amber-800 transition"
           onClick={openAddModal}
         >
           <IoIosAddCircle size={24} />
           Add User
         </button>
       </div>
-      <table className="min-w-full bg-white border rounded overflow-hidden ">
+      <table className="min-w-full bg-white border rounded overflow-hidden">
         <thead className="bg-amber-800 text-white">
           <tr>
-            {" "}
             <th className="px-4 py-2 text-left">Picture</th>
             <th className="px-4 py-2 text-left">Name</th>
             <th className="px-4 py-2 text-left">Email</th>
@@ -226,10 +217,9 @@ function ManageUsers() {
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
+          {currentUsers.map((user) => (
             <tr key={user._id} className="border-b">
               <td className="px-4 py-2">
-                {" "}
                 {user.image ? (
                   <img
                     src={user.image}
@@ -246,7 +236,7 @@ function ManageUsers() {
               <td className="px-4 py-2">{user.address}</td>
               <td className="px-4 py-2 d-flex gap-2">
                 <button
-                  className="text-amber-50 hover:txt-amber-500 "
+                  className="text-amber-50 hover:txt-amber-500"
                   onClick={() => handleEditUser(user)}
                   title="Edit"
                 >
@@ -265,9 +255,40 @@ function ManageUsers() {
         </tbody>
       </table>
 
+      {/* Pagination Controls */}
+      <div className="flex justify-center items-center gap-3 mt-4">
+        <button
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage((prev) => prev - 1)}
+          className="px-3 py-1 bg-amber-800 text-white rounded disabled:opacity-50"
+        >
+          Prev
+        </button>
+        {[...Array(totalPages).keys()].map((num) => (
+          <button
+            key={num}
+            onClick={() => setCurrentPage(num + 1)}
+            className={`px-3 py-1 rounded ${
+              currentPage === num + 1
+                ? "bg-amber-600 text-white"
+                : "bg-gray-200"
+            }`}
+          >
+            {num + 1}
+          </button>
+        ))}
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage((prev) => prev + 1)}
+          className="px-3 py-1 bg-amber-800 text-white rounded disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
+
       {showModal && (
         <div className="fixed inset-0 bg-[#4B2E05]/70 flex items-center justify-center z-50">
-          <div className="bg-[#F5E9DA]  rounded-2xl shadow-2xl  w-50 max-w-md relative border border-[#D7B899]">
+          <div className="bg-[#F5E9DA] rounded-2xl shadow-2xl w-50 max-w-md relative border border-[#D7B899]">
             <button
               className="absolute top-4 right-4 text-[#8B5C2A] hover:text-[#4B2E05] text-2xl font-bold"
               onClick={closeModal}
@@ -280,7 +301,7 @@ function ManageUsers() {
             </h3>
             <form
               onSubmit={editingId ? handleUpdateUser : handleAddUser}
-              className="flex flex-col gap-4 m-3 "
+              className="flex flex-col gap-4 m-3"
             >
               <input
                 name="name"
@@ -288,18 +309,17 @@ function ManageUsers() {
                 onChange={handleChange}
                 placeholder="Enter name"
                 required
-                className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
+                className="border border-[#D7B899] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
               />
-
               <input
                 name="email"
                 value={form.email}
                 onChange={handleChange}
                 placeholder="Enter email"
                 required
-                className="border border-[#D7B899 center rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
+                className="border border-[#D7B899] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
               />
-              <div className="inputss d-flex gap-2 align-items-center">
+              <div className="d-flex gap-2 align-items-center">
                 <select
                   name="role"
                   value={form.role}
@@ -311,22 +331,19 @@ function ManageUsers() {
                   <option value="user">User</option>
                   <option value="admin">Admin</option>
                 </select>
-
                 <input
                   type="file"
-                  id="fileUpload"
                   className="form-control w-20"
                   onChange={handleUpload}
                 />
               </div>
-
               <input
                 name="address"
                 value={form.address}
                 onChange={handleChange}
                 placeholder="Address"
                 required
-                className="border border-[#D7B899] center rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
+                className="border border-[#D7B899] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
               />
               <input
                 name="password"
@@ -335,12 +352,12 @@ function ManageUsers() {
                 placeholder="Password"
                 required
                 type="password"
-                className="border border-[#D7B899] center rounded- focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
+                className="border border-[#D7B899] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
               />
-              <div className="flex gap-5 mt-2 justify-center mb-4 ">
+              <div className="flex gap-5 mt-2 justify-center mb-4">
                 <button
                   type="submit"
-                  className="bg-[#8B5C2A] text-[#F5E9DA] px-5 py-2  rounded hover:bg-[#4B2E05] transition font-semibold shadow"
+                  className="bg-[#8B5C2A] text-[#F5E9DA] px-5 py-2 rounded hover:bg-[#4B2E05] transition font-semibold shadow"
                 >
                   {editingId ? "Update" : "Add"}
                 </button>
