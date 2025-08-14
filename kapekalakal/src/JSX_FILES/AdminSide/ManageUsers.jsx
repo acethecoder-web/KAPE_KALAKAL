@@ -313,8 +313,6 @@ function ManageUsers() {
                 </select>
 
                 <input
-                  name="image"
-                  value={form.image}
                   type="file"
                   id="fileUpload"
                   className="form-control w-20"

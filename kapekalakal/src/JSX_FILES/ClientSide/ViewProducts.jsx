@@ -33,17 +33,17 @@ function ViewProducts() {
               <img
                 src={product.image ? product.image : "placeholder.jpg"}
                 alt={product.name || "No Image"}
-                className="w-100 h-100 object-cover rounded-full"
+                className="product-img w-100 h-100 object-cover rounded"
               />{" "}
             </div>
             <div className="product-details">
               <h1 className="product-name">{product.name}</h1>
-              <p className="product-description">{product.description}</p>
-              <div className="quantity-container">
-                <button className="quantity-button">-</button>
-                <p className="quantity-display">1</p>
-                <button className="quantity-button">+</button>
-              </div>
+              <h1 className="product-description">
+                {product.description
+                  ? product.description.split(" ").slice(0, 15).join(" ") +
+                    (product.description.split(" ").length > 15 ? " ..." : "")
+                  : ""}
+              </h1>
               <p className="product-price">
                 <i class="fa-solid fa-peso-sign"></i> {product.price}
               </p>

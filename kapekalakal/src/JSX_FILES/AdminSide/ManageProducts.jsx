@@ -238,10 +238,9 @@ function ManageProducts() {
           ))}
         </tbody>
       </table>
-
       {showModal && (
         <div className="fixed inset-0 bg-[#4B2E05]/70 flex items-center justify-center z-50">
-          <div className="bg-[#F5E9DA] rounded-2xl shadow-2xl w-50 max-w-md relative border border-[#D7B899]">
+          <div className="bg-[#F5E9DA] rounded-2xl shadow-2xl w-[700px] max-w-3xl relative border border-[#D7B899]">
             <button
               onClick={closeModal}
               className="absolute top-4 right-4 text-[#8B5C2A] text-2xl font-bold hover:text-[#4B2E05]"
@@ -253,56 +252,76 @@ function ManageProducts() {
             </h3>
             <form
               onSubmit={editingId ? handleUpdateProduct : handleAddProduct}
-              className="flex flex-col gap-4 p-5"
+              className="grid grid-cols-2 gap-4 p-5"
             >
-              <input
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                placeholder="Product Name"
-                required
-                className="border border-[#D7B899] rounded-lg p-2"
-              />
-              <input
-                name="category"
-                value={form.category}
-                onChange={handleChange}
-                placeholder="Category"
-                required
-                className="border border-[#D7B899] rounded-lg p-2"
-              />
-              <input
-                name="description"
-                value={form.description}
-                onChange={handleChange}
-                placeholder="Description"
-                required
-                className="border border-[#D7B899] rounded-lg p-2"
-              />
-              <input
-                type="number"
-                name="price"
-                value={form.price}
-                onChange={handleChange}
-                placeholder="Price"
-                required
-                className="border border-[#D7B899] rounded-lg p-2"
-              />
-              <input
-                type="number"
-                name="stock"
-                value={form.stock}
-                onChange={handleChange}
-                placeholder="Stock"
-                required
-                className="border border-[#D7B899] rounded-lg p-2"
-              />
-              <input
-                type="file"
-                onChange={handleUpload}
-                className="border border-[#D7B899] rounded-lg p-2"
-              />
-              <div className="flex justify-center gap-4 mt-4">
+              {/* Left column */}
+              <div className="flex flex-col gap-4">
+                <input
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="Product Name"
+                  required
+                  className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
+                />
+
+                <select
+                  name="category"
+                  value={form.category}
+                  onChange={handleChange}
+                  required
+                  className="border show border-[#D7B899 center rounded-lg  bg-white"
+                >
+                  <option value="" disabled>
+                    Select Category
+                  </option>
+                  <option value="coffee">Coffee</option>
+                  <option value="brewing gear">Brewing Gear</option>
+                  <option value="accessories">Accessories</option>
+                </select>
+
+                <input
+                  type="number"
+                  name="price"
+                  value={form.price}
+                  onChange={handleChange}
+                  placeholder="Price"
+                  required
+                  className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
+                />
+
+                <input
+                  type="number"
+                  name="stock"
+                  value={form.stock}
+                  onChange={handleChange}
+                  placeholder="Stock"
+                  required
+                  className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
+                />
+
+                <input
+                  type="file"
+                  onChange={handleUpload}
+                  className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] p-2 bg-white"
+                />
+              </div>
+
+              {/* Right column */}
+              <div className="flex flex-col gap-4">
+                <textarea
+                  name="description"
+                  value={form.description}
+                  onChange={handleChange}
+                  placeholder="Description"
+                  required
+                  rows={10}
+                  className="border border-[#D7B899 center  rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B5C2A] bg-white"
+                />
+              </div>
+
+              {/* Buttons */}
+              <div className="col-span-2 flex justify-center gap-4 mt-4">
                 <button
                   type="submit"
                   className="bg-[#8B5C2A] text-white px-5 py-2 rounded hover:bg-[#4B2E05]"
