@@ -1,12 +1,16 @@
 import "./ProductsFilter.css";
 
-function ProductsFilter({ setCategory, setSort }) {
+function ProductsFilter({ setCategory, setSort, setSearchTerm }) {
   const handleCategoryChange = (e) => {
     setCategory(e.target.value);
   };
 
   const handleSortChange = (e) => {
     setSort(e.target.value);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
   };
 
   return (
@@ -50,6 +54,15 @@ function ProductsFilter({ setCategory, setSort }) {
             <option value="price-low">SORT BY PRICE: LOW - HIGH</option>
             <option value="price-high">SORT BY PRICE: HIGH - LOW</option>
           </select>
+        </div>
+
+        {/* Live Search */}
+        <div className="search-con">
+          <input
+            type="search"
+            placeholder="Search a product..."
+            onChange={handleSearchChange}
+          />
         </div>
       </div>
     </div>

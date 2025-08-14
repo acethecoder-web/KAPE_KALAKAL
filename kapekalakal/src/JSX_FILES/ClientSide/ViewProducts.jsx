@@ -8,6 +8,7 @@ function ViewProducts() {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [category, setCategory] = useState("ALL");
   const [sort, setSort] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const { setActiveView } = useClientView();
 
   const fetchProducts = async () => {
@@ -37,6 +38,15 @@ function ViewProducts() {
       );
     }
 
+    // Filter by search term
+    if (searchTerm.trim() !== "") {
+      updatedProducts = updatedProducts.filter(
+        (product) =>
+          product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          product.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
     // Sort products
     if (sort === "name") {
       updatedProducts.sort((a, b) => a.name.localeCompare(b.name));
@@ -47,11 +57,15 @@ function ViewProducts() {
     }
 
     setFilteredProducts(updatedProducts);
-  }, [category, sort, products]);
+  }, [category, sort, searchTerm, products]);
 
   return (
     <>
-      <ProductsFilter setCategory={setCategory} setSort={setSort} />
+      <ProductsFilter
+        setCategory={setCategory}
+        setSort={setSort}
+        setSearchTerm={setSearchTerm}
+      />
       <h1 className="prod-head">{category} PRODUCTS</h1>
       <div className="d-flex main-prod-container flex-wrap gap-10">
         {filteredProducts.map((product, index) => (
