@@ -8,18 +8,19 @@ import ManageProducts from "./ManageProducts.jsx";
 import coffeeAnimation from "../../assets/coffee_animation.json";
 import Lottie from "lottie-react";
 import ProfileAdmin from "./ProfileAdmin.jsx";
+
 function AdminDashboardContent() {
   const { activeView, setActiveView } = useAdminView();
-  const [loading, setLoading] = useState(false);
-  const [currentView, setCurrentView] = useState("manage-users");
+  const [loading, setLoading] = useState(true); // Start with loading true
+  const [currentView, setCurrentView] = useState(null); // Start with null
 
   useEffect(() => {
     setActiveView("manage-users");
   }, [setActiveView]);
 
-  // Add loading animation when view changes
+  // Handle loading animation when view changes or on initial load
   useEffect(() => {
-    if (activeView !== currentView) {
+    if (activeView && activeView !== currentView) {
       setLoading(true);
       const timeout = setTimeout(() => {
         setCurrentView(activeView);
@@ -42,7 +43,7 @@ function AdminDashboardContent() {
       );
     }
 
-    switch (activeView) {
+    switch (currentView) {
       case "manage-users":
         return <ManageUsers />;
       case "manage-products":

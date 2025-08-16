@@ -80,6 +80,19 @@ function Register() {
             <div className="flex items-center w-full bg-transparent border border-black-300/60 h-12 rounded-full overflow-hidden pl-6 gap-2">
               <FaUser className="mx-2" />
               <input
+                type="text"
+                name="name"
+                placeholder="Name"
+                value={formData.name}
+                onChange={handleChange}
+                className="bg-transparent text-black-500 placeholder-black-500/100 outline-none text-sm w-full h-full"
+                required
+              />
+            </div>
+
+            <div className="flex items-center w-full bg-transparent border border-black-300/60 h-12 rounded-full overflow-hidden pl-6 gap-2">
+              <FaUser className="mx-2" />
+              <input
                 type="email"
                 name="email"
                 placeholder="Email"
@@ -103,12 +116,12 @@ function Register() {
               />
             </div>
 
-            <div className="flex user  items-center w-full bg-transparent border border-black-300/60 h-12 rounded-full overflow-hidden pl-6 gap-2">
+            <div className="flex user hidden items-center w-full bg-transparent border border-black-300/60 h-12 rounded-full overflow-hidden pl-6 gap-2">
               <FaRankingStar className="mx-2" />
               <input
                 type="text"
                 placeholder="role"
-                value=""
+                value="user"
                 onChange={handleChange}
                 name="role"
                 className="bg-transparent text-black-500 placeholder-black-500/100 outline-none text-sm w-full h-full"

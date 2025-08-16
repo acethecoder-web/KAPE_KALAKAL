@@ -9,7 +9,7 @@ function ViewProducts() {
   const [category, setCategory] = useState("ALL");
   const [sort, setSort] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const { setActiveView } = useClientView();
+  const { setActiveView, setSelectedProduct, addToCart } = useClientView();
 
   const fetchProducts = async () => {
     try {
@@ -29,7 +29,6 @@ function ViewProducts() {
   useEffect(() => {
     let updatedProducts = [...products];
 
-    // Filter by category
     if (category !== "ALL") {
       updatedProducts = updatedProducts.filter(
         (product) =>
@@ -38,7 +37,6 @@ function ViewProducts() {
       );
     }
 
-    // Filter by search term
     if (searchTerm.trim() !== "") {
       updatedProducts = updatedProducts.filter(
         (product) =>
@@ -47,7 +45,6 @@ function ViewProducts() {
       );
     }
 
-    // Sort products
     if (sort === "name") {
       updatedProducts.sort((a, b) => a.name.localeCompare(b.name));
     } else if (sort === "price-low") {
@@ -70,9 +67,13 @@ function ViewProducts() {
       <div className="d-flex main-prod-container flex-wrap gap-10">
         {filteredProducts.map((product, index) => (
           <div key={index} className="productcard-container">
+            {/* 👇 Clicking image → go to product details */}
             <div
-              onClick={() => setActiveView("product-details")}
               className="image"
+              onClick={() => {
+                setSelectedProduct(product);
+                setActiveView("product-details");
+              }}
             >
               <img
                 src={product.image ? product.image : "placeholder.jpg"}
@@ -97,7 +98,13 @@ function ViewProducts() {
                 <i className="fa-solid fa-peso-sign"></i> {product.price}
               </p>
               <div className="buttons">
-                <button className="cart-button">Add to cart</button>
+                {/* 👇 Add to cart only */}
+                <button
+                  className="cart-button"
+                  onClick={() => addToCart(product)}
+                >
+                  Add to cart
+                </button>
                 <button className="buy-button">Buy now</button>
               </div>
             </div>

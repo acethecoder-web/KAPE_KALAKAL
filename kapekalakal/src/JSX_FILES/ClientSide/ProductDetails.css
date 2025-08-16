@@ -1,0 +1,94 @@
+body {
+  background-color: #f8f1e7; /* Warm cream background */
+  font-family: "Georgia", serif; /* Vintage serif font */
+}
+
+.coffee-product {
+  display: flex;
+  gap: 2rem;
+  padding: 20px;
+  max-width: 900px;
+  margin: 40px auto;
+  background: #fdf6ec;
+  border: 2px solid #d4b483;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.2);
+  background-image: url("https://www.transparenttextures.com/patterns/beige-paper.png");
+  background-size: cover;
+}
+
+.coffee-image img {
+  max-width: 300px;
+  border-radius: 8px;
+  border: 3px solid #a47449;
+  background-color: #e3c6a0;
+}
+
+.coffee-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #4a2c2a; /* Dark coffee brown */
+}
+
+.coffee-details h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+  color: #3b241f;
+  border-bottom: 2px dashed #a47449;
+  padding-bottom: 5px;
+}
+
+.description {
+  font-size: 16px;
+  margin-bottom: 15px;
+  color: #5c4033;
+}
+
+.price {
+  font-size: 20px;
+  font-weight: bold;
+  color: #7b3f00;
+  background: #f5d6a3;
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #a47449;
+}
+
+.pd-buttons button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Add to Cart Button - Coffee Bean Brown */
+.pd-buttons button:first-child {
+  background: linear-gradient(135deg, #8b4513, #a0522d);
+  color: #f5f3f0;
+}
+
+.pd-buttons button:first-child:hover {
+  background: linear-gradient(135deg, #a0522d, #cd853f);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(139, 69, 19, 0.3);
+}
+
+/* Checkout Button - Espresso Dark */
+.pd-buttons button:last-child {
+  background: linear-gradient(135deg, #3c2415, #5d4037);
+  color: #f5f3f0;
+}
+
+.pd-buttons button:last-child:hover {
+  background: linear-gradient(135deg, #5d4037, #6f4e37);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(60, 36, 21, 0.3);
+}
