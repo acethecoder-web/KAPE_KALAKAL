@@ -279,7 +279,13 @@ function CartPage() {
                   />
                 </div>
                 <div>
-                  <h4 style={{ margin: "0", color: colors.dark }}>
+                  <h4
+                    style={{
+                      margin: "0",
+                      color: colors.dark,
+                      fontSize: "25px",
+                    }}
+                  >
                     {item.name}
                   </h4>
                   <p style={{ margin: "5px 0", color: colors.medium }}>
