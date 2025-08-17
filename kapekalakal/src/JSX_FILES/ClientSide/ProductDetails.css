@@ -92,3 +92,102 @@ body {
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(60, 36, 21, 0.3);
 }
+
+/* Quantity selector container */
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 1rem 0;
+  width: fit-content;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(101, 67, 33, 0.1);
+}
+
+/* Quantity buttons styling */
+.pd-qbuttons button {
+  background: linear-gradient(135deg, #8b4513 0%, #a0522d 100%);
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pd-qbuttons button:hover {
+  background: linear-gradient(135deg, #a0522d 0%, #cd853f 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(101, 67, 33, 0.2);
+}
+
+.pd-qbuttons button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(101, 67, 33, 0.2);
+}
+
+.pd-qbuttons button:disabled {
+  background: #d2b48c;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Quantity display */
+.quantity-display {
+  background: #f5e6d3;
+  border: 2px solid #8b4513;
+  color: #654321;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  min-width: 60px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  box-sizing: border-box;
+}
+
+/* Alternative rounded style */
+.quantity-selector.rounded {
+  border-radius: 25px;
+  border: 2px solid #8b4513;
+}
+
+.quantity-selector.rounded .pd-qbuttons button {
+  border-radius: 0;
+  border: none;
+}
+
+.quantity-selector.rounded .pd-qbuttons:first-child button {
+  border-radius: 25px 0 0 25px;
+}
+
+.quantity-selector.rounded .pd-qbuttons:last-child button {
+  border-radius: 0 25px 25px 0;
+}
+
+.quantity-selector.rounded .quantity-display {
+  border: none;
+  border-top: 2px solid #8b4513;
+  border-bottom: 2px solid #8b4513;
+  background: #fff8dc;
+}
+
+/* Coffee theme colors */
+:root {
+  --coffee-dark: #654321;
+  --coffee-medium: #8b4513;
+  --coffee-light: #d2b48c;
+  --coffee-cream: #f5e6d3;
+  --coffee-white: #fff8dc;
+}

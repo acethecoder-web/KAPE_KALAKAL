@@ -1,49 +1,111 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useClientView } from "./ClientViewContext";
 
 function CartPage() {
   const { setActiveView } = useClientView();
-
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Premium Arabica Coffee",
-      description: "Rich, smooth blend with chocolate notes",
-      price: 12.99,
-      quantity: 2,
-      image:
-        "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=200&h=200&fit=crop",
-      size: "Medium",
-      roast: "Dark",
-    },
-    {
-      id: 2,
-      name: "Espresso Blend",
-      description: "Intense flavor with caramel undertones",
-      price: 18.99,
-      quantity: 1,
-      image:
-        "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=200&h=200&fit=crop",
-      size: "Large",
-      roast: "Medium",
-    },
-  ]);
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const taxRate = 0.08;
   const shippingFee = 5.99;
 
-  const updateQuantity = (itemId, change) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === itemId
-          ? { ...item, quantity: Math.max(1, item.quantity + change) }
-          : item
-      )
-    );
+  // Fetch cart items from database
+  const fetchCartItems = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("http://localhost:5174/api/cart");
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch cart items");
+      }
+
+      const data = await response.json();
+      setCartItems(data);
+      setError(null);
+    } catch (error) {
+      console.error("Error fetching cart items:", error);
+      setError("Failed to load cart items. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const removeItem = (itemId) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+  // Load cart items on component mount
+  useEffect(() => {
+    fetchCartItems();
+  }, []);
+
+  // Update quantity in database
+  const updateQuantity = async (itemId, change) => {
+    try {
+      const item = cartItems.find((item) => item._id === itemId);
+      const newQuantity = Math.max(1, item.quantity + change);
+
+      const response = await fetch(`http://localhost:5174/api/cart/${itemId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ quantity: newQuantity }),
+      });
+
+      if (response.ok) {
+        // Update local state
+        setCartItems((prevItems) =>
+          prevItems.map((item) =>
+            item._id === itemId ? { ...item, quantity: newQuantity } : item
+          )
+        );
+      } else {
+        console.error("Failed to update quantity");
+        alert("Failed to update quantity. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error updating quantity:", error);
+      alert("Network error. Please try again.");
+    }
+  };
+
+  // Remove item from database
+  const removeItem = async (itemId) => {
+    try {
+      const response = await fetch(`http://localhost:5174/api/cart/${itemId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        // Update local state
+        setCartItems((prevItems) =>
+          prevItems.filter((item) => item._id !== itemId)
+        );
+      } else {
+        console.error("Failed to remove item");
+        alert("Failed to remove item. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error removing item:", error);
+      alert("Network error. Please try again.");
+    }
+  };
+
+  // Clear entire cart
+  const clearCart = async () => {
+    try {
+      const response = await fetch("http://localhost:5174/api/cart", {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setCartItems([]);
+      } else {
+        console.error("Failed to clear cart");
+        alert("Failed to clear cart. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error clearing cart:", error);
+      alert("Network error. Please try again.");
+    }
   };
 
   const subtotal = cartItems.reduce(
@@ -63,22 +125,88 @@ function CartPage() {
     gold: "#d4af37",
   };
 
+  if (loading) {
+    return (
+      <div style={{ padding: "40px", textAlign: "center" }}>
+        <div style={{ fontSize: "2rem", color: colors.light }}>
+          <i className="fas fa-spinner fa-spin"></i>
+        </div>
+        <p style={{ color: colors.dark, marginTop: "20px" }}>
+          Loading your cart...
+        </p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ padding: "40px", textAlign: "center" }}>
+        <div style={{ fontSize: "2rem", color: "red" }}>
+          <i className="fas fa-exclamation-triangle"></i>
+        </div>
+        <p style={{ color: colors.dark, marginTop: "20px" }}>{error}</p>
+        <button
+          onClick={fetchCartItems}
+          style={{
+            padding: "10px 20px",
+            background: colors.light,
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            marginTop: "10px",
+          }}
+        >
+          Try Again
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div style={{ padding: "2px 2px", maxWidth: "1200px", margin: "0 auto" }}>
       {/* Header */}
-      <h1
+      <div
         style={{
-          textAlign: "center",
-          fontSize: "30px",
-          fontWeight: "700",
-          color: colors.dark,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
           marginBottom: "20px",
-          marginTop: "20px",
         }}
       >
-        <i className="fas fa-shopping-cart" style={{ marginRight: "10px" }}></i>
-        Shopping Cart
-      </h1>
+        <h1
+          style={{
+            fontSize: "30px",
+            fontWeight: "700",
+            color: colors.dark,
+            marginTop: "20px",
+          }}
+        >
+          <i
+            className="fas fa-shopping-cart"
+            style={{ marginRight: "10px" }}
+          ></i>
+          Shopping Cart ({cartItems.length} items)
+        </h1>
+
+        {cartItems.length > 0 && (
+          <button
+            onClick={clearCart}
+            style={{
+              background: "transparent",
+              border: "2px solid red",
+              color: "red",
+              padding: "8px 16px",
+              borderRadius: "5px",
+              cursor: "pointer",
+              fontSize: "14px",
+            }}
+          >
+            <i className="fas fa-trash" style={{ marginRight: "5px" }}></i>
+            Clear Cart
+          </button>
+        )}
+      </div>
 
       <div
         style={{
@@ -109,11 +237,26 @@ function CartPage() {
               <p style={{ color: colors.medium }}>
                 Add some delicious coffee to get started!
               </p>
+              <button
+                onClick={() => setActiveView("view-products")}
+                style={{
+                  background: colors.light,
+                  color: "white",
+                  border: "none",
+                  padding: "12px 24px",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  marginTop: "20px",
+                  fontSize: "16px",
+                }}
+              >
+                Browse Products
+              </button>
             </div>
           ) : (
             cartItems.map((item) => (
               <div
-                key={item.id}
+                key={item._id}
                 style={{
                   display: "grid",
                   gridTemplateColumns: "100px 1fr auto auto",
@@ -125,7 +268,7 @@ function CartPage() {
               >
                 <div>
                   <img
-                    src={item.image}
+                    src={item.image || "placeholder.jpg"}
                     alt={item.name}
                     style={{
                       width: "100px",
@@ -142,29 +285,49 @@ function CartPage() {
                   <p style={{ margin: "5px 0", color: colors.medium }}>
                     {item.description}
                   </p>
+                  {item.category && (
+                    <span
+                      style={{
+                        background: colors.light,
+                        color: "white",
+                        padding: "2px 8px",
+                        borderRadius: "12px",
+                        fontSize: "12px",
+                      }}
+                    >
+                      {item.category}
+                    </span>
+                  )}
                 </div>
                 <div
                   style={{ display: "flex", alignItems: "center", gap: "8px" }}
                 >
                   <button
-                    onClick={() => updateQuantity(item.id, -1)}
+                    onClick={() => updateQuantity(item._id, -1)}
+                    disabled={item.quantity <= 1}
                     style={{
                       width: "28px",
                       height: "28px",
                       borderRadius: "50%",
-                      background: colors.light,
+                      background: item.quantity <= 1 ? "#ccc" : colors.light,
                       color: "#fff",
                       border: "none",
-                      cursor: "pointer",
+                      cursor: item.quantity <= 1 ? "not-allowed" : "pointer",
                     }}
                   >
                     <i className="fas fa-minus"></i>
                   </button>
-                  <span className="" style={{ fontSize: "40px" }}>
+                  <span
+                    style={{
+                      fontSize: "18px",
+                      minWidth: "30px",
+                      textAlign: "center",
+                    }}
+                  >
                     {item.quantity}
                   </span>
                   <button
-                    onClick={() => updateQuantity(item.id, 1)}
+                    onClick={() => updateQuantity(item._id, 1)}
                     style={{
                       width: "28px",
                       height: "28px",
@@ -186,15 +349,16 @@ function CartPage() {
                       color: colors.dark,
                     }}
                   >
-                    ${(item.price * item.quantity).toFixed(2)}
+                    ₱{(item.price * item.quantity).toFixed(2)}
                   </p>
                   <button
-                    onClick={() => removeItem(item.id)}
+                    onClick={() => removeItem(item._id)}
                     style={{
                       background: "none",
                       border: "none",
                       color: "red",
                       cursor: "pointer",
+                      marginTop: "5px",
                     }}
                   >
                     <i className="fas fa-trash"></i>
@@ -206,133 +370,143 @@ function CartPage() {
         </div>
 
         {/* Summary */}
-        <div
-          style={{
-            flex: "1",
-            minWidth: "280px",
-            background: colors.dark,
-            borderRadius: "15px",
-            padding: "20px",
-            color: "#fff",
-            boxShadow: "0 8px 20px rgba(0,0,0,0.2)",
-            height: "fit-content",
-          }}
-        >
-          <h3
+        {cartItems.length > 0 && (
+          <div
             style={{
-              textAlign: "center",
-              marginBottom: "30px",
+              flex: "1",
+              minWidth: "280px",
+              background: colors.dark,
+              borderRadius: "15px",
+              padding: "20px",
               color: "#fff",
+              boxShadow: "0 8px 20px rgba(0,0,0,0.2)",
+              height: "fit-content",
             }}
           >
-            <i
-              className="fas fa-receipt"
-              style={{ marginRight: "8px", color: colors.gold }}
-            ></i>
-            Cart Total
-          </h3>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginBottom: "10px",
-            }}
-          >
-            <span style={{ fontSize: "25px" }}>Subtotal:</span>
-            <span
+            <h3
               style={{
-                fontSize: "25px",
-                fontWeight: "700",
-                color: colors.gold,
+                textAlign: "center",
+                marginBottom: "30px",
+                color: "#fff",
               }}
             >
-              ${subtotal.toFixed(2)}
-            </span>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginBottom: "10px",
-            }}
-          >
-            <span style={{ fontSize: "25px" }}>Tax:</span>
-            <span
+              <i
+                className="fas fa-receipt"
+                style={{ marginRight: "8px", color: colors.gold }}
+              ></i>
+              Order Summary
+            </h3>
+            <div
               style={{
-                fontSize: "25px",
-                fontWeight: "700",
-                color: colors.gold,
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: "10px",
               }}
             >
-              ${tax.toFixed(2)}
-            </span>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginBottom: "10px",
-            }}
-          >
-            <span style={{ fontSize: "25px" }}>Shipping:</span>
-            <span
+              <span style={{ fontSize: "16px" }}>Subtotal:</span>
+              <span
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "700",
+                  color: colors.gold,
+                }}
+              >
+                ₱{subtotal.toFixed(2)}
+              </span>
+            </div>
+            <div
               style={{
-                fontSize: "25px",
-                fontWeight: "700",
-                color: colors.gold,
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: "10px",
               }}
             >
-              ${shippingFee.toFixed(2)}
-            </span>
-          </div>
-          <hr style={{ borderColor: "#fff" }} />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              fontSize: "1.1rem",
-            }}
-          >
-            <strong>Total:</strong>
-            <strong style={{ color: colors.gold }}>${total.toFixed(2)}</strong>
-          </div>
+              <span style={{ fontSize: "16px" }}>Tax (8%):</span>
+              <span
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "700",
+                  color: colors.gold,
+                }}
+              >
+                ₱{tax.toFixed(2)}
+              </span>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: "10px",
+              }}
+            >
+              <span style={{ fontSize: "16px" }}>Shipping:</span>
+              <span
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "700",
+                  color: colors.gold,
+                }}
+              >
+                ₱{shippingFee.toFixed(2)}
+              </span>
+            </div>
+            <hr style={{ borderColor: "#fff", margin: "20px 0" }} />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                fontSize: "1.2rem",
+                marginBottom: "20px",
+              }}
+            >
+              <strong>Total:</strong>
+              <strong style={{ color: colors.gold }}>
+                ₱{total.toFixed(2)}
+              </strong>
+            </div>
 
-          <button
-            onClick={() => setActiveView("my-payments")}
-            style={{
-              width: "100%",
-              marginTop: "20px",
-              padding: "12px",
-              background: colors.gold,
-              border: "none",
-              borderRadius: "10px",
-              fontWeight: "700",
-              cursor: "pointer",
-            }}
-          >
-            <i
-              className="fas fa-credit-card"
-              style={{ marginRight: "8px" }}
-            ></i>
-            Proceed to Checkout
-          </button>
-          <button
-            style={{
-              width: "100%",
-              marginTop: "10px",
-              padding: "10px",
-              background: "transparent",
-              border: "2px solid #fff",
-              borderRadius: "10px",
-              color: "#fff",
-              fontWeight: "600",
-              cursor: "pointer",
-            }}
-          >
-            <i className="fas fa-arrow-left" style={{ marginRight: "8px" }}></i>
-            Continue Shopping
-          </button>
-        </div>
+            <button
+              onClick={() => setActiveView("my-payments")}
+              style={{
+                width: "100%",
+                marginTop: "10px",
+                padding: "15px",
+                background: colors.gold,
+                border: "none",
+                borderRadius: "10px",
+                fontWeight: "700",
+                cursor: "pointer",
+                fontSize: "16px",
+              }}
+            >
+              <i
+                className="fas fa-credit-card"
+                style={{ marginRight: "8px" }}
+              ></i>
+              Proceed to Checkout
+            </button>
+            <button
+              onClick={() => setActiveView("view-products")}
+              style={{
+                width: "100%",
+                marginTop: "10px",
+                padding: "12px",
+                background: "transparent",
+                border: "2px solid #fff",
+                borderRadius: "10px",
+                color: "#fff",
+                fontWeight: "600",
+                cursor: "pointer",
+              }}
+            >
+              <i
+                className="fas fa-arrow-left"
+                style={{ marginRight: "8px" }}
+              ></i>
+              Continue Shopping
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

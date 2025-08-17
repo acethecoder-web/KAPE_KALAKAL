@@ -56,6 +56,53 @@ function ViewProducts() {
     setFilteredProducts(updatedProducts);
   }, [category, sort, searchTerm, products]);
 
+  // Function to handle Buy Now click
+  const handleBuyNow = (product) => {
+    setSelectedProduct(product);
+    setActiveView("product-details");
+  };
+
+  // Enhanced Add to Cart function with database integration
+  const handleAddToCart = async (product) => {
+    try {
+      const cartItem = {
+        productId: product._id,
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        image: product.image,
+        category: product.category,
+        quantity: 1, // Default quantity
+      };
+
+      const response = await fetch("http://localhost:5174/api/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(cartItem),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Item added to cart:", result);
+
+        // Optional: Show success message or notification
+        alert(`${product.name} added to cart!`);
+
+        // Also call the context addToCart if you still need it for local state
+        addToCart(product);
+      } else {
+        const error = await response.json();
+        console.error("Error adding to cart:", error);
+        alert("Failed to add item to cart. Please try again.");
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+      alert("Network error. Please check your connection and try again.");
+    }
+  };
+
   return (
     <>
       <ProductsFilter
@@ -98,14 +145,20 @@ function ViewProducts() {
                 <i className="fa-solid fa-peso-sign"></i> {product.price}
               </p>
               <div className="buttons">
-                {/* 👇 Add to cart only */}
+                {/* 👇 Add to cart with database integration */}
                 <button
                   className="cart-button"
-                  onClick={() => addToCart(product)}
+                  onClick={() => handleAddToCart(product)}
                 >
                   Add to cart
                 </button>
-                <button className="buy-button">Buy now</button>
+                {/* 👇 Buy now - goes to product details */}
+                <button
+                  className="buy-button"
+                  onClick={() => handleBuyNow(product)}
+                >
+                  Buy now
+                </button>
               </div>
             </div>
           </div>

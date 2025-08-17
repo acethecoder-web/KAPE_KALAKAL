@@ -10,6 +10,7 @@ function ManageOrders() {
     totalPrice: "",
     status: "",
   });
+
   const [editingId, setEditingId] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
