@@ -9,6 +9,7 @@ function MyPayments() {
   const [loading, setLoading] = useState(true);
   const [accountName, setAccountName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
+  const [processingPayment, setProcessingPayment] = useState(false);
 
   // Tax and shipping constants (same as cart)
   const taxRate = 0.08;
@@ -53,6 +54,53 @@ function MyPayments() {
   const tax = subtotal * taxRate;
   const total = subtotal + tax + shippingFee;
 
+  // Generate order ID
+  const generateOrderId = () => {
+    return `ORD-${Date.now()}-${Math.random()
+      .toString(36)
+      .substr(2, 5)
+      .toUpperCase()}`;
+  };
+
+  // Save order to database
+  const saveOrderToDatabase = async (orderData) => {
+    try {
+      const response = await fetch("http://localhost:5174/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to create order");
+      }
+
+      const savedOrder = await response.json();
+      return savedOrder;
+    } catch (error) {
+      console.error("Error saving order:", error);
+      throw error;
+    }
+  };
+
+  // Clear cart after successful order
+  const clearCart = async () => {
+    try {
+      const response = await fetch("http://localhost:5174/api/cart", {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        console.warn("Failed to clear cart, but order was successful");
+      }
+    } catch (error) {
+      console.warn("Error clearing cart:", error);
+    }
+  };
+
   // Handle payment confirmation
   const handleConfirmPayment = async () => {
     if (!selectedMethod) {
@@ -73,35 +121,67 @@ function MyPayments() {
       return;
     }
 
-    // Here you can add your payment processing logic
+    setProcessingPayment(true);
+
     try {
-      // Create order object
+      // Create order object with all necessary details
+      const orderId = generateOrderId();
       const orderData = {
-        items: cartItems,
+        orderId: orderId,
+        items: cartItems.map((item) => ({
+          productId: item._id || item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          total: item.price * item.quantity,
+        })),
         paymentMethod: selectedMethod,
-        accountName: accountName,
-        accountNumber: accountNumber,
-        subtotal: subtotal,
-        tax: tax,
-        shippingFee: shippingFee,
-        total: total,
+        paymentDetails: {
+          method: paymentOptions.find((p) => p.id === selectedMethod)?.name,
+          accountName: selectedMethod !== "cod" ? accountName : null,
+          accountNumber: selectedMethod !== "cod" ? accountNumber : null,
+        },
+        pricing: {
+          subtotal: subtotal,
+          tax: tax,
+          taxRate: taxRate,
+          shippingFee: shippingFee,
+          total: total,
+        },
+        status: selectedMethod === "cod" ? "pending" : "awaiting_payment",
         orderDate: new Date().toISOString(),
+        customerInfo: {
+          // You might want to add customer info here if available
+          // email, name, address, etc.
+        },
       };
 
-      // You can send this to your backend to create the order
-      console.log("Order Data:", orderData);
+      // Save order to database
+      const savedOrder = await saveOrderToDatabase(orderData);
 
-      // Show success message
-      alert(`Payment confirmed! Order total: ₱${total.toFixed(2)}`);
+      // Show success message with order ID
+      alert(
+        `Payment confirmed!\n` +
+          `Order ID: ${orderId}\n` +
+          `Total: ₱${total.toFixed(2)}\n` +
+          `Payment Method: ${orderData.paymentDetails.method}\n\n` +
+          `${
+            selectedMethod === "cod"
+              ? "Please prepare exact change upon delivery."
+              : "Please complete your payment to process the order."
+          }`
+      );
 
-      // Clear the cart after successful payment (optional)
-      await fetch("http://localhost:5174/api/cart", { method: "DELETE" });
+      // Clear the cart after successful payment
+      await clearCart();
 
-      // Redirect to a success page or back to products
+      // Redirect to success page or back to products
       setActiveView("view-products");
     } catch (error) {
       console.error("Payment error:", error);
-      alert("Payment failed. Please try again.");
+      alert(`Payment failed: ${error.message}\nPlease try again.`);
+    } finally {
+      setProcessingPayment(false);
     }
   };
 
@@ -287,24 +367,40 @@ function MyPayments() {
           {/* Confirm Payment */}
           <button
             onClick={handleConfirmPayment}
+            disabled={!selectedMethod || processingPayment}
             style={{
               marginTop: "20px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: selectedMethod ? "#3c2415" : "#ccc",
+              backgroundColor:
+                selectedMethod && !processingPayment ? "#3c2415" : "#ccc",
               color: "#fff",
               padding: "12px",
               borderRadius: "8px",
-              cursor: selectedMethod ? "pointer" : "not-allowed",
+              cursor:
+                selectedMethod && !processingPayment
+                  ? "pointer"
+                  : "not-allowed",
               fontWeight: "bold",
               border: "none",
               transition: "all 0.2s ease",
             }}
-            disabled={!selectedMethod}
           >
-            <FaClipboardCheck style={{ marginRight: "8px" }} />
-            CONFIRM PAYMENT (₱{total.toFixed(2)})
+            {processingPayment ? (
+              <>
+                <i
+                  className="fas fa-spinner fa-spin"
+                  style={{ marginRight: "8px" }}
+                ></i>
+                PROCESSING...
+              </>
+            ) : (
+              <>
+                <FaClipboardCheck style={{ marginRight: "8px" }} />
+                CONFIRM PAYMENT (₱{total.toFixed(2)})
+              </>
+            )}
           </button>
         </div>
       </div>

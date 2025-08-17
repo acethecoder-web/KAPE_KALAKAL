@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useClientView } from "./ClientViewContext";
+import { useCart } from "./cartcontext"; // Import the cart context
 
 function CartPage() {
   const { setActiveView } = useClientView();
+  const { updateCartCount } = useCart(); // Get the updateCartCount function
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -38,6 +40,9 @@ function CartPage() {
       const data = await response.json();
       setCartItems(data);
       setError(null);
+
+      // Update the cart count in the context
+      updateCartCount();
     } catch (error) {
       console.error("Error fetching cart items:", error);
       setError("Failed to load cart items. Please try again.");
@@ -72,6 +77,9 @@ function CartPage() {
             item._id === itemId ? { ...item, quantity: newQuantity } : item
           )
         );
+
+        // Update the cart count in the context
+        updateCartCount();
       } else {
         console.error("Failed to update quantity");
         alert("Failed to update quantity. Please try again.");
@@ -94,6 +102,9 @@ function CartPage() {
         setCartItems((prevItems) =>
           prevItems.filter((item) => item._id !== itemId)
         );
+
+        // Update the cart count in the context
+        updateCartCount();
       } else {
         console.error("Failed to remove item");
         alert("Failed to remove item. Please try again.");
@@ -115,6 +126,9 @@ function CartPage() {
         if (response.ok) {
           setCartItems([]);
           setCurrentPage(1);
+
+          // Update the cart count in the context
+          updateCartCount();
         } else {
           console.error("Failed to clear cart");
           alert("Failed to clear cart. Please try again.");

@@ -9,6 +9,7 @@ import Lottie from "lottie-react";
 import CartPage from "./Cart.jsx";
 import ProductDetails from "./ProductDetails.jsx";
 import Profile from "./Profile.jsx";
+import { CartProvider } from "./cartcontext.jsx";
 function ClientDashboardContent() {
   const { activeView, setActiveView } = useClientView();
   const [loading, setLoading] = useState(false);
@@ -62,10 +63,13 @@ function ClientDashboardContent() {
 
   return (
     <>
-      <ClientNavBar />
-      <div className="client-dashboard pl-5 flex justify-center">
-        <div className="client-body">{renderContent()}</div>
-      </div>
+      {" "}
+      <CartProvider>
+        <ClientNavBar />
+        <div className="client-dashboard pl-5 flex justify-center">
+          <div className="client-body">{renderContent()}</div>
+        </div>
+      </CartProvider>
     </>
   );
 }

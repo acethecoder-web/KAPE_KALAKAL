@@ -3,11 +3,22 @@ import Order from "../models/ordersmodel.js";
 
 const router = express.Router();
 
-// GET all orders
+// GET all orders with pagination
 router.get("/", async (req, res) => {
   try {
-    const orders = await Order.find().sort({ date: -1 });
-    res.json(orders);
+    const { page = 1, limit = 10 } = req.query;
+    const orders = await Order.find()
+      .sort({ date: -1 })
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
+
+    const total = await Order.countDocuments();
+    res.json({
+      orders,
+      total,
+      page: Number(page),
+      pages: Math.ceil(total / limit),
+    });
   } catch (err) {
     res.status(500).json({ error: "Server error" });
   }
@@ -16,7 +27,10 @@ router.get("/", async (req, res) => {
 // POST a new order
 router.post("/", async (req, res) => {
   try {
-    const newOrder = new Order(req.body);
+    const newOrder = new Order({
+      ...req.body,
+      status: "Pending", // default status
+    });
     await newOrder.save();
     res.status(201).json(newOrder);
   } catch (err) {
@@ -24,7 +38,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// PUT update order
+// PUT update order (including status)
 router.put("/:id", async (req, res) => {
   try {
     const updated = await Order.findByIdAndUpdate(req.params.id, req.body, {

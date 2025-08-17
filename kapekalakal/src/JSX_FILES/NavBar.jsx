@@ -14,9 +14,6 @@ function NavBar() {
           <Link to="/about" className="nav-items">
             ABOUT
           </Link>
-          <Link to="/products" className="nav-items">
-            PRODUCTS
-          </Link>
           <Link to="/login" className="nav-items nav-item6" href="">
             LOG IN
           </Link>
@@ -36,9 +33,7 @@ function NavBar() {
         <Link to="/about" className="nav-items2">
           ABOUT
         </Link>
-        <Link to="/products" className="nav-items2">
-          PRODUCTS
-        </Link>
+
         <Link to="/order" className="nav-items2">
           ORDER NOW
         </Link>

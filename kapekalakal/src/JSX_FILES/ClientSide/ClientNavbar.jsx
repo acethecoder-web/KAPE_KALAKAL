@@ -2,8 +2,12 @@ import "../../CSS_FILES/App.css";
 import "./ClientNavbar.css";
 import { Link } from "react-router-dom";
 import { useClientView } from "./ClientViewContext";
+import { useCart } from "./cartcontext"; // Import the cart context
+
 function ClientNavbar() {
   const { setActiveView } = useClientView();
+  const { cartItemCount } = useCart(); // Get the cart item count
+
   return (
     <>
       <nav className="navbar">
@@ -25,10 +29,13 @@ function ClientNavbar() {
           </div>
           <div
             onClick={() => setActiveView("cart")}
-            className="nav-items mb-2 "
+            className="nav-items mb-2 cart-icon-container"
             href=""
           >
-            <i class="fa-solid fa-cart-shopping"></i>
+            <i className="fa-solid fa-cart-shopping"></i>
+            {cartItemCount > 0 && (
+              <span className="cart-notification">{cartItemCount}</span>
+            )}
           </div>
           <div
             onClick={() => setActiveView("profile")}
@@ -61,9 +68,15 @@ function ClientNavbar() {
           <Link to="/order" className="nav-items2">
             MY ORDERS
           </Link>
-          <Link to="/cart" className="nav-items2">
+          <div
+            onClick={() => setActiveView("cart")}
+            className="nav-items2 cart-mobile-container"
+          >
             CART
-          </Link>
+            {cartItemCount > 0 && (
+              <span className="cart-notification-mobile">{cartItemCount}</span>
+            )}
+          </div>
           <Link to="/login" Link className="nav-items nav-item6-2">
             LOGIN
           </Link>
