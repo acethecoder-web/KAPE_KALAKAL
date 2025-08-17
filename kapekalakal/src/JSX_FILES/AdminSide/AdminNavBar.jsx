@@ -37,9 +37,6 @@ function AdminNavBar() {
         </div>
       </nav>
       <div className="burger-con">
-        <Link to="/about" className="nav-items2">
-          ABOUT
-        </Link>
         <Link to="/products" className="nav-items2">
           PRODUCTS
         </Link>

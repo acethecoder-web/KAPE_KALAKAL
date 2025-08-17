@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { FaClipboardCheck } from "react-icons/fa";
 import { useClientView } from "./ClientViewContext";
+import { useCart } from "./cartcontext";
 
 function MyPayments() {
   const { setActiveView } = useClientView();
+  const { updateCartCount } = useCart();
   const [selectedMethod, setSelectedMethod] = useState(null);
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [accountName, setAccountName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [processingPayment, setProcessingPayment] = useState(false);
+  const [user, setUser] = useState(null);
 
   // Tax and shipping constants (same as cart)
   const taxRate = 0.08;
@@ -20,11 +23,47 @@ function MyPayments() {
     { id: "paypal", name: "PAYPAL", logo: "./logos/PAYPAL.png" },
   ];
 
-  // Fetch cart items from database
+  // Get current user (same logic as CartPage)
+  useEffect(() => {
+    const getCurrentUser = () => {
+      // Option 1: Get from localStorage (if you store user info there)
+      const userData = localStorage.getItem("user");
+      if (userData) {
+        return JSON.parse(userData);
+      }
+
+      // Option 2: Get from sessionStorage
+      const sessionUser = sessionStorage.getItem("user");
+      if (sessionUser) {
+        return JSON.parse(sessionUser);
+      }
+
+      // Option 3: Generate a temporary user ID for guest users
+      let guestId = localStorage.getItem("guestUserId");
+      if (!guestId) {
+        guestId = "guest_" + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem("guestUserId", guestId);
+      }
+
+      return {
+        id: guestId,
+        name: "Guest User",
+        isGuest: true,
+      };
+    };
+
+    setUser(getCurrentUser());
+  }, []);
+
+  // Fetch cart items from database for specific user
   const fetchCartItems = async () => {
+    if (!user?.id) return;
+
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:5174/api/cart");
+      const response = await fetch(
+        `http://localhost:5174/api/cart?userId=${user.id}`
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch cart items");
@@ -41,10 +80,12 @@ function MyPayments() {
     }
   };
 
-  // Load cart items on component mount
+  // Load cart items when user is available
   useEffect(() => {
-    fetchCartItems();
-  }, []);
+    if (user?.id) {
+      fetchCartItems();
+    }
+  }, [user?.id]);
 
   // Calculate totals
   const subtotal = cartItems.reduce(
@@ -86,14 +127,21 @@ function MyPayments() {
     }
   };
 
-  // Clear cart after successful order
+  // Clear cart after successful order (user-specific)
   const clearCart = async () => {
-    try {
-      const response = await fetch("http://localhost:5174/api/cart", {
-        method: "DELETE",
-      });
+    if (!user?.id) return;
 
-      if (!response.ok) {
+    try {
+      const response = await fetch(
+        `http://localhost:5174/api/cart?userId=${user.id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (response.ok) {
+        updateCartCount(); // Update cart count in context
+      } else {
         console.warn("Failed to clear cart, but order was successful");
       }
     } catch (error) {
@@ -121,19 +169,32 @@ function MyPayments() {
       return;
     }
 
+    if (!user?.id) {
+      alert("User session expired. Please refresh and try again.");
+      return;
+    }
+
     setProcessingPayment(true);
 
     try {
+      // Simulate payment processing delay (1-3 seconds)
+      await new Promise((resolve) =>
+        setTimeout(resolve, Math.random() * 2000 + 1000)
+      );
+
       // Create order object with all necessary details
       const orderId = generateOrderId();
       const orderData = {
         orderId: orderId,
+        userId: user.id, // Include user ID for the order
         items: cartItems.map((item) => ({
-          productId: item._id || item.id,
+          productId: item.productId || item._id,
           name: item.name,
           price: item.price,
           quantity: item.quantity,
           total: item.price * item.quantity,
+          image: item.image,
+          category: item.category,
         })),
         paymentMethod: selectedMethod,
         paymentDetails: {
@@ -142,33 +203,43 @@ function MyPayments() {
           accountNumber: selectedMethod !== "cod" ? accountNumber : null,
         },
         pricing: {
-          subtotal: subtotal,
-          tax: tax,
+          subtotal: parseFloat(subtotal.toFixed(2)),
+          tax: parseFloat(tax.toFixed(2)),
           taxRate: taxRate,
           shippingFee: shippingFee,
-          total: total,
+          total: parseFloat(total.toFixed(2)),
         },
-        status: selectedMethod === "cod" ? "pending" : "awaiting_payment",
+        status: "completed", // Since it's simulated, mark as completed
+        paymentStatus: selectedMethod === "cod" ? "pending" : "paid",
         orderDate: new Date().toISOString(),
         customerInfo: {
-          // You might want to add customer info here if available
-          // email, name, address, etc.
+          userId: user.id,
+          userName: user.name || "Guest User",
+          isGuest: user.isGuest || false,
+        },
+        deliveryInfo: {
+          method: selectedMethod === "cod" ? "delivery" : "pickup",
+          estimatedDate: new Date(
+            Date.now() + 3 * 24 * 60 * 60 * 1000
+          ).toISOString(), // 3 days from now
         },
       };
 
       // Save order to database
+      console.log("Saving order:", orderData);
       const savedOrder = await saveOrderToDatabase(orderData);
 
       // Show success message with order ID
       alert(
-        `Payment confirmed!\n` +
+        `🎉 Payment Successful!\n\n` +
           `Order ID: ${orderId}\n` +
           `Total: ₱${total.toFixed(2)}\n` +
-          `Payment Method: ${orderData.paymentDetails.method}\n\n` +
+          `Payment Method: ${orderData.paymentDetails.method}\n` +
+          `Customer: ${user.name}\n\n` +
           `${
             selectedMethod === "cod"
-              ? "Please prepare exact change upon delivery."
-              : "Please complete your payment to process the order."
+              ? "📦 Your order will be delivered within 3-5 business days.\nPlease prepare exact change upon delivery."
+              : "📦 Your order has been confirmed!\nYou will receive an email confirmation shortly."
           }`
       );
 
@@ -179,11 +250,25 @@ function MyPayments() {
       setActiveView("view-products");
     } catch (error) {
       console.error("Payment error:", error);
-      alert(`Payment failed: ${error.message}\nPlease try again.`);
+      alert(`❌ Payment failed: ${error.message}\nPlease try again.`);
     } finally {
       setProcessingPayment(false);
     }
   };
+
+  // Show loading if no user yet
+  if (!user) {
+    return (
+      <div style={{ padding: "40px", textAlign: "center" }}>
+        <div style={{ fontSize: "2rem", color: "#8b4513" }}>
+          <i className="fas fa-spinner fa-spin"></i>
+        </div>
+        <p style={{ color: "#3c2415", marginTop: "20px" }}>
+          Loading user information...
+        </p>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -205,7 +290,9 @@ function MyPayments() {
           <i className="fas fa-shopping-cart"></i>
         </div>
         <h3 style={{ color: "#3c2415" }}>No items to checkout</h3>
-        <p style={{ color: "#5d4037" }}>Your cart is empty.</p>
+        <p style={{ color: "#5d4037" }}>
+          Your cart is empty. Add some products first!
+        </p>
         <button
           onClick={() => setActiveView("view-products")}
           style={{
@@ -279,6 +366,30 @@ function MyPayments() {
           >
             PAYMENT METHOD
           </h3>
+        </div>
+
+        {/* User Info Display */}
+        <div
+          style={{
+            marginBottom: "20px",
+            padding: "10px",
+            backgroundColor: "#f5f3f0",
+            borderRadius: "8px",
+            fontSize: "12px",
+          }}
+        >
+          <p style={{ margin: 0, color: "#3c2415" }}>
+            <i
+              className={`fas ${user.isGuest ? "fa-user-clock" : "fa-user"}`}
+              style={{ marginRight: "5px" }}
+            ></i>
+            <strong>Customer:</strong> {user.name}
+          </p>
+          <p
+            style={{ margin: "5px 0 0 0", color: "#5d4037", fontSize: "11px" }}
+          >
+            {user.isGuest ? "Shopping as Guest" : "Registered User"}
+          </p>
         </div>
 
         {/* Payment Options */}
@@ -393,7 +504,7 @@ function MyPayments() {
                   className="fas fa-spinner fa-spin"
                   style={{ marginRight: "8px" }}
                 ></i>
-                PROCESSING...
+                PROCESSING PAYMENT...
               </>
             ) : (
               <>
@@ -439,6 +550,21 @@ function MyPayments() {
         >
           {new Date().toLocaleDateString()} - {new Date().toLocaleTimeString()}
         </p>
+
+        {/* Customer Info */}
+        <p
+          style={{
+            textAlign: "center",
+            color: "#3c2415",
+            fontSize: "11px",
+            margin: "5px 0",
+            fontWeight: "bold",
+          }}
+        >
+          Customer: {user.name}
+          {user.isGuest && " (Guest)"}
+        </p>
+
         <h5 style={{ textAlign: "center", margin: "10px 0", color: "#5d4037" }}>
           -------------------------------
         </h5>

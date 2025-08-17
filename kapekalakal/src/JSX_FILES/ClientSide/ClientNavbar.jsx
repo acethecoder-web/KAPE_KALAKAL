@@ -18,9 +18,6 @@ function ClientNavbar() {
           <p className="shopname mb-4">KAPE KALAKAL</p>
         </div>
         <div className="nav-buttons ">
-          <Link to="/about" className="nav-items mb-4">
-            ABOUT
-          </Link>
           <div
             onClick={() => setActiveView("view-products")}
             className="nav-items mb-4"
@@ -59,9 +56,6 @@ function ClientNavbar() {
 
       <div className="burger-con">
         <div className="burger-items">
-          <Link to="/about" className="nav-items2">
-            ABOUT
-          </Link>
           <Link to="/products" className="nav-items2">
             PRODUCTS
           </Link>
