@@ -6,9 +6,24 @@ function CartPage() {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3;
 
   const taxRate = 0.08;
   const shippingFee = 5.99;
+
+  // Calculate pagination values
+  const totalPages = Math.ceil(cartItems.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentItems = cartItems.slice(startIndex, endIndex);
+
+  // Reset to page 1 when items change and current page becomes invalid
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(1);
+    }
+  }, [cartItems.length, currentPage, totalPages]);
 
   // Fetch cart items from database
   const fetchCartItems = async () => {
@@ -91,21 +106,37 @@ function CartPage() {
 
   // Clear entire cart
   const clearCart = async () => {
-    try {
-      const response = await fetch("http://localhost:5174/api/cart", {
-        method: "DELETE",
-      });
+    if (window.confirm("Are you sure you want to clear your entire cart?")) {
+      try {
+        const response = await fetch("http://localhost:5174/api/cart", {
+          method: "DELETE",
+        });
 
-      if (response.ok) {
-        setCartItems([]);
-      } else {
-        console.error("Failed to clear cart");
-        alert("Failed to clear cart. Please try again.");
+        if (response.ok) {
+          setCartItems([]);
+          setCurrentPage(1);
+        } else {
+          console.error("Failed to clear cart");
+          alert("Failed to clear cart. Please try again.");
+        }
+      } catch (error) {
+        console.error("Error clearing cart:", error);
+        alert("Network error. Please try again.");
       }
-    } catch (error) {
-      console.error("Error clearing cart:", error);
-      alert("Network error. Please try again.");
     }
+  };
+
+  // Pagination handlers
+  const goToPage = (page) => {
+    setCurrentPage(page);
+  };
+
+  const goToPrevious = () => {
+    setCurrentPage((prev) => Math.max(1, prev - 1));
+  };
+
+  const goToNext = () => {
+    setCurrentPage((prev) => Math.min(totalPages, prev + 1));
   };
 
   const subtotal = cartItems.reduce(
@@ -254,124 +285,253 @@ function CartPage() {
               </button>
             </div>
           ) : (
-            cartItems.map((item) => (
+            <>
+              {/* Pagination Info */}
               <div
-                key={item._id}
                 style={{
-                  display: "grid",
-                  gridTemplateColumns: "100px 1fr auto auto",
-                  gap: "20px",
+                  display: "flex",
+                  justifyContent: "space-between",
                   alignItems: "center",
+                  marginBottom: "20px",
+                  padding: "10px 0",
                   borderBottom: "1px solid #eee",
-                  padding: "15px 0",
                 }}
               >
-                <div>
-                  <img
-                    src={item.image || "placeholder.jpg"}
-                    alt={item.name}
-                    style={{
-                      width: "100px",
-                      height: "100px",
-                      borderRadius: "10px",
-                      objectFit: "cover",
-                    }}
-                  />
-                </div>
-                <div>
-                  <h4
-                    style={{
-                      margin: "0",
-                      color: colors.dark,
-                      fontSize: "25px",
-                    }}
-                  >
-                    {item.name}
-                  </h4>
-                  <p style={{ margin: "5px 0", color: colors.medium }}>
-                    {item.description}
-                  </p>
-                  {item.category && (
-                    <span
+                <p
+                  style={{
+                    margin: 0,
+                    color: colors.medium,
+                    fontSize: "14px",
+                  }}
+                >
+                  Showing {startIndex + 1}-
+                  {Math.min(endIndex, cartItems.length)} of {cartItems.length}{" "}
+                  items
+                </p>
+                <p
+                  style={{
+                    margin: 0,
+                    color: colors.medium,
+                    fontSize: "14px",
+                  }}
+                >
+                  Page {currentPage} of {totalPages}
+                </p>
+              </div>
+
+              {/* Cart Items List */}
+              {currentItems.map((item) => (
+                <div
+                  key={item._id}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "100px 1fr auto auto",
+                    gap: "20px",
+                    alignItems: "center",
+                    borderBottom: "1px solid #eee",
+                    padding: "15px 0",
+                  }}
+                >
+                  <div>
+                    <img
+                      src={item.image || "placeholder.jpg"}
+                      alt={item.name}
                       style={{
-                        background: colors.light,
-                        color: "white",
-                        padding: "2px 8px",
-                        borderRadius: "12px",
-                        fontSize: "12px",
+                        width: "100px",
+                        height: "100px",
+                        borderRadius: "10px",
+                        objectFit: "cover",
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <h4
+                      style={{
+                        margin: "0",
+                        color: colors.dark,
+                        fontSize: "18px",
                       }}
                     >
-                      {item.category}
+                      {item.name}
+                    </h4>
+
+                    {item.category && (
+                      <span
+                        style={{
+                          background: colors.light,
+                          color: "white",
+                          padding: "2px 8px",
+                          borderRadius: "12px",
+                          fontSize: "12px",
+                        }}
+                      >
+                        {item.category}
+                      </span>
+                    )}
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                    }}
+                  >
+                    <button
+                      onClick={() => updateQuantity(item._id, -1)}
+                      disabled={item.quantity <= 1}
+                      style={{
+                        width: "32px",
+                        height: "32px",
+                        borderRadius: "50%",
+                        background: item.quantity <= 1 ? "#ccc" : colors.light,
+                        color: "#fff",
+                        border: "none",
+                        cursor: item.quantity <= 1 ? "not-allowed" : "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <i
+                        className="fas fa-minus"
+                        style={{ fontSize: "12px" }}
+                      ></i>
+                    </button>
+                    <span
+                      style={{
+                        fontSize: "16px",
+                        minWidth: "40px",
+                        textAlign: "center",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {item.quantity}
                     </span>
-                  )}
+                    <button
+                      onClick={() => updateQuantity(item._id, 1)}
+                      style={{
+                        width: "32px",
+                        height: "32px",
+                        borderRadius: "50%",
+                        background: colors.light,
+                        color: "#fff",
+                        border: "none",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <i
+                        className="fas fa-plus"
+                        style={{ fontSize: "12px" }}
+                      ></i>
+                    </button>
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    <p
+                      style={{
+                        margin: "0",
+                        fontWeight: "700",
+                        color: colors.dark,
+                        fontSize: "16px",
+                      }}
+                    >
+                      ₱{(item.price * item.quantity).toFixed(2)}
+                    </p>
+                    <button
+                      onClick={() => removeItem(item._id)}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        color: "red",
+                        cursor: "pointer",
+                        marginTop: "8px",
+                        padding: "4px",
+                      }}
+                    >
+                      <i className="fas fa-trash"></i>
+                    </button>
+                  </div>
                 </div>
+              ))}
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
                 <div
-                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: "10px",
+                    marginTop: "30px",
+                    padding: "20px 0",
+                  }}
                 >
                   <button
-                    onClick={() => updateQuantity(item._id, -1)}
-                    disabled={item.quantity <= 1}
+                    onClick={goToPrevious}
+                    disabled={currentPage === 1}
                     style={{
-                      width: "28px",
-                      height: "28px",
-                      borderRadius: "50%",
-                      background: item.quantity <= 1 ? "#ccc" : colors.light,
-                      color: "#fff",
+                      background: currentPage === 1 ? "#ccc" : colors.light,
+                      color: "white",
                       border: "none",
-                      cursor: item.quantity <= 1 ? "not-allowed" : "pointer",
+                      padding: "8px 12px",
+                      borderRadius: "5px",
+                      cursor: currentPage === 1 ? "not-allowed" : "pointer",
+                      fontSize: "14px",
                     }}
                   >
-                    <i className="fas fa-minus"></i>
+                    <i className="fas fa-chevron-left"></i> Previous
                   </button>
-                  <span
-                    style={{
-                      fontSize: "18px",
-                      minWidth: "30px",
-                      textAlign: "center",
-                    }}
-                  >
-                    {item.quantity}
-                  </span>
+
+                  {/* Page Numbers */}
+                  {[...Array(totalPages)].map((_, index) => {
+                    const pageNumber = index + 1;
+                    return (
+                      <button
+                        key={pageNumber}
+                        onClick={() => goToPage(pageNumber)}
+                        style={{
+                          background:
+                            currentPage === pageNumber
+                              ? colors.dark
+                              : "transparent",
+                          color:
+                            currentPage === pageNumber ? "white" : colors.dark,
+                          border: `2px solid ${colors.dark}`,
+                          padding: "8px 12px",
+                          borderRadius: "5px",
+                          cursor: "pointer",
+                          fontSize: "14px",
+                          fontWeight:
+                            currentPage === pageNumber ? "bold" : "normal",
+                        }}
+                      >
+                        {pageNumber}
+                      </button>
+                    );
+                  })}
+
                   <button
-                    onClick={() => updateQuantity(item._id, 1)}
+                    onClick={goToNext}
+                    disabled={currentPage === totalPages}
                     style={{
-                      width: "28px",
-                      height: "28px",
-                      borderRadius: "50%",
-                      background: colors.light,
-                      color: "#fff",
+                      background:
+                        currentPage === totalPages ? "#ccc" : colors.light,
+                      color: "white",
                       border: "none",
-                      cursor: "pointer",
+                      padding: "8px 12px",
+                      borderRadius: "5px",
+                      cursor:
+                        currentPage === totalPages ? "not-allowed" : "pointer",
+                      fontSize: "14px",
                     }}
                   >
-                    <i className="fas fa-plus"></i>
+                    Next <i className="fas fa-chevron-right"></i>
                   </button>
                 </div>
-                <div style={{ textAlign: "right" }}>
-                  <p
-                    style={{
-                      margin: "0",
-                      fontWeight: "700",
-                      color: colors.dark,
-                    }}
-                  >
-                    ₱{(item.price * item.quantity).toFixed(2)}
-                  </p>
-                  <button
-                    onClick={() => removeItem(item._id)}
-                    style={{
-                      background: "none",
-                      border: "none",
-                      color: "red",
-                      cursor: "pointer",
-                      marginTop: "5px",
-                    }}
-                  >
-                    <i className="fas fa-trash"></i>
-                  </button>
-                </div>
-              </div>
-            ))
+              )}
+            </>
           )}
         </div>
 
@@ -472,24 +632,32 @@ function CartPage() {
             </div>
 
             <button
-              onClick={() => setActiveView("my-payments")}
+              onClick={() => {
+                if (cartItems.length === 0) {
+                  alert("Your cart is empty!");
+                  return;
+                }
+                setActiveView("my-payments");
+              }}
               style={{
                 width: "100%",
                 marginTop: "10px",
                 padding: "15px",
-                background: colors.gold,
+                background: cartItems.length === 0 ? "#ccc" : colors.gold,
                 border: "none",
                 borderRadius: "10px",
                 fontWeight: "700",
-                cursor: "pointer",
+                cursor: cartItems.length === 0 ? "not-allowed" : "pointer",
                 fontSize: "16px",
+                color: cartItems.length === 0 ? "#666" : "#000",
               }}
+              disabled={cartItems.length === 0}
             >
               <i
                 className="fas fa-credit-card"
                 style={{ marginRight: "8px" }}
               ></i>
-              Proceed to Checkout
+              Proceed to Checkout ({cartItems.length} items)
             </button>
             <button
               onClick={() => setActiveView("view-products")}
