@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 const orderSchema = new mongoose.Schema({
   orderId: String,
   userId: String,
@@ -19,3 +21,5 @@ const orderSchema = new mongoose.Schema({
   createdAt: Date,
   updatedAt: Date,
 });
+
+export default mongoose.model("Order", orderSchema);
