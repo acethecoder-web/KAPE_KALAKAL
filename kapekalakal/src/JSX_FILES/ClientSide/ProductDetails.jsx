@@ -11,35 +11,107 @@ function ProductDetails() {
     setQuantity((prev) => Math.max(1, prev + change));
   };
 
-  // Get current user (same logic as MyPayments)
+  // Enhanced user detection to get actual logged-in user
   const getCurrentUser = () => {
-    // Option 1: Get from localStorage (if you store user info there)
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      return JSON.parse(userData);
-    }
+    try {
+      // First, try to get logged-in user from localStorage
+      const loggedInUser = localStorage.getItem("loggedInUser");
+      if (loggedInUser) {
+        const userData = JSON.parse(loggedInUser);
+        console.log("Found logged-in user:", userData);
+        return {
+          id: userData.id || userData._id || userData.userId,
+          name: userData.name || userData.username || userData.fullName,
+          email: userData.email,
+          isGuest: false,
+          ...userData,
+        };
+      }
 
-    // Option 2: Get from sessionStorage
-    const sessionUser = sessionStorage.getItem("user");
-    if (sessionUser) {
-      return JSON.parse(sessionUser);
-    }
+      // Try alternative storage keys that might be used
+      const alternativeKeys = ["user", "currentUser", "authUser", "userData"];
+      for (const key of alternativeKeys) {
+        const storedData = localStorage.getItem(key);
+        if (storedData) {
+          try {
+            const userData = JSON.parse(storedData);
+            if (
+              userData &&
+              (userData.name || userData.username) &&
+              userData.name !== "Guest User"
+            ) {
+              console.log(`Found user data in ${key}:`, userData);
+              return {
+                id: userData.id || userData._id || userData.userId,
+                name: userData.name || userData.username || userData.fullName,
+                email: userData.email,
+                isGuest: false,
+                ...userData,
+              };
+            }
+          } catch (parseError) {
+            console.warn(`Error parsing ${key} from localStorage:`, parseError);
+          }
+        }
+      }
 
-    // Option 3: Generate a temporary user ID for guest users
-    let guestId = localStorage.getItem("guestUserId");
-    if (!guestId) {
-      guestId = "guest_" + Math.random().toString(36).substr(2, 9);
-      localStorage.setItem("guestUserId", guestId);
-    }
+      // Check sessionStorage as backup
+      const sessionUser =
+        sessionStorage.getItem("loggedInUser") ||
+        sessionStorage.getItem("user");
+      if (sessionUser) {
+        try {
+          const userData = JSON.parse(sessionUser);
+          if (
+            userData &&
+            (userData.name || userData.username) &&
+            userData.name !== "Guest User"
+          ) {
+            console.log("Found user in sessionStorage:", userData);
+            return {
+              id: userData.id || userData._id || userData.userId,
+              name: userData.name || userData.username || userData.fullName,
+              email: userData.email,
+              isGuest: false,
+              ...userData,
+            };
+          }
+        } catch (parseError) {
+          console.warn("Error parsing session user data:", parseError);
+        }
+      }
 
-    return {
-      id: guestId,
-      name: "Guest User",
-      isGuest: true,
-    };
+      // If no logged-in user found, create/get guest user
+      console.log("No logged-in user found, creating guest user");
+      let guestId = localStorage.getItem("guestUserId");
+      if (!guestId) {
+        guestId = "guest_" + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem("guestUserId", guestId);
+      }
+
+      return {
+        id: guestId,
+        name: "Guest User",
+        isGuest: true,
+      };
+    } catch (error) {
+      console.error("Error retrieving user data:", error);
+      // Fallback to guest user
+      let guestId = localStorage.getItem("guestUserId");
+      if (!guestId) {
+        guestId = "guest_" + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem("guestUserId", guestId);
+      }
+
+      return {
+        id: guestId,
+        name: "Guest User",
+        isGuest: true,
+      };
+    }
   };
 
-  // Enhanced Add to Cart function with database integration (same as ViewProducts)
+  // Enhanced Add to Cart function with database integration
   const handleAddToCart = async (product) => {
     try {
       const user = getCurrentUser();
@@ -66,15 +138,14 @@ function ProductDetails() {
         const result = await response.json();
         console.log("Item added to cart:", result);
 
-        // Optional: Show success message or notification
+        // Show success message with user info
         alert(
           `${product.name} (${quantity} ${
             quantity > 1 ? "items" : "item"
-          }) added to cart!`
+          }) added to ${user.isGuest ? "guest" : user.name + "'s"} cart!`
         );
 
         // Also call the context addToCart if you still need it for local state
-        // Note: You might need to modify this to handle quantity properly
         addToCart({ ...product, quantity });
       } else {
         const error = await response.json();
@@ -87,11 +158,13 @@ function ProductDetails() {
     }
   };
 
-  // New function to handle direct checkout
+  // Enhanced function to handle direct checkout
   const handleDirectCheckout = async (product) => {
     try {
       setIsCheckingOut(true);
       const user = getCurrentUser();
+
+      console.log("Direct checkout initiated by user:", user);
 
       // Create a temporary cart item for this checkout
       const checkoutItem = {
@@ -131,8 +204,17 @@ function ProductDetails() {
             productId: product._id,
             quantity: quantity,
             timestamp: Date.now(),
+            userName: user.name,
+            isGuest: user.isGuest,
           })
         );
+
+        // Show confirmation message
+        const confirmMessage = user.isGuest
+          ? `Proceeding to checkout as guest user...`
+          : `Proceeding to checkout for ${user.name}...`;
+
+        console.log(confirmMessage);
 
         // Redirect to payments page
         setActiveView("my-payments");
@@ -152,6 +234,9 @@ function ProductDetails() {
   if (!selectedProduct) {
     return <p>No product selected.</p>;
   }
+
+  // Get current user for display
+  const currentUser = getCurrentUser();
 
   return (
     <div className="coffee-product">
@@ -214,7 +299,7 @@ function ProductDetails() {
           </button>
         </div>
 
-        {/* Optional: Show checkout info */}
+        {/* Enhanced checkout info */}
         <div style={{ marginTop: "15px", fontSize: "12px", color: "#666" }}>
           <p>
             <strong>Total for checkout:</strong> ₱

@@ -42,33 +42,85 @@ function MyPayments() {
 
   const clientId = getPayPalClientId();
 
-  // Get current user (same logic as CartPage)
+  // Get current user with proper JWT authentication check
   useEffect(() => {
     const getCurrentUser = () => {
-      // Option 1: Get from localStorage (if you store user info there)
-      const userData = localStorage.getItem("user");
-      if (userData) {
-        return JSON.parse(userData);
-      }
+      try {
+        // Function to get cookie value by name
+        const getCookie = (name) => {
+          const value = `; ${document.cookie}`;
+          const parts = value.split(`; ${name}=`);
+          if (parts.length === 2) return parts.pop().split(";").shift();
+          return null;
+        };
 
-      // Option 2: Get from sessionStorage
-      const sessionUser = sessionStorage.getItem("user");
-      if (sessionUser) {
-        return JSON.parse(sessionUser);
-      }
+        // Function to decode JWT token
+        const decodeJWT = (token) => {
+          try {
+            const base64Url = token.split(".")[1];
+            const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+            const jsonPayload = decodeURIComponent(
+              atob(base64)
+                .split("")
+                .map(function (c) {
+                  return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+                })
+                .join("")
+            );
+            return JSON.parse(jsonPayload);
+          } catch (error) {
+            console.error("Error decoding JWT:", error);
+            return null;
+          }
+        };
 
-      // Option 3: Generate a temporary user ID for guest users
-      let guestId = localStorage.getItem("guestUserId");
-      if (!guestId) {
-        guestId = "guest_" + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem("guestUserId", guestId);
-      }
+        // Get JWT token from cookies
+        const token =
+          getCookie("token") || getCookie("authToken") || getCookie("jwt");
 
-      return {
-        id: guestId,
-        name: "Guest User",
-        isGuest: true,
-      };
+        if (token) {
+          const userData = decodeJWT(token);
+          if (userData && userData.name && userData.name !== "Guest User") {
+            console.log("Found logged-in user from JWT:", userData);
+            return {
+              id:
+                userData.id || userData._id || userData.userId || userData.sub,
+              name: userData.name || userData.username || userData.fullName,
+              email: userData.email,
+              isGuest: false,
+              ...userData,
+            };
+          }
+        }
+
+        // If no valid JWT token found, create/get guest user
+        console.log("No logged-in user found, creating guest user");
+        let guestId = localStorage.getItem("guestUserId");
+        if (!guestId) {
+          guestId = "guest_" + Math.random().toString(36).substr(2, 9);
+          localStorage.setItem("guestUserId", guestId);
+        }
+
+        return {
+          id: guestId,
+          name: "Guest User",
+          isGuest: true,
+        };
+      } catch (error) {
+        console.error("Error retrieving user data:", error);
+        // Fallback to guest user
+        let guestId = localStorage.getItem("guestUserId");
+        if (!guestId) {
+          guestId = "guest_" + Math.random().toString(36).substr(2, 9);
+          localStorage.setItem("guestUserId", guestId);
+        }
+
+        return {
+          id: guestId,
+          name: "Guest User",
+          isGuest: true,
+        };
+      }
     };
 
     setUser(getCurrentUser());
@@ -279,8 +331,7 @@ function MyPayments() {
           `Order ID: ${orderId}\n` +
           `Total: ₱${total.toFixed(2)}\n` +
           `Payment Method: ${orderData.paymentDetails.method}\n` +
-          `Customer: ${user.name}\n` +
-          `${
+          +`${
             isDirectCheckout ? "Items: 1 product (Direct Checkout)\n" : ""
           }\n` +
           `${
@@ -415,30 +466,6 @@ function MyPayments() {
           </h3>
         </div>
 
-        {/* User Info Display */}
-        <div
-          style={{
-            marginBottom: "20px",
-            padding: "10px",
-            backgroundColor: "#f5f3f0",
-            borderRadius: "8px",
-            fontSize: "12px",
-          }}
-        >
-          <p style={{ margin: 0, color: "#3c2415" }}>
-            <i
-              className={`fas ${user.isGuest ? "fa-user-clock" : "fa-user"}`}
-              style={{ marginRight: "5px" }}
-            ></i>
-            <strong>Customer:</strong> {user.name}
-          </p>
-          <p
-            style={{ margin: "5px 0 0 0", color: "#5d4037", fontSize: "11px" }}
-          >
-            {user.isGuest ? "Shopping as Guest" : "Registered User"}
-          </p>
-        </div>
-
         {/* Payment Options */}
         <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
           {paymentOptions.map((option) => (
@@ -527,8 +554,6 @@ function MyPayments() {
           {/* PayPal Buttons - Show when PayPal is selected */}
           {selectedMethod === "paypal" && (
             <div style={{ marginTop: "20px" }}>
-              {/* Add debugging info for development */}
-
               {clientId && clientId !== "sb" ? (
                 <PayPalButtons
                   style={{ layout: "vertical" }}
@@ -745,20 +770,6 @@ function MyPayments() {
           {new Date().toLocaleDateString()} - {new Date().toLocaleTimeString()}
         </p>
 
-        {/* Customer Info */}
-        <p
-          style={{
-            textAlign: "center",
-            color: "#3c2415",
-            fontSize: "11px",
-            margin: "5px 0",
-            fontWeight: "bold",
-          }}
-        >
-          Customer: {user.name}
-          {user.isGuest && " (Guest)"}
-        </p>
-
         <h5 style={{ textAlign: "center", margin: "10px 0", color: "#5d4037" }}>
           -------------------------------
         </h5>
@@ -881,7 +892,13 @@ function MyPayments() {
               margin: "5px 0",
             }}
           >
-            <span style={{ fontSize: "12px", color: "#3c2415" }}>
+            <span
+              style={{
+                filter: "drop-shadow(0px 0px 0px rgba(0,0,0,0.5))",
+                fontSize: "12px",
+                color: "#3c2415",
+              }}
+            >
               Subtotal:
             </span>
             <span style={{ fontSize: "12px", fontWeight: "bold" }}>
@@ -964,7 +981,7 @@ function MyPayments() {
             {selectedMethod === "cod"
               ? "Payment will be collected upon delivery"
               : selectedMethod === "paypal"
-              ? "Complete payment using PayPal buttons above"
+              ? "Complete payment using PayPal buttons on the left side"
               : selectedMethod
               ? "Complete payment details above to proceed"
               : "Select a payment method to continue"}
