@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaClipboardCheck } from "react-icons/fa";
 import { useClientView } from "./ClientViewContext";
 import { useCart } from "./cartcontext";
+import { PayPalButtons } from "@paypal/react-paypal-js";
 
 function MyPayments() {
   const { setActiveView } = useClientView();
@@ -13,7 +14,6 @@ function MyPayments() {
   const [accountNumber, setAccountNumber] = useState("");
   const [processingPayment, setProcessingPayment] = useState(false);
   const [user, setUser] = useState(null);
-
   // Tax and shipping constants (same as cart)
   const taxRate = 0.08;
   const shippingFee = 5.99;
@@ -22,6 +22,25 @@ function MyPayments() {
     { id: "cod", name: "CASH ON DELIVERY", logo: "./logos/COD.png" },
     { id: "paypal", name: "PAYPAL", logo: "./logos/PAYPAL.png" },
   ];
+
+  // Get PayPal client ID from environment variables with better error handling
+  const getPayPalClientId = () => {
+    try {
+      const clientId = import.meta.env?.VITE_PAYPAL_CLIENT_ID;
+      if (!clientId) {
+        console.warn(
+          "PayPal Client ID not found in environment variables. Using sandbox ID."
+        );
+        return "sb"; // PayPal sandbox default
+      }
+      return clientId;
+    } catch (error) {
+      console.error("Error accessing environment variables:", error);
+      return "sb"; // Fallback to sandbox
+    }
+  };
+
+  const clientId = getPayPalClientId();
 
   // Get current user (same logic as CartPage)
   useEffect(() => {
@@ -158,6 +177,7 @@ function MyPayments() {
 
     if (
       selectedMethod !== "cod" &&
+      selectedMethod !== "paypal" &&
       (!accountName.trim() || !accountNumber.trim())
     ) {
       alert("Please enter account name and number for this payment method");
@@ -171,6 +191,12 @@ function MyPayments() {
 
     if (!user?.id) {
       alert("User session expired. Please refresh and try again.");
+      return;
+    }
+
+    // For PayPal, don't process here - let PayPal buttons handle it
+    if (selectedMethod === "paypal") {
+      alert("Please use the PayPal button below to complete your payment");
       return;
     }
 
@@ -430,89 +456,239 @@ function MyPayments() {
             </div>
           ))}
 
-          {/* Account Inputs - Only show for non-COD payments */}
-          {selectedMethod && selectedMethod !== "cod" && (
-            <div
-              style={{
-                marginTop: "15px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px",
-              }}
-            >
-              <input
-                type="text"
-                placeholder="ENTER ACC NAME:"
-                value={accountName}
-                onChange={(e) => setAccountName(e.target.value)}
+          {/* Account Inputs - Only show for non-COD and non-PayPal payments */}
+          {selectedMethod &&
+            selectedMethod !== "cod" &&
+            selectedMethod !== "paypal" && (
+              <div
                 style={{
-                  width: "95%",
-                  padding: "10px",
-                  border: "1px solid #5d4037",
-                  borderRadius: "6px",
-                  outline: "none",
-                  transition: "0.3s",
+                  marginTop: "15px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "10px",
                 }}
-                onFocus={(e) => (e.target.style.border = "2px solid #3c2415")}
-                onBlur={(e) => (e.target.style.border = "1px solid #5d4037")}
-              />
-              <input
-                type="text"
-                placeholder="ENTER ACC NUMBER:"
-                value={accountNumber}
-                onChange={(e) => setAccountNumber(e.target.value)}
-                style={{
-                  width: "95%",
-                  padding: "10px",
-                  border: "1px solid #5d4037",
-                  borderRadius: "6px",
-                  outline: "none",
-                  transition: "0.3s",
-                }}
-                onFocus={(e) => (e.target.style.border = "2px solid #3c2415")}
-                onBlur={(e) => (e.target.style.border = "1px solid #5d4037")}
-              />
+              >
+                <input
+                  type="text"
+                  placeholder="ENTER ACC NAME:"
+                  value={accountName}
+                  onChange={(e) => setAccountName(e.target.value)}
+                  style={{
+                    width: "95%",
+                    padding: "10px",
+                    border: "1px solid #5d4037",
+                    borderRadius: "6px",
+                    outline: "none",
+                    transition: "0.3s",
+                  }}
+                  onFocus={(e) => (e.target.style.border = "2px solid #3c2415")}
+                  onBlur={(e) => (e.target.style.border = "1px solid #5d4037")}
+                />
+                <input
+                  type="text"
+                  placeholder="ENTER ACC NUMBER:"
+                  value={accountNumber}
+                  onChange={(e) => setAccountNumber(e.target.value)}
+                  style={{
+                    width: "95%",
+                    padding: "10px",
+                    border: "1px solid #5d4037",
+                    borderRadius: "6px",
+                    outline: "none",
+                    transition: "0.3s",
+                  }}
+                  onFocus={(e) => (e.target.style.border = "2px solid #3c2415")}
+                  onBlur={(e) => (e.target.style.border = "1px solid #5d4037")}
+                />
+              </div>
+            )}
+
+          {/* PayPal Buttons - Show when PayPal is selected */}
+          {selectedMethod === "paypal" && (
+            <div style={{ marginTop: "20px" }}>
+              {/* Add debugging info for development */}
+              {import.meta.env?.DEV && (
+                <div
+                  style={{
+                    padding: "8px",
+                    backgroundColor: "#fff3cd",
+                    border: "1px solid #ffeaa7",
+                    borderRadius: "4px",
+                    marginBottom: "10px",
+                    fontSize: "12px",
+                  }}
+                >
+                  <strong>Debug Info:</strong> Client ID: {clientId}
+                </div>
+              )}
+
+              {clientId && clientId !== "sb" ? (
+                <PayPalButtons
+                  style={{ layout: "vertical" }}
+                  createOrder={(data, actions) => {
+                    return actions.order.create({
+                      purchase_units: [
+                        {
+                          amount: {
+                            value: total.toFixed(2),
+                            currency_code: "PHP", // Change to "USD" if needed
+                          },
+                          description: `Order by ${user.name}`,
+                        },
+                      ],
+                    });
+                  }}
+                  onApprove={async (data, actions) => {
+                    try {
+                      const details = await actions.order.capture();
+                      console.log("Payment successful:", details);
+
+                      // Build order object
+                      const orderId = generateOrderId();
+                      const orderData = {
+                        orderId,
+                        userId: user.id,
+                        items: cartItems.map((item) => ({
+                          productId: item.productId || item._id,
+                          name: item.name,
+                          price: item.price,
+                          quantity: item.quantity,
+                          total: item.price * item.quantity,
+                          image: item.image,
+                          category: item.category,
+                        })),
+                        paymentMethod: "paypal",
+                        paymentDetails: {
+                          method: "PAYPAL",
+                          transactionId: details.id,
+                          payerEmail: details.payer?.email_address,
+                          paymentStatus: details.status,
+                          captureDetails: details,
+                        },
+                        pricing: {
+                          subtotal: parseFloat(subtotal.toFixed(2)),
+                          tax: parseFloat(tax.toFixed(2)),
+                          taxRate: taxRate,
+                          shippingFee: shippingFee,
+                          total: parseFloat(total.toFixed(2)),
+                        },
+                        status: "completed",
+                        paymentStatus: "paid",
+                        orderDate: new Date().toISOString(),
+                        customerInfo: {
+                          userId: user.id,
+                          userName: user.name || "Guest User",
+                          isGuest: user.isGuest || false,
+                        },
+                        deliveryInfo: {
+                          method: "pickup",
+                          estimatedDate: new Date(
+                            Date.now() + 3 * 24 * 60 * 60 * 1000
+                          ).toISOString(),
+                        },
+                      };
+
+                      await saveOrderToDatabase(orderData);
+                      await clearCart();
+
+                      alert(
+                        `🎉 PayPal Payment Successful!\n\n` +
+                          `Order ID: ${orderId}\n` +
+                          `Transaction ID: ${details.id}\n` +
+                          `Total: ₱${total.toFixed(2)}\n` +
+                          `Customer: ${user.name}\n\n` +
+                          `📦 Your order has been confirmed!\nYou will receive an email confirmation shortly.`
+                      );
+
+                      setActiveView("view-products");
+                    } catch (error) {
+                      console.error("Error processing PayPal payment:", error);
+                      alert("❌ Error processing payment. Please try again.");
+                    }
+                  }}
+                  onError={(err) => {
+                    console.error("PayPal Checkout error", err);
+                    alert(
+                      "❌ PayPal payment could not be completed. Please try again or select a different payment method."
+                    );
+                  }}
+                  onCancel={(data) => {
+                    console.log("PayPal payment cancelled", data);
+                    // Don't show alert for cancellation, user chose to cancel
+                  }}
+                />
+              ) : (
+                <div
+                  style={{
+                    padding: "15px",
+                    backgroundColor: "#fff3cd",
+                    border: "1px solid #ffeaa7",
+                    borderRadius: "8px",
+                    textAlign: "center",
+                  }}
+                >
+                  <p style={{ margin: 0, color: "#856404" }}>
+                    <i
+                      className="fas fa-exclamation-triangle"
+                      style={{ marginRight: "8px" }}
+                    ></i>
+                    PayPal is not configured. Please set up your
+                    VITE_PAYPAL_CLIENT_ID environment variable.
+                  </p>
+                  <p
+                    style={{
+                      margin: "8px 0 0 0",
+                      fontSize: "12px",
+                      color: "#6c5ce7",
+                    }}
+                  >
+                    For testing, you can use PayPal Sandbox credentials.
+                  </p>
+                </div>
+              )}
             </div>
           )}
 
-          {/* Confirm Payment */}
-          <button
-            onClick={handleConfirmPayment}
-            disabled={!selectedMethod || processingPayment}
-            style={{
-              marginTop: "20px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor:
-                selectedMethod && !processingPayment ? "#3c2415" : "#ccc",
-              color: "#fff",
-              padding: "12px",
-              borderRadius: "8px",
-              cursor:
-                selectedMethod && !processingPayment
-                  ? "pointer"
-                  : "not-allowed",
-              fontWeight: "bold",
-              border: "none",
-              transition: "all 0.2s ease",
-            }}
-          >
-            {processingPayment ? (
-              <>
-                <i
-                  className="fas fa-spinner fa-spin"
-                  style={{ marginRight: "8px" }}
-                ></i>
-                PROCESSING PAYMENT...
-              </>
-            ) : (
-              <>
-                <FaClipboardCheck style={{ marginRight: "8px" }} />
-                CONFIRM PAYMENT (₱{total.toFixed(2)})
-              </>
-            )}
-          </button>
+          {/* Confirm Payment Button - Hide for PayPal since it has its own buttons */}
+          {selectedMethod !== "paypal" && (
+            <button
+              onClick={handleConfirmPayment}
+              disabled={!selectedMethod || processingPayment}
+              style={{
+                marginTop: "20px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor:
+                  selectedMethod && !processingPayment ? "#3c2415" : "#ccc",
+                color: "#fff",
+                padding: "12px",
+                borderRadius: "8px",
+                cursor:
+                  selectedMethod && !processingPayment
+                    ? "pointer"
+                    : "not-allowed",
+                fontWeight: "bold",
+                border: "none",
+                transition: "all 0.2s ease",
+              }}
+            >
+              {processingPayment ? (
+                <>
+                  <i
+                    className="fas fa-spinner fa-spin"
+                    style={{ marginRight: "8px" }}
+                  ></i>
+                  PROCESSING PAYMENT...
+                </>
+              ) : (
+                <>
+                  <FaClipboardCheck style={{ marginRight: "8px" }} />
+                  CONFIRM PAYMENT (₱{total.toFixed(2)})
+                </>
+              )}
+            </button>
+          )}
         </div>
       </div>
 
@@ -751,17 +927,19 @@ function MyPayments() {
                 <strong>Payment Method:</strong>{" "}
                 {paymentOptions.find((p) => p.id === selectedMethod)?.name}
               </p>
-              {selectedMethod !== "cod" && accountName && (
-                <p
-                  style={{
-                    margin: "5px 0 0 0",
-                    fontSize: "12px",
-                    color: "#3c2415",
-                  }}
-                >
-                  <strong>Account:</strong> {accountName}
-                </p>
-              )}
+              {selectedMethod !== "cod" &&
+                selectedMethod !== "paypal" &&
+                accountName && (
+                  <p
+                    style={{
+                      margin: "5px 0 0 0",
+                      fontSize: "12px",
+                      color: "#3c2415",
+                    }}
+                  >
+                    <strong>Account:</strong> {accountName}
+                  </p>
+                )}
             </div>
           )}
         </div>

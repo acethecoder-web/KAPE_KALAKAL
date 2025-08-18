@@ -11,6 +11,7 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
+		"@paypal/react-paypal-js": "^8.8.3",
 		"bcrypt": "^6.0.0",
 		"bcryptjs": "^3.0.2",
 		"bootstrap": "^5.3.7",
