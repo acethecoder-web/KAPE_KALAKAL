@@ -132,7 +132,7 @@ function ViewProducts() {
               <h1 className="product-name">
                 {product.name
                   ? product.name.split(" ").slice(0, 3).join(" ") +
-                    (product.name.split(" ").length > 3 ? "..." : "")
+                    (product.name.split(" ").length > 3 ? "" : "")
                   : ""}
               </h1>
               <h1 className="product-description">

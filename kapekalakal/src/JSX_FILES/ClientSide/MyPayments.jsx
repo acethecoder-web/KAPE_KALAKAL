@@ -106,6 +106,20 @@ function MyPayments() {
     }
   }, [user?.id]);
 
+  useEffect(() => {
+    // Clean up direct checkout session data when payments page loads
+    const directCheckoutData = sessionStorage.getItem("directCheckout");
+    if (directCheckoutData) {
+      console.log("Direct checkout detected:", JSON.parse(directCheckoutData));
+      // You can use this data for additional processing if needed
+    }
+
+    // Optional: Clean up the session storage after use
+    return () => {
+      sessionStorage.removeItem("directCheckout");
+    };
+  }, []);
+
   // Calculate totals
   const subtotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -255,13 +269,20 @@ function MyPayments() {
       console.log("Saving order:", orderData);
       const savedOrder = await saveOrderToDatabase(orderData);
 
+      // Check if this was a direct checkout
+      const directCheckoutData = sessionStorage.getItem("directCheckout");
+      const isDirectCheckout = directCheckoutData && cartItems.length === 1;
+
       // Show success message with order ID
       alert(
         `🎉 Payment Successful!\n\n` +
           `Order ID: ${orderId}\n` +
           `Total: ₱${total.toFixed(2)}\n` +
           `Payment Method: ${orderData.paymentDetails.method}\n` +
-          `Customer: ${user.name}\n\n` +
+          `Customer: ${user.name}\n` +
+          `${
+            isDirectCheckout ? "Items: 1 product (Direct Checkout)\n" : ""
+          }\n` +
           `${
             selectedMethod === "cod"
               ? "📦 Your order will be delivered within 3-5 business days.\nPlease prepare exact change upon delivery."
@@ -507,20 +528,6 @@ function MyPayments() {
           {selectedMethod === "paypal" && (
             <div style={{ marginTop: "20px" }}>
               {/* Add debugging info for development */}
-              {import.meta.env?.DEV && (
-                <div
-                  style={{
-                    padding: "8px",
-                    backgroundColor: "#fff3cd",
-                    border: "1px solid #ffeaa7",
-                    borderRadius: "4px",
-                    marginBottom: "10px",
-                    fontSize: "12px",
-                  }}
-                >
-                  <strong>Debug Info:</strong> Client ID: {clientId}
-                </div>
-              )}
 
               {clientId && clientId !== "sb" ? (
                 <PayPalButtons
@@ -544,9 +551,9 @@ function MyPayments() {
                       console.log("Payment successful:", details);
 
                       // Build order object
-                      const orderId = generateOrderId();
+                      const paypalOrderId = generateOrderId();
                       const orderData = {
-                        orderId,
+                        orderId: paypalOrderId,
                         userId: user.id,
                         items: cartItems.map((item) => ({
                           productId: item.productId || item._id,
@@ -591,12 +598,23 @@ function MyPayments() {
                       await saveOrderToDatabase(orderData);
                       await clearCart();
 
+                      // Check if this was a direct checkout for PayPal too
+                      const directCheckoutData =
+                        sessionStorage.getItem("directCheckout");
+                      const isDirectCheckout =
+                        directCheckoutData && cartItems.length === 1;
+
                       alert(
                         `🎉 PayPal Payment Successful!\n\n` +
-                          `Order ID: ${orderId}\n` +
+                          `Order ID: ${paypalOrderId}\n` +
                           `Transaction ID: ${details.id}\n` +
                           `Total: ₱${total.toFixed(2)}\n` +
-                          `Customer: ${user.name}\n\n` +
+                          `Customer: ${user.name}\n` +
+                          `${
+                            isDirectCheckout
+                              ? "Items: 1 product (Direct Checkout)\n"
+                              : ""
+                          }\n` +
                           `📦 Your order has been confirmed!\nYou will receive an email confirmation shortly.`
                       );
 
@@ -898,50 +916,66 @@ function MyPayments() {
               ₱{shippingFee.toFixed(2)}
             </span>
           </div>
-          <hr style={{ margin: "10px 0", borderColor: "#5d4037" }} />
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
               margin: "10px 0",
+              borderTop: "1px solid #ddd",
+              paddingTop: "8px",
             }}
           >
-            <strong style={{ fontSize: "14px", color: "#3c2415" }}>
-              TOTAL:
-            </strong>
-            <strong style={{ fontSize: "14px", color: "#d4af37" }}>
-              ₱{total.toFixed(2)}
-            </strong>
-          </div>
-
-          {selectedMethod && (
-            <div
+            <span
               style={{
-                marginTop: "15px",
-                padding: "10px",
-                backgroundColor: "#f5f5f5",
-                borderRadius: "5px",
+                fontSize: "14px",
+                fontWeight: "bold",
+                color: "#3c2415",
               }}
             >
-              <p style={{ margin: 0, fontSize: "12px", color: "#3c2415" }}>
-                <strong>Payment Method:</strong>{" "}
-                {paymentOptions.find((p) => p.id === selectedMethod)?.name}
-              </p>
-              {selectedMethod !== "cod" &&
-                selectedMethod !== "paypal" &&
-                accountName && (
-                  <p
-                    style={{
-                      margin: "5px 0 0 0",
-                      fontSize: "12px",
-                      color: "#3c2415",
-                    }}
-                  >
-                    <strong>Account:</strong> {accountName}
-                  </p>
-                )}
-            </div>
-          )}
+              TOTAL:
+            </span>
+            <span
+              style={{
+                fontSize: "14px",
+                fontWeight: "bold",
+                color: "#8b4513",
+              }}
+            >
+              ₱{total.toFixed(2)}
+            </span>
+          </div>
+        </div>
+
+        {/* Payment Status */}
+        <div
+          style={{
+            marginTop: "15px",
+            padding: "10px",
+            backgroundColor: "#f0f8ff",
+            borderRadius: "6px",
+            textAlign: "center",
+          }}
+        >
+          <p style={{ margin: 0, fontSize: "11px", color: "#3c2415" }}>
+            <i
+              className="fas fa-info-circle"
+              style={{ marginRight: "5px" }}
+            ></i>
+            {selectedMethod === "cod"
+              ? "Payment will be collected upon delivery"
+              : selectedMethod === "paypal"
+              ? "Complete payment using PayPal buttons above"
+              : selectedMethod
+              ? "Complete payment details above to proceed"
+              : "Select a payment method to continue"}
+          </p>
+        </div>
+
+        {/* Footer */}
+        <div style={{ textAlign: "center", marginTop: "20px" }}>
+          <p style={{ fontSize: "10px", color: "#888", margin: 0 }}>
+            Thank you for choosing Kape Kalakal!
+          </p>
         </div>
       </div>
     </div>
