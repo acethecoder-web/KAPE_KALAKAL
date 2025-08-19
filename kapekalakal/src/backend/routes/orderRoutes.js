@@ -5,8 +5,54 @@ import mongoose from "mongoose";
 
 const router = express.Router();
 
+// ===============================
+// ADMIN ROUTES
+// ===============================
+
+// GET all orders (admin)
+router.get("/all", async (req, res) => {
+  try {
+    const orders = await Order.find().sort({ orderDate: -1 }).lean();
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Error fetching all orders:", error);
+    res.status(500).json({ message: "Error fetching all orders" });
+  }
+});
+
+// PUT update order status (admin)
+router.put("/admin/:orderId", async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+
+    if (!status) {
+      return res.status(400).json({ message: "status is required" });
+    }
+
+    const updatedOrder = await Order.findOneAndUpdate(
+      { orderId },
+      { status, updatedAt: new Date() },
+      { new: true, lean: true }
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.status(200).json(updatedOrder);
+  } catch (error) {
+    console.error("Error updating order (admin):", error);
+    res.status(500).json({ message: "Error updating order" });
+  }
+});
+
+// ===============================
+// USER ROUTES
+// ===============================
+
 // GET all orders for specific user
-router.get("/orders", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const { userId } = req.query;
 
@@ -28,8 +74,8 @@ router.get("/orders", async (req, res) => {
   }
 });
 
-// GET specific order by orderId
-router.get("/orders/:orderId", async (req, res) => {
+// GET specific order by orderId (for user)
+router.get("/:orderId", async (req, res) => {
   try {
     const { orderId } = req.params;
     const { userId } = req.query;
@@ -55,9 +101,9 @@ router.get("/orders/:orderId", async (req, res) => {
 });
 
 // POST create new order
-router.post("/orders", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    console.log("Received order data:", req.body); // Debug log
+    console.log("Received order data:", req.body);
 
     const {
       orderId,
@@ -86,7 +132,7 @@ router.post("/orders", async (req, res) => {
       });
     }
 
-    // Create new order with all the data from frontend
+    // Create new order
     const newOrder = new Order({
       orderId: orderId || new mongoose.Types.ObjectId().toString(),
       userId,
@@ -104,21 +150,19 @@ router.post("/orders", async (req, res) => {
     });
 
     const savedOrder = await newOrder.save();
-    console.log("Order saved successfully:", savedOrder.orderId); // Debug log
+    console.log("Order saved successfully:", savedOrder.orderId);
     res.status(201).json(savedOrder);
   } catch (error) {
     console.error("Error creating order:", error);
-    console.error("Error details:", error.stack); // More detailed error logging
     res.status(500).json({
       message: "Error creating order",
       error: error.message,
-      details: process.env.NODE_ENV === "development" ? error.stack : undefined,
     });
   }
 });
 
-// PUT update order status
-router.put("/orders/:orderId", async (req, res) => {
+// PUT update order status (user)
+router.put("/:orderId", async (req, res) => {
   try {
     const { orderId } = req.params;
     const { userId } = req.query;
@@ -152,8 +196,8 @@ router.put("/orders/:orderId", async (req, res) => {
   }
 });
 
-// DELETE order (admin only or within cancellation period)
-router.delete("/orders/:orderId", async (req, res) => {
+// DELETE order (user cancellation)
+router.delete("/:orderId", async (req, res) => {
   try {
     const { orderId } = req.params;
     const { userId } = req.query;
@@ -168,11 +212,9 @@ router.delete("/orders/:orderId", async (req, res) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    // Check if order can be cancelled (e.g., only if status is "pending")
     if (order.status !== "pending") {
       return res.status(400).json({
-        message:
-          "Order cannot be cancelled. Only pending orders can be cancelled.",
+        message: "Only pending orders can be cancelled",
       });
     }
 

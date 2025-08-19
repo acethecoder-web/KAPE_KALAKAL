@@ -17,7 +17,6 @@ function MyPayments() {
   // Tax and shipping constants (same as cart)
   const taxRate = 0.08;
   const shippingFee = 5.99;
-
   const paymentOptions = [
     { id: "cod", name: "CASH ON DELIVERY", logo: "./logos/COD.png" },
     { id: "paypal", name: "PAYPAL", logo: "./logos/PAYPAL.png" },
