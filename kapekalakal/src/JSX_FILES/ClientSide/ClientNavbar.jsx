@@ -25,6 +25,12 @@ function ClientNavbar() {
             PRODUCTS
           </div>
           <div
+            onClick={() => setActiveView("view-my-orders")}
+            className="nav-items mb-4"
+          >
+            MY ORDERS
+          </div>
+          <div
             onClick={() => setActiveView("cart")}
             className="nav-items mb-2 cart-icon-container"
             href=""

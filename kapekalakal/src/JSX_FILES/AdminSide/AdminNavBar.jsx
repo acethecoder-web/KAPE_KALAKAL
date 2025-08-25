@@ -86,14 +86,6 @@ function AdminNavBar() {
           <i class="fa-solid s-icon fa-xl fa-list-check"></i>
           MANAGE ORDERS
         </div>
-        <div
-          to=""
-          className="nav-items2-1"
-          onClick={() => setActiveView("manage-payments")}
-        >
-          <i class="fa-solid s-icon fa-xl fa-money-bill-1-wave"></i>
-          MANAGE PAYMENTS
-        </div>
       </div>
     </>
   );

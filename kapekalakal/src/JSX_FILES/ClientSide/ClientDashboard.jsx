@@ -46,8 +46,6 @@ function ClientDashboardContent() {
     switch (activeView) {
       case "view-products":
         return <ViewProducts />;
-      case "my-orders":
-        return <MyOrders />;
       case "my-payments":
         return <MyPayments />;
       case "cart":
@@ -56,6 +54,8 @@ function ClientDashboardContent() {
         return <ProductDetails />;
       case "profile":
         return <Profile />;
+      case "view-my-orders":
+        return <MyOrders />;
       default:
         return <div>Select a section from the menu.</div>;
     }

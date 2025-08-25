@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import userRoutes from "./routes/userRoutes.js";
 import productsRoutes from "./routes/productsRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
+import customerOrderRoutes from "./routes/customerRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js"; // Add this line
 // import createSuperAdmin from "./config/superAdminSeeder.js";
 import { connectDB } from "./db.js";
@@ -28,6 +29,7 @@ app.use("/api", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/products", productsRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/customer-orders", customerOrderRoutes);
 app.use("/api", cartRoutes); // Add this line
 
 // Health check endpoint

@@ -169,7 +169,7 @@ function AdminOrderPage() {
                   </td>
                   <td style={{ padding: "12px", textAlign: "center" }}>
                     <button
-                      onClick={() => updateStatus(order.orderId, "Approved")}
+                      onClick={() => updateStatus(order.orderId, "Delivered")}
                       disabled={updating === order.orderId}
                       style={{
                         marginRight: "5px",
@@ -181,7 +181,7 @@ function AdminOrderPage() {
                         cursor: "pointer",
                       }}
                     >
-                      Approve
+                      Delivered
                     </button>
                     <button
                       onClick={() => updateStatus(order.orderId, "Cancelled")}
@@ -199,7 +199,7 @@ function AdminOrderPage() {
                       Cancel
                     </button>
                     <button
-                      onClick={() => updateStatus(order.orderId, "Shipped")}
+                      onClick={() => updateStatus(order.orderId, "Approved")}
                       disabled={updating === order.orderId}
                       style={{
                         backgroundColor: "#7b2e00",
@@ -210,7 +210,7 @@ function AdminOrderPage() {
                         cursor: "pointer",
                       }}
                     >
-                      Ship
+                      Approve
                     </button>
                   </td>
                 </tr>
