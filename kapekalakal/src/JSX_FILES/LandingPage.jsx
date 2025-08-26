@@ -1,5 +1,5 @@
 import "../CSS_FILES/LandingPage.css";
-import { BrowserRouter, Router, Route } from "react-router-dom";
+import { Link, BrowserRouter, Router, Route } from "react-router-dom";
 import About from "./About";
 import NavBar from "./NavBar";
 function LandingPage() {
@@ -12,7 +12,11 @@ function LandingPage() {
           <span>Fueling</span> Mornings, <br /> <br /> <span>Brewing</span>{" "}
           Connections
         </h1>
-        <button className="register">REGISTER NOW</button>
+        {/* <button className="register"></button> */}
+        <Link to="/register" className="register">
+          {" "}
+          REGISTER NOW
+        </Link>
       </div>
     </>
   );

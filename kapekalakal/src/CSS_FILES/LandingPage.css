@@ -1,53 +1,53 @@
 @font-face {
-	font-family: bebas;
-	src: url(/fonts/BebasNeue-Regular.otf);
+  font-family: bebas;
+  src: url(/fonts/BebasNeue-Regular.otf);
 }
 
 @font-face {
-	font-family: playfair;
-	src: url(/fonts/PlayfairDisplay-Regular.ttf);
+  font-family: playfair;
+  src: url(../../public/fonts/PlayfairDisplay-Italic.ttf);
 }
 
 @font-face {
-	font-family: playfairb;
-	src: url(/fonts/PlayfairDisplay-Bold.ttf);
+  font-family: playfairb;
+  src: url(/fonts/PlayfairDisplay-Bold.ttf);
 }
 
 * {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .tagline {
-	font-family: playfair;
-	margin-left: 250px;
-	margin-top: 80px;
+  font-family: bebas;
+  margin-left: 250px;
+  margin-top: 80px;
 }
 
 span {
-	font-size: 150px;
-	font-family: playfair;
-	filter: drop-shadow(1px 5.5px 2px black);
-	font-weight: light;
+  font-size: 150px;
+  font-family: playfair;
+  filter: drop-shadow(1px 5.5px 2px black);
+  font-weight: light;
 }
 
 .register {
-	background-color: rgba(72, 53, 38, 0.8);
-	padding: 10px;
-	border: none;
-	border-radius: 25px;
-	margin-left: 255px;
-	margin-top: 20px;
-	color: white;
-	transition-duration: 0.2s;
-	font-size: 20px;
-	font-family: playfairb;
+  background-color: rgba(72, 53, 38, 0.8);
+  padding: 10px;
+  border: none;
+  border-radius: 25px;
+  margin-left: 255px;
+  margin-top: 20px;
+  color: white;
+  transition-duration: 0.2s;
+  font-size: 20px;
+  font-family: playfairb;
 }
 
 .register:hover {
-	background-color: rgba(29, 23, 19, 0.8);
-	color: white;
+  background-color: rgba(29, 23, 19, 0.8);
+  color: white;
 }
 
 /* RESPONSIVENESS OF THE PAGE */
@@ -57,48 +57,48 @@ span {
 /* Small devices (phones) */
 
 @media (max-width: 576px) {
-	.tagline {
-		font-size: 30px;
-		margin-left: 300px;
-		margin-top: 40px;
-	}
+  .tagline {
+    font-size: 30px;
+    margin-left: 300px;
+    margin-top: 40px;
+  }
 
-	.register {
-		margin-left: 295px;
-		margin-top: 40px;
-	}
+  .register {
+    margin-left: 295px;
+    margin-top: 40px;
+  }
 
-	span {
-		font-size: 70px;
-	}
+  span {
+    font-size: 70px;
+  }
 }
 
 /* Medium devices (tablets) */
 
 @media (max-width: 768px) {
-	.tagline {
-		margin-left: 80px;
-		margin-top: 90px;
-	}
+  .tagline {
+    margin-left: 80px;
+    margin-top: 90px;
+  }
 
-	.register {
-		margin-left: 85px;
-		margin-top: 20px;
-	}
+  .register {
+    margin-left: 85px;
+    margin-top: 20px;
+  }
 }
 
 /* Large devices (small laptops) */
 
 @media (max-width: 992px) {
-	.tagline {
-		margin-left: 80px;
-		margin-top: 130px;
-	}
+  .tagline {
+    margin-left: 80px;
+    margin-top: 130px;
+  }
 
-	.register {
-		margin-left: 85px;
-		margin-top: 20px;
-	}
+  .register {
+    margin-left: 85px;
+    margin-top: 20px;
+  }
 }
 
 /* Extra large devices (desktops */
@@ -112,26 +112,26 @@ span {
 }
 
 @media (max-width: 480px) {
-	.maincon1 {
-		margin-left: -60px;
-		margin-top: 10px;
-		font-size: 10px;
-	}
+  .maincon1 {
+    margin-left: -60px;
+    margin-top: 10px;
+    font-size: 10px;
+  }
 
-	.tagline {
-		font-size: 20px;
-		left: 20px;
-		margin-bottom: 10px;
-	}
+  .tagline {
+    font-size: 20px;
+    left: 20px;
+    margin-bottom: 10px;
+  }
 
-	.register {
-		margin-left: 80px;
-		margin-top: 10px;
-		font-size: 10px;
-		font-family: playfairb;
-	}
+  .register {
+    margin-left: 80px;
+    margin-top: 10px;
+    font-size: 10px;
+    font-family: playfairb;
+  }
 
-	span {
-		font-size: 40px;
-	}
+  span {
+    font-size: 40px;
+  }
 }
